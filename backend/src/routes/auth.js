@@ -47,7 +47,7 @@ router.post("/register", (req, res) => {
     });
 });
 
-// Log in using login/password
+// Log in using username/password
 router.post("/login", passport.authenticate("local"), (req, res) => {
   console.log("In login route");
   console.log(req.user);
