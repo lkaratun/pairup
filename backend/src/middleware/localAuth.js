@@ -42,7 +42,7 @@ passport.use(
   )
 );
 
-const cookieExtractor = req => req && req.cookies && req.cookies.jwt;
+const cookieExtractor = req => req && req.cookies && req.cookies.token;
 
 passport.use(
   new JWTStrategy(
@@ -50,14 +50,20 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
       secretOrKey: secret
     },
-    async (jwtPayload, done) => {
-      const user = new User({ id: jwtPayload.id });
+    async (token, done) => {
+      console.log("token = ", token);
+
+      const user = new User({ id: token.id });
       user
         .read()
         .then(userData => {
           done(null, userData[0]);
         })
-        .catch(err => done(err, false));
+        .catch(err => {
+          console.error(err);
+
+          done(err, false);
+        });
     }
   )
 );

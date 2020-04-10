@@ -2,12 +2,22 @@ const passport = require("passport");
 const express = require("express");
 const User = require("../models/User");
 require("../middleware/googleAuth");
+require("../middleware/localAuth");
+const addMonths = require("date-fns/addMonths");
 
 const router = express.Router();
 
 function loginSuccessRedirect(req, res) {
   const token = new User({ id: req.user.id }).refreshToken();
-  res.redirect(`http://localhost:3100?token=${token}`);
+  res
+    .cookie("token", token, {
+      expires: addMonths(new Date(), 1),
+      httpOnly: true
+    })
+    .cookie("firstName", req.user.first_name, {
+      expires: addMonths(new Date(), 1)
+    });
+  res.redirect(`http://localhost:3100`);
 }
 
 // Create an account using google oAuth
