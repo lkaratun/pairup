@@ -9,7 +9,9 @@ const omit = require("lodash/omit");
 const router = express.Router();
 
 function loginSuccessRedirect(req, res) {
-  const token = new User({ id: req.user.id }).refreshToken();
+  const token = new User(req.user).refreshToken();
+  console.log("new token = ", token);
+
   res
     .cookie("token", token, {
       expires: addMonths(new Date(), 1),
@@ -19,7 +21,8 @@ function loginSuccessRedirect(req, res) {
       expires: addMonths(new Date(), 1),
       domain: "local.pair-up.net"
     });
-  res.redirect(`http://local.pair-up.net/`);
+  // res.redirect(`http://local.pair-up.net/`);
+  res.send({ token, user: req.user });
 }
 
 // Create an account using google oAuth
@@ -37,10 +40,10 @@ router.get("/googleAuthSuccess", passport.authenticate("google"), loginSuccessRe
 
 // Test route to view current user info and token
 router.get("/view", (req, res) => {
+  console.log("in /view handler!!");
+
   // res.header({ "test-header": "test-value" });
   // req.headers.host = "api.local.pair-up.net/auth/view";
-  console.log(res);
-
   res.send({
     cookies: req.cookies,
     user: req.user,
@@ -71,12 +74,34 @@ router.post("/register", (req, res) => {
 });
 
 // Log in using username/password
-router.post("/login", passport.authenticate("local"), (req, res) => {
+router.post("/login", passport.authenticate("userRequired"), (req, res) => {
   console.log("In login route");
   console.log(req.user);
 
   const token = new User({ id: req.user.id }).refreshToken();
   res.status(201).json({ ...req.user, token });
 });
+
+// Get user data from token
+router.get(
+  "/getUserFromToken",
+  function(req, res, next) {
+    console.log("Entered getUserFromToken handler2");
+
+    passport.authenticate("getUserDataFromToken", function(err, user, info) {
+      console.log("In error handler");
+      console.log({ err, user, info_msg: info && info.message });
+      // if (user === false && info && info.message === "No auth token") return next();
+      req.user = user || {};
+      return next(err);
+    })(req, res, next);
+  },
+  (req, res) => {
+    console.log("In getUserFromToken route!");
+    console.log("req.user = ", req.user);
+
+    res.send(req.user);
+  }
+);
 
 module.exports = router;

@@ -45,6 +45,7 @@ passport.use(
 const cookieExtractor = req => req && req.cookies && req.cookies.token;
 
 passport.use(
+  "userRequired",
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
@@ -64,6 +65,20 @@ passport.use(
 
           done(err, false);
         });
+    }
+  )
+);
+
+passport.use(
+  "getUserDataFromToken",
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+      secretOrKey: secret
+    },
+    async (token, done) => {
+      console.log("token in JWT middleware = ", token);
+      return done(null, token);
     }
   )
 );

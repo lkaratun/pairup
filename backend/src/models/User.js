@@ -35,9 +35,18 @@ class User extends Table {
   }
 
   refreshToken() {
-    return jwt.sign({ id: this.data[this.pk] }, SECRET, {
-      expiresIn: JWT_EXP_THRESHOLD
-    });
+    return jwt.sign(
+      {
+        id: this.data[this.pk],
+        email: this.data.email,
+        firstName: this.data.first_name,
+        lastName: this.data.last_name
+      },
+      SECRET,
+      {
+        expiresIn: JWT_EXP_THRESHOLD
+      }
+    );
   }
 
   hashPassword() {
