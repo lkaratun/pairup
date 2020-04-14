@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Cookies from "js-cookie";
-// import PropTypes from "prop-types";
 import Input from "./Input";
 import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
@@ -31,7 +29,6 @@ export default () => {
         }
       )
       .then(res => {
-        Cookies.set("token", res.data.token);
         // router.push("/");
         // props.context.logIn({ data: res.data, method: "password" });
       })

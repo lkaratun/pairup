@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Cookies from "js-cookie";
 // import { useRouter } from "next/router";
 import axios from "axios";
 import Input from "./Input";
@@ -42,7 +41,7 @@ function RegisterForm() {
       )
       .then(res => {
         // props.context.logIn({ data: res.data, method: "password" });
-        Cookies.set("token", res.data.token);
+        // Cookies.set("token", res.data.token);
         // router.push("/");
       })
       .catch(err => {

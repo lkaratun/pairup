@@ -46,6 +46,8 @@
       2,
       "never"
     ],
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": 0,
     "import/no-unresolved": 0,
     "prefer-destructuring": 0,
     "class-methods-use-this": 0,

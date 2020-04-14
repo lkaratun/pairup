@@ -1,44 +1,41 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+console.log("Creating new context object");
+
 const UserContext = React.createContext();
+
 class UserProvider extends Component {
-  state = {
+  initialState = {
     loggedIn: false,
-    firstName: null,
-    lastName: null,
-    email: null,
+    firstName: this.props.cookies.firstName || null,
+    lastName: this.props.cookies.lastName || null,
+    email: this.props.email || null,
     token: null,
     bio: null,
     id: null,
     image: null
   };
 
-  componentDidMount() {
-    this.setState({
-      loggedIn: localStorage.getItem("loggedIn") === "true",
-      firstName: localStorage.getItem("firstName"),
-      lastName: localStorage.getItem("lastName"),
-      email: localStorage.getItem("email"),
-      token: localStorage.getItem("token"),
-      bio: localStorage.getItem("bio"),
-      image: localStorage.getItem("image"),
-      id: localStorage.getItem("id")
-    });
-  }
+  state = console.log("Initializing context state") || this.initialState;
+
+  // componentDidMount() {
+  //   console.log("In context didMount");
+  //   this.setState({
+  //     loggedIn: localStorage.getItem("loggedIn") === "true",
+  //     firstName: localStorage.getItem("firstName"),
+  //     lastName: localStorage.getItem("lastName"),
+  //     email: localStorage.getItem("email"),
+  //     token: localStorage.getItem("token"),
+  //     bio: localStorage.getItem("bio"),
+  //     image: localStorage.getItem("image"),
+  //     id: localStorage.getItem("id")
+  //   });
+  // }
 
   logIn = ({ data, method }) => {
-    if (!["oauth", "password"].includes(method))
-      throw new Error("Auth method not recognized");
-    const allowedFields = [
-      "first_name",
-      "last_name",
-      "email",
-      "token",
-      "bio",
-      "image",
-      "id"
-    ];
+    if (!["oauth", "password"].includes(method)) throw new Error("Auth method not recognized");
+    const allowedFields = ["first_name", "last_name", "email", "token", "bio", "image", "id"];
 
     const newState = { loggedIn: true };
     Object.entries(data).forEach(([key, value]) => {
@@ -56,27 +53,12 @@ class UserProvider extends Component {
   };
 
   logOut = () => {
-    this.setState({
-      loggedIn: false,
-      firstName: null,
-      lastName: null,
-      email: null,
-      token: null,
-      image: null,
-      id: null
-    });
+    this.setState(this.initialState);
     localStorage.clear();
   };
 
   updateUser = (key, value) => {
-    const allowedFields = [
-      "firstName",
-      "lastName",
-      "email",
-      "token",
-      "bio",
-      "image"
-    ];
+    const allowedFields = ["firstName", "lastName", "email", "token", "bio", "image"];
     if (!allowedFields.includes(key)) return;
     this.setState({ [key]: value });
     localStorage.setItem(key, value);
@@ -88,6 +70,7 @@ class UserProvider extends Component {
   };
 
   render() {
+    console.log("In context render");
     return (
       <UserContext.Provider
         value={{

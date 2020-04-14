@@ -4,17 +4,18 @@ import styled from "styled-components";
 
 import MainLayout from "../components/MainLayout";
 
-export async function getServerSideProps(ctx) {
-  console.log("query = ", ctx.query);
-  // const cookies = context.req.getHeader("Cookie");
-  console.log("cookies = ", ctx.req.headers.cookie);
+// export async function getServerSideProps(ctx) {
+//   // console.log("query = ", ctx.query);
+//   // const cookies = context.req.getHeader("Cookie");
+//   console.log("cookies in indexPage = ", ctx.req.headers.cookie);
+//   // console.log("In IndexPage -> getServerSideProps");
 
-  // const router = useRouter();
-  // router.replace({ pathname: router.pathname, query: {} });
-  return { props: {} };
-}
+//   // const router = useRouter();
+//   // router.replace({ pathname: router.pathname, query: {} });
+//   return { props: {} };
+// }
 
-export default () => {
+export default function Index() {
   return (
     <MainLayout>
       <LandingPage>
@@ -33,7 +34,7 @@ export default () => {
       </LandingPage>
     </MainLayout>
   );
-};
+}
 
 const LandingPage = styled.section`
   width: 100%;
