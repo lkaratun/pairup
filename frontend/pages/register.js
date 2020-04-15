@@ -6,18 +6,13 @@ import MainLayout from "../components/MainLayout";
 import { UserConsumer } from "../components/UserProvider";
 import device from "../styles/device";
 
-export async function getServerSideProps() {
-  console.log("In RegisterPage -> getServerSideProps");
-  return { props: { test: "test" } };
-}
-
 class Register extends Component {
   render() {
     return (
       <MainLayout>
         <RegisterWrapper>
           <InputSection>
-            <Title>Register {JSON.stringify(this.props)}</Title>
+            <Title>Register</Title>
             <LinkWrapper>
               <p>If you have an account:&nbsp; </p>
               <Link href="/register">

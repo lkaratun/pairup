@@ -17,8 +17,8 @@ function RegisterForm() {
     bio: "",
     password: "",
     email: "",
-    passwordsDontMatch: false,
-    registrationFailed: false
+    registrationFailed: false,
+    failReason: ""
   });
 
   const handleSubmit = async e => {
@@ -46,11 +46,9 @@ function RegisterForm() {
       })
       .catch(err => {
         console.error(err.response);
-        handleFail();
+        setState({ ...state, registrationFailed: true, failReason: err.response.data.message });
       });
   };
-
-  const handleFail = () => setState({ registrationFailed: true });
 
   const handleInput = e => {
     // Method that syncs current input with state
@@ -71,6 +69,7 @@ function RegisterForm() {
           placeholder="Email"
           onChange={handleInput}
           required
+          value={state.email}
         />
         <Input
           id="password"
@@ -81,12 +80,27 @@ function RegisterForm() {
           onChange={handleInput}
           required
         />
-        <Input id="firstName" name="firstName" type="text" placeholder="First Name" onChange={handleInput} required />
+        <Input
+          id="firstName"
+          name="firstName"
+          type="text"
+          placeholder="First Name"
+          onChange={handleInput}
+          required
+        />
         <p> Optional fields:</p>
-        <Input id="lastName" name="lastName" type="text" placeholder="Last Name" onChange={handleInput} />
+        <Input
+          id="lastName"
+          name="lastName"
+          type="text"
+          placeholder="Last Name"
+          onChange={handleInput}
+        />
         <TextArea placeholder="Short Bio" onChange={handleInput} />
         <LoginButton text="Register" />
-        {registrationFailed && <StyledErrorMsg>Registration failed!</StyledErrorMsg>}
+        {registrationFailed && (
+          <StyledErrorMsg>Registration failed. Reason: {state.failReason}</StyledErrorMsg>
+        )}
       </form>
     </>
   );
