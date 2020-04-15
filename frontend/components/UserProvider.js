@@ -8,8 +8,8 @@ const UserContext = React.createContext();
 class UserProvider extends Component {
   initialState = {
     loggedIn: false,
-    firstName: this.props.cookies.firstName || null,
-    lastName: this.props.cookies.lastName || null,
+    firstName: this.props.cookies?.firstName || null,
+    lastName: this.props.cookies?.lastName || null,
     email: this.props.email || null,
     token: null,
     bio: null,
