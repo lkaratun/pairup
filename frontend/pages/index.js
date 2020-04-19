@@ -16,6 +16,8 @@ import MainLayout from "../components/MainLayout";
 // }
 
 export default function Index() {
+  console.log("process.env.NODE_ENV = ", process.env.NODE_ENV);
+
   return (
     <MainLayout>
       <LandingPage>

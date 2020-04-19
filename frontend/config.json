@@ -1,3 +1,8 @@
 {
-  "BACKEND_URL": "//api.local.pair-up.net"
+  "development": {
+    "BACKEND_URL": "//api.local.pair-up.net"
+  },
+  "production": {
+    "BACKEND_URL": "//api.pair-up.net"
+  }
 }

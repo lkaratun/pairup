@@ -7,7 +7,7 @@ import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 function RegisterForm() {
   // const router = useRouter();

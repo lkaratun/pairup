@@ -7,7 +7,7 @@ import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class NewEvent extends React.Component {
   state = {
@@ -44,9 +44,7 @@ class NewEvent extends React.Component {
           <InputSection>
             <Title>Create New Event</Title>
             <NewEventForm createEvent={this.createEvent} />
-            {serverPostFail && (
-              <p style={{ color: "red" }}>Event creation failed, try again</p>
-            )}
+            {serverPostFail && <p style={{ color: "red" }}>Event creation failed, try again</p>}
           </InputSection>
         </EventWrapper>
       </MainLayout>

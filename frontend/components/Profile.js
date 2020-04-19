@@ -9,7 +9,7 @@ import BioModal from "./BioModal";
 import NameModal from "./NameModal";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class Profile extends Component {
   state = { events: [], bioEditorOpened: false, nameEditorOpened: false };
@@ -36,8 +36,7 @@ class Profile extends Component {
     }
   }
 
-  makeEventsDomElements = events =>
-    events.map(event => <Event {...event} key={event.id} />);
+  makeEventsDomElements = events => events.map(event => <Event {...event} key={event.id} />);
 
   showBioEditor = () => this.setState({ bioEditorOpened: true });
 
@@ -115,8 +114,7 @@ class Profile extends Component {
                   </p>
                 ) : (
                   <p>
-                    No bio{" "}
-                    <EditButton onClick={this.showBioEditor}>(add)</EditButton>
+                    No bio <EditButton onClick={this.showBioEditor}>(add)</EditButton>
                   </p>
                 )}
                 <BioModal

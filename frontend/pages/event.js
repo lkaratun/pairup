@@ -10,7 +10,7 @@ import Modal from "../components/Modal";
 import ImageUploader from "../components/ImageUploader";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 function getAttendance(userID, eventAttendees) {
   // helper fn to determine if user is already participating in an event
@@ -77,9 +77,7 @@ export class event extends Component {
       min_people: minPeople,
       author_id: authorID
     } = currentEvent.data;
-    const dateFromFormat = dateFrom
-      ? format(dateFrom, "MMMM DD YYYY")
-      : "not set";
+    const dateFromFormat = dateFrom ? format(dateFrom, "MMMM DD YYYY") : "not set";
     const dateToFormat = dateTo ? format(dateTo, "MMMM DD YYYY") : "not set";
 
     this.setState({
@@ -233,10 +231,7 @@ export class event extends Component {
               </InfoWrapper>
               <Attendees attendees={eventAttendees} />
               <JoinPanel>
-                <AvailableSpotsLeftNotice
-                  spotsLeft={spotsLeft}
-                  maxPeople={maxPeople}
-                />
+                <AvailableSpotsLeftNotice spotsLeft={spotsLeft} maxPeople={maxPeople} />
                 <ControlledAttendenceButtons
                   userID={userID}
                   authorID={authorID}

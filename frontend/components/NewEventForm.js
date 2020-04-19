@@ -11,7 +11,7 @@ import DynamicActivitySearch from "./DynamicActivitySearch";
 import DynamicLocationSearch from "./DynamicLocationSearch";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class EventForm extends Component {
   state = {
@@ -43,10 +43,7 @@ class EventForm extends Component {
     // validate new object
     const REQUIRED_FIELDS = ["name", "activity_id", "max_people"];
     for (let i = 0; i < REQUIRED_FIELDS.length; i++) {
-      if (
-        newEvent[REQUIRED_FIELDS[i]] === null ||
-        newEvent[REQUIRED_FIELDS[i]] === ""
-      ) {
+      if (newEvent[REQUIRED_FIELDS[i]] === null || newEvent[REQUIRED_FIELDS[i]] === "") {
         this.setState({ valid: false });
         return;
       }
@@ -154,30 +151,19 @@ class EventForm extends Component {
           placeholder="Activity"
           allowNew
         />
-        <DynamicLocationSearch
-          updateLocation={this.updateLocation}
-          placeholder="City"
-          allowNew
-        />
-        <SelectParticipantRange
-          updateParticipantRange={this.updateParticipantRange}
-        />
+        <DynamicLocationSearch updateLocation={this.updateLocation} placeholder="City" allowNew />
+        <SelectParticipantRange updateParticipantRange={this.updateParticipantRange} />
         <DateRangePicker updateDateRange={this.updateDateRange} />
         {!valid && (
           <ErrorMsg>
-            Please make sure you filled name, activity and max people fields to
-            continue!
+            Please make sure you filled name, activity and max people fields to continue!
           </ErrorMsg>
         )}
         <ButtonWrapper>
           <WideButton onClick={this.handleBackButton} color="red">
             Back
           </WideButton>
-          <WideButton
-            onClick={this.handleBackButton}
-            type="submit"
-            color="purple"
-          >
+          <WideButton onClick={this.handleBackButton} type="submit" color="purple">
             Create
           </WideButton>
         </ButtonWrapper>
