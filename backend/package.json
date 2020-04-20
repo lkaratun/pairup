@@ -19,6 +19,7 @@
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.19.0",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "date-fns": "^2.12.0",
@@ -36,7 +37,8 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "passport-strategy": "^1.0.0",
-    "pg": "^7.18.2"
+    "pg": "^7.18.2",
+    "spdy": "^4.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

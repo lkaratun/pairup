@@ -12,8 +12,12 @@ const authRouter = require("./routes/auth");
 const eventsRouter = require("./routes/events");
 const placesRouter = require("./routes/places");
 const usersRouter = require("./routes/users");
+const compression = require("compression");
+const fs = require("fs");
+const spdy = require("spdy");
 
-const port = process.env.PORT || 8000;
+const httpPort = process.env.PORT || 8000;
+const httpsPort = process.env.HTTPS_PORT || 8443;
 const app = express();
 
 app.use(helmet());
@@ -30,6 +34,22 @@ app.use("/users", passport.authenticate("jwt"), usersRouter);
 app.use("/activities", activitiesRouter);
 app.use("/places", placesRouter);
 app.use("/events", eventsRouter);
-app.use((err, req, res, next) => (res.headersSent ? next(err) : res.status(500).json({ message: err.message })));
+app.use((err, req, res, next) =>
+  res.headersSent ? next(err) : res.status(500).json({ message: err.message })
+);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.use(compression());
+
+spdy
+  .createServer(
+    {
+      key: fs.readFileSync("localhost.key"),
+      cert: fs.readFileSync("localhost.crt"),
+      protocols: ["h2", "spdy/3.1", "spdy/3", "spdy/2", "http/1.1", "http/1.0"],
+    },
+    app
+  )
+  .listen(httpsPort, () =>
+    console.log(`Server is listening to https requests on port ${httpsPort}!`)
+  );
+app.listen(httpPort, () => console.log(`Listening on http requests on port ${httpPort}!`));
