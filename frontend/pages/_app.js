@@ -1,6 +1,7 @@
 import React from "react";
 import cookie from "cookie";
 import UserProvider from "../components/UserProvider";
+import "react-datepicker/dist/react-datepicker.css";
 
 MyApp.getInitialProps = async function getServerSideProps({ ctx }) {
   const existingCookies = cookie.parse(ctx?.req?.headers?.cookie || "");

@@ -1,12 +1,11 @@
 import React from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
 class DateSelector extends React.Component {
   state = {
-    startDate: null
+    startDate: null,
   };
 
   componentDidUpdate(prevProps) {
@@ -40,8 +39,8 @@ class DateSelector extends React.Component {
           popperModifiers={{
             offset: {
               enabled: true,
-              offset: "30px, 10px"
-            }
+              offset: "30px, 10px",
+            },
           }}
           todayButton="today"
           selected={startDate}
@@ -61,7 +60,7 @@ DateSelector.propTypes = {
   updateSelection: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
   cleared: PropTypes.bool,
-  mobile: PropTypes.bool
+  mobile: PropTypes.bool,
 };
 
 const DatePickerStylingWrapper = styled.div`
