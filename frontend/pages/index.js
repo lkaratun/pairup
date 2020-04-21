@@ -1,25 +1,42 @@
 import React from "react";
 import styled from "styled-components";
+// import { useRouter } from "next/router";
+
 import MainLayout from "../components/MainLayout";
 
-export default () => (
-  <MainLayout>
-    <LandingPage>
-      <HeroSection>
-        <CallToAction>
-          <h3>Experiences are to be enjoyed with others</h3>
-          <p>Find people to do things together</p>
-          <EventsBtn href="/events">Events</EventsBtn>
-        </CallToAction>
-        <HeroPicture>
-          <source media="(max-width: 450px)" srcSet=".././static/hero-mobile.jpg" />
-          <source media="(max-width: 1600px)" srcSet=".././static/hero-base.jpg" />
-          <img src=".././static/hero-base.jpg" alt="person-kayaking-in-river" width="inherit" />
-        </HeroPicture>
-      </HeroSection>
-    </LandingPage>
-  </MainLayout>
-);
+// export async function getServerSideProps(ctx) {
+//   // console.log("query = ", ctx.query);
+//   // const cookies = context.req.getHeader("Cookie");
+//   console.log("cookies in indexPage = ", ctx.req.headers.cookie);
+//   // console.log("In IndexPage -> getServerSideProps");
+
+//   // const router = useRouter();
+//   // router.replace({ pathname: router.pathname, query: {} });
+//   return { props: {} };
+// }
+
+export default function Index() {
+  console.log("process.env.NODE_ENV = ", process.env.NODE_ENV);
+
+  return (
+    <MainLayout>
+      <LandingPage>
+        <HeroSection>
+          <CallToAction>
+            <h3>Experiences are to be enjoyed with others</h3>
+            <p>Find people to do things together</p>
+            <EventsBtn href="/events">Events</EventsBtn>
+          </CallToAction>
+          <HeroPicture>
+            <source media="(max-width: 450px)" srcSet=".././static/hero-mobile.jpg" />
+            <source media="(max-width: 1600px)" srcSet=".././static/hero-base.jpg" />
+            <img src=".././static/hero-base.jpg" alt="person-kayaking-in-river" width="inherit" />
+          </HeroPicture>
+        </HeroSection>
+      </LandingPage>
+    </MainLayout>
+  );
+}
 
 const LandingPage = styled.section`
   width: 100%;

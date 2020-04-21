@@ -10,7 +10,7 @@ import Modal from "../components/Modal";
 import ImageUploader from "../components/ImageUploader";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 function getAttendance(userID, eventAttendees) {
   // helper fn to determine if user is already participating in an event
@@ -210,7 +210,7 @@ export class event extends Component {
                       </SubTitle>
                     ) : (
                       <SubTitle>not set</SubTitle>
-                      )}
+                    )}
                   </div>
                   <div>
                     <Title>Starts: </Title>
@@ -223,7 +223,10 @@ export class event extends Component {
                 </InfoPanel>
                 <div>
                   <EventImage src={eventImage} alt="people in a group" />
-                  <ImageUploader url={`/events/${this.props.router.query.id}/images`} onCompletion={this.updateImage} />
+                  <ImageUploader
+                    url={`/events/${this.props.router.query.id}/images`}
+                    onCompletion={this.updateImage}
+                  />
                 </div>
               </InfoWrapper>
               <Attendees attendees={eventAttendees} />
@@ -240,13 +243,19 @@ export class event extends Component {
               </JoinPanel>
               <ControlButtons>
                 <BackButton onClick={() => router.push("/events")} />
-                {Number(userID) === Number(authorID) && <DeleteButton onClick={this.showModal}>Delete</DeleteButton>}
+                {Number(userID) === Number(authorID) && (
+                  <DeleteButton onClick={this.showModal}>Delete</DeleteButton>
+                )}
               </ControlButtons>
-              <Modal showModal={this.state.showModal} hide={this.hideModal} confirm={this.deleteEvent} />
+              <Modal
+                showModal={this.state.showModal}
+                hide={this.hideModal}
+                confirm={this.deleteEvent}
+              />
             </EventCard>
           ) : (
             <p>Fetching Event Details...</p>
-            )}
+          )}
         </Container>
       </MainLayout>
     );
@@ -263,7 +272,14 @@ function AvailableSpotsLeftNotice({ spotsLeft, maxPeople }) {
   return <h4>{spotsLeft} spot(s) left</h4>;
 }
 
-function ControlledAttendenceButtons({ userID, authorID, userIsAttending, leaveEvent, joinEvent, eventIsFull }) {
+function ControlledAttendenceButtons({
+  userID,
+  authorID,
+  userIsAttending,
+  leaveEvent,
+  joinEvent,
+  eventIsFull
+}) {
   const userIsOwner = Number(userID) === Number(authorID);
   if (userIsOwner) {
     return null;

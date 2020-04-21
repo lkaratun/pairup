@@ -1,56 +1,56 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { UserConsumer } from "./UserProvider";
+import { UserContext } from "./UserProvider";
 import device from "../styles/device";
 
-class Navbar extends React.Component {
-  render() {
-    return (
-      <StyledNav>
-        <ul>
-          <li>
-            <Link href="/">
-              <LogoWrapper>
-                <Logo src=".././static/logo.svg" alt="logo" />
-              </LogoWrapper>
-            </Link>
-          </li>
-          <li>
-            <Link href="/events">
-              <NavLink>Events</NavLink>
-            </Link>
-          </li>
-          <Logo />
-          <UserConsumer>
-            {({ loggedIn, logOut }) =>
-              loggedIn ? (
-                <NavAuthBtns>
-                  <AuthSection>
-                    <Link href="/profile">
-                      <NavLink>Profile</NavLink>
-                    </Link>
-                    <NavLink onClick={logOut}>Logout</NavLink>
-                  </AuthSection>
-                </NavAuthBtns>
-              ) : (
-                <NavAuthBtnsLoggedIn>
-                  <UnAuthSection>
-                    <Link href="/login">
-                      <NavLink>Log in</NavLink>
-                    </Link>
-                    <Link href="/register">
-                      <NavLink>Register</NavLink>
-                    </Link>
-                  </UnAuthSection>
-                </NavAuthBtnsLoggedIn>
-              )
-            }
-          </UserConsumer>
-        </ul>
-      </StyledNav>
-    );
-  }
+function Navbar() {
+  const userContext = useContext(UserContext) || {};
+  console.log("UserContext = ", userContext);
+
+  const { loggedIn, logOut, firstName } = userContext;
+  console.log("fistName = ", firstName);
+
+  return (
+    <StyledNav>
+      <ul>
+        <li>
+          <Link href="/">
+            <LogoWrapper>
+              <Logo src=".././static/logo.svg" alt="logo" />
+            </LogoWrapper>
+          </Link>
+        </li>
+        <li>
+          <Link href="/events">
+            <NavLink>Events</NavLink>
+          </Link>
+        </li>
+        <Logo />
+        {firstName ? (
+          <NavAuthButtons>
+            <AuthSection>
+              <Link href="/profile">
+                <NavLink>{`Hi ${firstName}!`}</NavLink>
+              </Link>
+              <NavLink onClick={logOut}>Logout</NavLink>
+            </AuthSection>
+          </NavAuthButtons>
+        ) : (
+          <NavAuthButtonsLoggedIn>
+            <UnAuthSection>
+              <Link href="/login">
+                <NavLink>Log in</NavLink>
+              </Link>
+              <Link href="/register">
+                <NavLink>Register</NavLink>
+              </Link>
+            </UnAuthSection>
+          </NavAuthButtonsLoggedIn>
+        )}
+      </ul>
+    </StyledNav>
+  );
 }
 
 export default Navbar;
@@ -102,7 +102,7 @@ const Logo = styled.img`
   width: 100px;
 `;
 
-const NavAuthBtns = styled.li`
+const NavAuthButtons = styled.li`
   margin-left: auto;
 
   ${device.mobileL`
@@ -110,7 +110,7 @@ const NavAuthBtns = styled.li`
   `}
 `;
 
-const NavAuthBtnsLoggedIn = styled.li`
+const NavAuthButtonsLoggedIn = styled.li`
   margin-left: auto;
 
   ${device.mobileL`

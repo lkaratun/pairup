@@ -7,7 +7,7 @@ import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
 import config from "../config.json";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class NewEvent extends React.Component {
   state = {

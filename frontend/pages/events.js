@@ -11,7 +11,7 @@ import { ColoredButton } from "../components/shared/Buttons";
 import DynamicLocationSearch from "../components/DynamicLocationSearch";
 import DynamicActivitySearch from "../components/DynamicActivitySearch";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 const DateSelectorDynamic = dynamic(() => import("../components/DateSelector"), {
   ssr: false
@@ -69,7 +69,10 @@ class Dashboard extends Component {
   };
 
   clearFilters = () => {
-    this.setState({ eventFilters: { date_from: null, city: null, activity: null }, cleared: true });
+    this.setState({
+      eventFilters: { date_from: null, city: null, activity: null },
+      cleared: true
+    });
   };
 
   loadMoreEvents = async () => {
@@ -128,7 +131,12 @@ class Dashboard extends Component {
             allowNew={false}
             cleared={cleared}
           />
-          <DateSelectorDynamic placeholder="date" updateSelection={this.updateDate} cleared={cleared} mobile={mobile} />
+          <DateSelectorDynamic
+            placeholder="date"
+            updateSelection={this.updateDate}
+            cleared={cleared}
+            mobile={mobile}
+          />
           <ColoredButton type="button" onClick={this.clearFilters} color="gray">
             Clear
           </ColoredButton>

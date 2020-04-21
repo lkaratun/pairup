@@ -1,5 +1,8 @@
 {
-  "GOOGLE_CLIENT_ID": "your_client_id",
-  "GOOGLE_CLIENT_SECRET": "your_client_secret",
-  "BACKEND_URL": "http://localhost:8000/api"
+  "development": {
+    "BACKEND_URL": "//api.local.pair-up.net"
+  },
+  "production": {
+    "BACKEND_URL": "//api.pair-up.net"
+  }
 }

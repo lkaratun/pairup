@@ -3,3 +3,6 @@ uploads
 *.txt
 backend/src/config/default.json
 db_backups/
+*.crt
+*.key
+*.pem

@@ -1,30 +1,37 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
+
 import Link from "next/link";
 import styled from "styled-components";
 import LoginForm from "../components/LoginForm";
 import MainLayout from "../components/MainLayout";
-import { UserConsumer } from "../components/UserProvider";
+import { UserConsumer, UserContext } from "../components/UserProvider";
 import device from "../styles/device";
 
-class LoginPage extends Component {
-  render() {
-    return (
-      <MainLayout>
-        <LoginWrapper>
-          <InputSection>
-            <Title>Log in</Title>
-            <LinkWrapper>
-              <p>If you have no account:&nbsp; </p>
-              <Link href="/register">
-                <StyledLink>register!</StyledLink>
-              </Link>
-            </LinkWrapper>
-            <UserConsumer>{context => <LoginForm context={context} />}</UserConsumer>
-          </InputSection>
-        </LoginWrapper>
-      </MainLayout>
-    );
-  }
+export async function getServerSideProps() {
+  console.log("In LoginPage -> getServerSideProps");
+  // const context = useContext(UserContext);
+  // console.log("In LoginPage -> context", context);
+
+  return { props: {} };
+}
+
+function LoginPage() {
+  return (
+    <MainLayout>
+      <LoginWrapper>
+        <InputSection>
+          <Title>Log in</Title>
+          <LinkWrapper>
+            <p>If you have no account:&nbsp; </p>
+            <Link href="/register">
+              <StyledLink>register!</StyledLink>
+            </Link>
+          </LinkWrapper>
+          <UserConsumer>{context => <LoginForm context={context} />}</UserConsumer>
+        </InputSection>
+      </LoginWrapper>
+    </MainLayout>
+  );
 }
 
 export default LoginPage;

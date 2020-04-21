@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import config from "../config.json";
 import Input from "./Input";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class DynamicActivitySearch extends React.Component {
   constructor(props) {
@@ -37,7 +37,11 @@ class DynamicActivitySearch extends React.Component {
     if (suggestionArray.length === 0) {
       this.setState({ suggestions: [], showSuggestions: false });
     } else {
-      this.setState({ suggestions: suggestionArray, matchingSuggestions: suggestionArray, showSuggestions: false });
+      this.setState({
+        suggestions: suggestionArray,
+        matchingSuggestions: suggestionArray,
+        showSuggestions: false
+      });
     }
   }
 
@@ -120,7 +124,12 @@ class DynamicActivitySearch extends React.Component {
     };
     console.log(payload);
 
-    this.setState({ showSuggestions: false, inputVal: name, selectionID: id, selectionName: name });
+    this.setState({
+      showSuggestions: false,
+      inputVal: name,
+      selectionID: id,
+      selectionName: name
+    });
     updateActivity(payload, true);
   };
 
@@ -219,7 +228,13 @@ class DynamicActivitySearch extends React.Component {
   };
 
   render() {
-    const { showSuggestions, inputVal, matchingSuggestions, showAddButton, focusedItem } = this.state;
+    const {
+      showSuggestions,
+      inputVal,
+      matchingSuggestions,
+      showAddButton,
+      focusedItem
+    } = this.state;
     const { placeholder, allowNew } = this.props;
     const suggestionsList = matchingSuggestions.map((suggestion, idx) => (
       <SuggestionItem
@@ -273,8 +288,6 @@ export default DynamicActivitySearch;
 const SearchBarWrapper = styled.div`
   position: relative;
 `;
-
-
 
 const AddButton = styled.div`
   cursor: pointer;

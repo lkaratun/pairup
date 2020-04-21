@@ -5,7 +5,7 @@ import { UserContext } from "./UserProvider";
 import config from "../config.json";
 import { WideButton } from "./shared/Buttons";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class ImageUploader extends Component {
   state = { selectedFile: null };

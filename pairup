@@ -1,0 +1,35 @@
+# Back end                                   
+server {                                     
+    listen 80;                               
+    server_name api.local.pair-up.net;       
+                                             
+    location / {                             
+        proxy_pass http://localhost:8000;
+        proxy_set_header        Host    api.local.pair-up.net;    
+    }                                        
+}   
+
+
+server {
+    listen 443 ssl;
+    server_name api.local.pair-up.net;
+
+    location / {
+        proxy_pass https://localhost:8443;
+        proxy_set_header        Host    api.local.pair-up.net;
+    }
+	
+        ssl_certificate      /mnt/c/projects/pairup/backend/localhost.crt;
+        ssl_certificate_key  /mnt/c/projects/pairup/backend/localhost.key;
+}
+                                        
+
+# Front end                                  
+server {                                     
+    listen 80;                               
+    server_name local.pair-up.net;           
+                                             
+    location / {                             
+        proxy_pass http://localhost:3100;    
+    }                                        
+}                                            

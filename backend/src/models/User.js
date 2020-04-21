@@ -3,14 +3,25 @@ const jwt = require("jsonwebtoken");
 const APIError = require("../utils/APIError.js");
 const Table = require("./Table");
 
-const SECRET = process.env.JWT_SECRET || "Default_JWT-Secret";
+if (!process.env.JWT_SECRET) throw new Error("JWT_SECRET env.var missing!");
+const SECRET = process.env.JWT_SECRET;
 const JWT_EXP_THRESHOLD = process.env.JWT_EXP_THRESHOLD || "60d";
 
 class User extends Table {
   constructor(rawData = {}) {
     const pk = "id";
     const tableName = "users";
-    const ACCEPTED_FIELDS = ["id", "email", "first_name", "last_name", "password", "bio", "image"];
+    const ACCEPTED_FIELDS = [
+      "id",
+      "email",
+      "first_name",
+      "last_name",
+      "password",
+      "bio",
+      "image",
+      "google_access_token",
+      "google_refresh_token"
+    ];
     const cleanData = {};
     Object.keys(rawData).forEach(key => {
       if (ACCEPTED_FIELDS.includes(key)) {
@@ -24,17 +35,27 @@ class User extends Table {
   }
 
   refreshToken() {
-    console.log(JWT_EXP_THRESHOLD);
-    return jwt.sign({ id: this.data[this.pk] }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
+    return jwt.sign(
+      {
+        id: this.data[this.pk],
+        email: this.data.email,
+        firstName: this.data.first_name,
+        lastName: this.data.last_name
+      },
+      SECRET,
+      {
+        expiresIn: JWT_EXP_THRESHOLD
+      }
+    );
   }
 
   hashPassword() {
-    // if user was creater without password(from auth/google endpoint) there is no need to hash it
+    // if user was created without password(from auth/google endpoint) there is no need to hash it
     return "password" in this.data
       ? bcrypt.hash(this.data.password, 10).then(hash => {
           this.data.password = hash;
         })
-      : new Promise(resolve => resolve());
+      : Promise.resolve();
   }
 
   create() {

@@ -1,98 +1,77 @@
-import React, { Component } from "react";
-import Router from "next/dist/lib/router";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
-import PropTypes from "prop-types";
 import Input from "./Input";
 import LoginButton from "./LoginButton";
-import GoogleRegisterButton from "./GoogleRegisterButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
-import { AuthButtonWrapper } from "./shared/Wrappers";
 
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
-class LoginForm extends Component {
-  state = {
-    email: "",
-    password: "",
-    loginFailed: false
-  };
+export default () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginFailed, setLoginFailed] = useState(false);
+  const router = useRouter();
 
-  handleGoogleAuth = data => {
-    const accessToken = data.accessToken.replace(/['"]+/g, "");
-    axios
-      .get(`${backendUrl}/auth/google?access_token=${accessToken}`)
-      .then(res => this.props.context.logIn({ data: res.data, method: "oauth" }))
-      .catch(console.log);
-    Router.push("/");
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-
     // Handle Success register state -> redirect
     axios
       .post(
         `${backendUrl}/auth/login`,
         {
-          email: this.state.email,
-          password: this.state.password
+          email,
+          password
         },
         {
           headers: { "Content-Type": "application/json" }
         }
       )
       .then(res => {
-        Router.push("/");
-        this.props.context.logIn({ data: res.data, method: "password" });
+        // router.push("/");
+        // props.context.logIn({ data: res.data, method: "password" });
       })
       .catch(err => {
         console.error(err.response);
-        this.handleFail();
+        setLoginFailed(true);
       });
   };
 
-  handleFail = () => this.setState({ loginFailed: true });
-
-  // Method that syncs current input with state
-  handleInput = e => {
-    const { name, value } = e.target;
-    const inputValue = { ...this.state, [name]: value };
-    this.setState(inputValue);
-  };
-
-  render() {
-    return (
-      <>
-        <form onSubmit={this.handleSubmit}>
-          <Input id="email" name="email" type="email" autoComplete="username" placeholder="Email" onChange={this.handleInput} required />
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Password"
-            onChange={this.handleInput}
-            required
-          />
-          <LoginButton text="Log in" />
-          {this.state.loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
-        </form>
-        <AuthButtonWrapper>
-          <GoogleRegisterButton
-            theme="#ea4335"
-            title="Log in using Google"
-            onCompletion={this.handleGoogleAuth}
-            onFailure={err => console.error(err.response)}
-          />
-        </AuthButtonWrapper>
-      </>
-    );
-  }
-}
-
-export default LoginForm;
-
-LoginForm.propTypes = {
-  context: PropTypes.object
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="username"
+          placeholder="Email"
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          placeholder="Password"
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
+        <LoginButton text="Log in" />
+        {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
+      </form>
+      <button type="button" onClick={() => router.push(`${backendUrl}/auth/google`)}>
+        Log in with Google
+      </button>
+      <button type="button" onClick={() => router.push(`${backendUrl}/auth/view`)}>
+        View cookies
+      </button>
+    </>
+  );
 };
+
+// LoginForm.propTypes = {
+//   context: PropTypes.object
+// };

@@ -5,8 +5,7 @@ import PropTypes from "prop-types";
 import config from "../config.json";
 import Input from "./Input";
 
-
-const backendUrl = config.BACKEND_URL;
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class DynamicLocationSearch extends React.Component {
   constructor(props) {
@@ -41,7 +40,11 @@ class DynamicLocationSearch extends React.Component {
     const suggestionArray = suggestions.data["places"];
     if (suggestionArray.length === 0) {
       // no results found
-      this.setState({ showSuggestions: false, suggestions: suggestionArray, matchingSuggestions: [] });
+      this.setState({
+        showSuggestions: false,
+        suggestions: suggestionArray,
+        matchingSuggestions: []
+      });
     } else {
       this.setState({
         matchingSuggestions: suggestionArray.slice(0, 10),
@@ -91,7 +94,9 @@ class DynamicLocationSearch extends React.Component {
   getSuggestions = input => {
     const { suggestions } = this.state;
     const regex = new RegExp(input, "gmi");
-    const matchingSuggestions = suggestions.filter(activity => activity.city.match(regex)).slice(0, 10);
+    const matchingSuggestions = suggestions
+      .filter(activity => activity.city.match(regex))
+      .slice(0, 10);
     if (matchingSuggestions.length === 0) {
       this.setState({ showSuggestions: false, matchingSuggestions: [] });
     } else {

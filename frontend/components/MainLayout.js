@@ -1,9 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Head from "next/head";
+import PropTypes from "prop-types";
 import styled, { createGlobalStyle } from "styled-components";
-import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 const MainLayout = props => {
   const { children } = props;

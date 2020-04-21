@@ -1,18 +1,22 @@
 import React from "react";
-import App, { Container } from "next/app";
+import cookie from "cookie";
 import UserProvider from "../components/UserProvider";
+import "react-datepicker/dist/react-datepicker.css";
 
-class MyApp extends App {
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <Container>
-        <UserProvider>
-          <Component {...pageProps} />
-        </UserProvider>
-      </Container>
-    );
-  }
+MyApp.getInitialProps = async function getServerSideProps({ ctx }) {
+  const existingCookies = cookie.parse(ctx?.req?.headers?.cookie || "");
+
+  return { props: { cookies: existingCookies } };
+};
+
+function MyApp({ Component, props, pageProps }) {
+  console.log("pageProps = ", pageProps);
+
+  return (
+    <UserProvider {...props} {...pageProps}>
+      <Component />
+    </UserProvider>
+  );
 }
 
 export default MyApp;
