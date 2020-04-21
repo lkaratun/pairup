@@ -10,7 +10,7 @@ const config = require("../../config.json");
 const router = express.Router();
 
 const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
-console.log({ env: process.env.NODE_ENV, FRONTEND_DOMAIN_NAME, FRONTEND_URL });
+console.log({ env: process.env.NODE_ENV, FRONTEND_DOMAIN, FRONTEND_URL });
 
 function loginSuccessRedirect(req, res) {
   const token = new User(req.user).refreshToken();
