@@ -15,14 +15,14 @@ function loginSuccessRedirect(req, res) {
   res
     .cookie("token", token, {
       expires: addMonths(new Date(), 1),
-      httpOnly: true
+      httpOnly: true,
     })
     .cookie("firstName", req.user.first_name, {
       expires: addMonths(new Date(), 1),
-      domain: "local.pair-up.net"
+      domain: "local.pair-up.net",
     });
-  // res.redirect(`http://local.pair-up.net/`);
-  res.send({ token, user: req.user });
+  res.redirect(`http://local.pair-up.net/`);
+  // res.send({ token, user: req.user });
 }
 
 // Create an account using google oAuth
@@ -31,7 +31,7 @@ router.get(
   passport.authenticate("google", {
     scope: ["profile", "email"],
     accessType: "offline",
-    session: true
+    session: true,
   })
 );
 
@@ -51,7 +51,7 @@ router.get("/view", (req, res) => {
     resHeaders: res.headers,
     url: req.url,
     baseUrl: req.baseUrl,
-    originalUrl: req.originalUrl
+    originalUrl: req.originalUrl,
   });
 });
 
