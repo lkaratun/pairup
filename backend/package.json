@@ -7,9 +7,9 @@
     "migrate": "node-pg-migrate",
     "dev": "nodemon src/server.js --watch src",
     "test": "mocha",
-    "start": "forever start src/server.js",
+    "start": "NODE_ENV=production forever start src/server.js",
     "stop": "forever stop src/server.js",
-    "restart": "forever restart src/server.js"
+    "restart": "NODE_ENV=production forever restart src/server.js"
   },
   "keywords": [],
   "author": "",
