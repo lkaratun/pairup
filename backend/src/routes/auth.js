@@ -16,6 +16,9 @@ function loginSuccessRedirect(req, res) {
   const token = new User(req.user).refreshToken();
   console.log("new token = ", token);
 
+  const refererDomain = req.headers.referer.split("/")[2];
+  const refererBaseUrl = /https?:\/\/.*\//.exec(req.headers.referer)[0];
+
   res
     .cookie("token", token, {
       expires: addMonths(new Date(), 1),
@@ -23,10 +26,10 @@ function loginSuccessRedirect(req, res) {
     })
     .cookie("firstName", req.user.first_name, {
       expires: addMonths(new Date(), 1),
-      domain: `${FRONTEND_DOMAIN_NAME}`,
+      domain: `${refererDomain}`,
     });
 
-  res.redirect(FRONTEND_URL);
+  res.redirect(refererBaseUrl);
 }
 
 // Create an account using google oAuth
@@ -54,6 +57,8 @@ router.get("/view", (req, res) => {
     url: req.url,
     baseUrl: req.baseUrl,
     originalUrl: req.originalUrl,
+    referer_domain: req.headers.referer.split("/")[2],
+    referer_url: /https?:\/\/.*\//.exec(req.headers.referer)[0],
   });
 });
 
