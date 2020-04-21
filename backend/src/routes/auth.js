@@ -5,8 +5,12 @@ require("../middleware/googleAuth");
 require("../middleware/localAuth");
 const addMonths = require("date-fns/addMonths");
 const omit = require("lodash/omit");
+const config = require("../../config.json");
 
 const router = express.Router();
+
+const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
+console.log({ env: process.env.NODE_ENV, FRONTEND_DOMAIN_NAME, FRONTEND_URL });
 
 function loginSuccessRedirect(req, res) {
   const token = new User(req.user).refreshToken();
@@ -19,10 +23,10 @@ function loginSuccessRedirect(req, res) {
     })
     .cookie("firstName", req.user.first_name, {
       expires: addMonths(new Date(), 1),
-      domain: "local.pair-up.net",
+      domain: `${FRONTEND_DOMAIN_NAME}`,
     });
-  res.redirect(`http://local.pair-up.net/`);
-  // res.send({ token, user: req.user });
+
+  res.redirect(FRONTEND_URL);
 }
 
 // Create an account using google oAuth
@@ -42,8 +46,6 @@ router.get("/googleAuthSuccess", passport.authenticate("google"), loginSuccessRe
 router.get("/view", (req, res) => {
   console.log("in /view handler!!");
 
-  // res.header({ "test-header": "test-value" });
-  // req.headers.host = "api.local.pair-up.net/auth/view";
   res.send({
     cookies: req.cookies,
     user: req.user,

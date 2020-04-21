@@ -1,0 +1,10 @@
+{
+  "development": {
+    "FRONTEND_DOMAIN": "local.pair-up.net",
+    "FRONTEND_URL": "http://local.pair-up.net"
+  },
+  "production": {
+    "FRONTEND_DOMAIN": "pair-up.net",
+    "FRONTEND_URL": "https://local.pair-up.net"
+  }
+}
