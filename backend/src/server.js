@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
@@ -40,11 +41,13 @@ app.use((err, req, res, next) =>
 
 app.use(compression());
 
+const { SSL_CERT_PATH, SSL_KEY_PATH } = process.env;
+
 spdy
   .createServer(
     {
-      key: fs.readFileSync("localhost.key"),
-      cert: fs.readFileSync("localhost.crt"),
+      key: fs.readFileSync(path.resolve(SSL_KEY_PATH)),
+      cert: fs.readFileSync(path.resolve(SSL_CERT_PATH)),
       protocols: ["h2", "spdy/3.1", "spdy/3", "spdy/2", "http/1.1", "http/1.0"],
     },
     app
