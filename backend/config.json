@@ -5,6 +5,6 @@
   },
   "production": {
     "FRONTEND_DOMAIN": "pair-up.net",
-    "FRONTEND_URL": "https://local.pair-up.net"
+    "FRONTEND_URL": "https://pair-up.net"
   }
 }
