@@ -43,7 +43,11 @@ router.get(
 );
 
 // Send JWT back to front end
-router.get("/googleAuthSuccess", passport.authenticate("google"), loginSuccessRedirect);
+router.get(
+  "/googleAuthSuccess",
+  passport.authenticate("google"),
+  loginSuccessRedirect
+);
 
 // Test route to view current user info and token
 router.get("/view", (req, res) => {
@@ -57,8 +61,9 @@ router.get("/view", (req, res) => {
     url: req.url,
     baseUrl: req.baseUrl,
     originalUrl: req.originalUrl,
-    referer_domain: req.headers.referer.split("/")[2],
-    referer_url: /https?:\/\/.*\//.exec(req.headers.referer)[0]
+    referer_domain: req.headers.referer && req.headers.referer.split("/")[2],
+    referer_url:
+      req.headers.referer && /https?:\/\/.*\//.exec(req.headers.referer)[0]
   });
 });
 
@@ -87,6 +92,16 @@ router.post("/login", passport.authenticate("userRequired"), (req, res) => {
 
   const token = new User({ id: req.user.id }).refreshToken();
   res.status(201).json({ ...req.user, token });
+});
+
+// Log out
+router.get("/logout", (req, res) => {
+  console.log("In logout route");
+  res
+    .clearCookie("token")
+    .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
+    .clearCookie("userId", { domain: FRONTEND_DOMAIN })
+    .send("User is logged out");
 });
 
 // Get user data from token
