@@ -2,19 +2,17 @@ import React from "react";
 import cookie from "cookie";
 import UserProvider from "../components/UserProvider";
 import "react-datepicker/dist/react-datepicker.css";
+import Cookies from "universal-cookie";
 
-MyApp.getInitialProps = async function getServerSideProps({ ctx }) {
-  const existingCookies = cookie.parse(ctx?.req?.headers?.cookie || "");
-
-  return { props: { cookies: existingCookies } };
+MyApp.getInitialProps = async function({ ctx }) {
+  const cookies = new Cookies(ctx?.req?.headers?.cookie);
+  return { props: { cookies: cookies.cookies } };
 };
 
 function MyApp({ Component, props, pageProps }) {
-  console.log("pageProps = ", pageProps);
-
   return (
-    <UserProvider {...props} {...pageProps}>
-      <Component />
+    <UserProvider cookies={props.cookies}>
+      <Component {...pageProps} />
     </UserProvider>
   );
 }
