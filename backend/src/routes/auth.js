@@ -101,6 +101,7 @@ router.get("/logout", (req, res) => {
     .clearCookie("token")
     .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
     .clearCookie("userId", { domain: FRONTEND_DOMAIN })
+    .status(204)
     .send("User is logged out");
 });
 

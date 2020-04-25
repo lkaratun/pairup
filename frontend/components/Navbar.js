@@ -32,7 +32,7 @@ function Navbar() {
               <Link href="/profile">
                 <NavLink>{`Hi ${firstName}!`}</NavLink>
               </Link>
-              {/* <NavLink onClick={logOut}>Logout</NavLink> */}
+              <NavLink onClick={userContext.logOut}>Logout</NavLink>
             </AuthSection>
           </NavAuthButtons>
         ) : (

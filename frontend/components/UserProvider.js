@@ -1,9 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
+import config from "../config.json";
+
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 const UserContext = React.createContext();
 
 function UserProvider({ children, cookies }) {
+  console.log("cookies in UserProvider = ", cookies);
+
   const logIn = ({ data, method }) => {
     if (!["oauth", "password"].includes(method))
       throw new Error("Auth method not recognized");
@@ -33,8 +39,10 @@ function UserProvider({ children, cookies }) {
   };
 
   const logOut = () => {
-    setState(initialState);
-    localStorage.clear();
+    axios({
+      url: `${backendUrl}/auth/logout`,
+      withCredentials: true
+    });
   };
 
   const updateUser = (key, value) => {
