@@ -7,66 +7,73 @@ const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 const UserContext = React.createContext();
 
-function UserProvider({ children, cookies }) {
-  console.log("cookies in UserProvider = ", cookies);
+class UserProvider extends React.Component {
+  state = {
+    firstName: this.props.cookies.firstName,
+    logIn: ({ data, method }) => {
+      if (!["oauth", "password"].includes(method))
+        throw new Error("Auth method not recognized");
+      const allowedFields = [
+        "first_name",
+        "last_name",
+        "email",
+        "token",
+        "bio",
+        "image",
+        "id"
+      ];
 
-  const logIn = ({ data, method }) => {
-    if (!["oauth", "password"].includes(method))
-      throw new Error("Auth method not recognized");
-    const allowedFields = [
-      "first_name",
-      "last_name",
-      "email",
-      "token",
-      "bio",
-      "image",
-      "id"
-    ];
+      const newState = { loggedIn: true };
+      Object.entries(data).forEach(([key, value]) => {
+        if (allowedFields.includes(key)) {
+          if (key === "first_name") newState["firstName"] = value;
+          else if (key === "last_name") newState["lastName"] = value;
+          else newState[key] = value;
+        }
+      });
+      setState(newState);
+      console.log(`Logged in as ${state.firstName} ${state.lastName}`);
+      Object.entries(state).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
+      });
+    },
 
-    const newState = { loggedIn: true };
-    Object.entries(data).forEach(([key, value]) => {
-      if (allowedFields.includes(key)) {
-        if (key === "first_name") newState["firstName"] = value;
-        else if (key === "last_name") newState["lastName"] = value;
-        else newState[key] = value;
-      }
-    });
-    setState(newState);
-    console.log(`Logged in as ${state.firstName} ${state.lastName}`);
-    Object.entries(state).forEach(([key, value]) => {
+    logOut: () => {
+      axios({
+        url: `${backendUrl}/auth/logout`,
+        withCredentials: true
+      });
+    },
+
+    updateUser: (key, value) => {
+      const allowedFields = [
+        "firstName",
+        "lastName",
+        "email",
+        "token",
+        "bio",
+        "image"
+      ];
+      if (!allowedFields.includes(key)) return;
+      setState({ [key]: value });
       localStorage.setItem(key, value);
-    });
+    }
   };
 
-  const logOut = () => {
-    axios({
-      url: `${backendUrl}/auth/logout`,
-      withCredentials: true
-    });
-  };
+  render() {
+    const { children, cookies: existingCookies } = this.props;
+    console.log("this.props.cookies = ", existingCookies);
 
-  const updateUser = (key, value) => {
-    const allowedFields = [
-      "firstName",
-      "lastName",
-      "email",
-      "token",
-      "bio",
-      "image"
-    ];
-    if (!allowedFields.includes(key)) return;
-    setState({ [key]: value });
-    localStorage.setItem(key, value);
-  };
+    const firstNameValue = 0;
+    const { firstName, token } = existingCookies;
 
-  const { firstName, token } = cookies;
-  return (
-    <UserContext.Provider
-      value={{ firstName, token, logIn, logOut, updateUser }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
+    console.log("{ firstName, token }", { firstName, token });
+    return (
+      <UserContext.Provider value={{ ...this.state }}>
+        {children}
+      </UserContext.Provider>
+    );
+  }
 }
 
 UserProvider.propTypes = {
