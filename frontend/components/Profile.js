@@ -36,7 +36,8 @@ class Profile extends Component {
     }
   }
 
-  makeEventsDomElements = events => events.map(event => <Event {...event} key={event.id} />);
+  makeEventsDomElements = events =>
+    events.map(event => <Event {...event} key={event.id} />);
 
   showBioEditor = () => this.setState({ bioEditorOpened: true });
 
@@ -56,7 +57,7 @@ class Profile extends Component {
         }
       )
       .catch(err => console.error(err.response));
-    this.props.context.updateUser("bio", text);
+    this.context.updateUser("bio", text);
   };
 
   setName = (firstName, lastName) => {
@@ -69,26 +70,30 @@ class Profile extends Component {
         }
       )
       .catch(err => console.error(err.response));
-    this.props.context.updateUser("firstName", firstName);
-    this.props.context.updateUser("lastName", lastName);
+    this.context.updateUser("firstName", firstName);
+    this.context.updateUser("lastName", lastName);
   };
 
   updateImage = url => {
-    this.props.context.updateUser("image", url);
+    this.context.updateUser("image", url);
   };
 
   render() {
-    const { firstName, lastName, loggedIn, email, bio } = this.props.context;
+    const { firstName } = this.context;
     const events = this.makeEventsDomElements(this.state.events);
 
     const imageSrc =
-      this.props.context.image !== "null" && this.props.context.image !== null
-        ? this.props.context.image
+      this.context.image !== "null" && this.context.image !== null
+        ? this.context.image
         : "../static/no_photo.jpg";
+
+    const lastName = null;
+    const bio = null;
+    const email = null;
 
     return (
       <Container>
-        {loggedIn ? (
+        {firstName ? (
           <GridWrapper>
             <SideBar>
               <ProfileImage src={imageSrc} />
@@ -99,7 +104,8 @@ class Profile extends Component {
               />
               <PersonalInfo>
                 <FirstLastName>
-                  {firstName} {lastName}
+                  {firstName}
+                  {lastName}
                 </FirstLastName>
                 <EditButton onClick={this.showNameEditor}>(edit)</EditButton>
                 <br />
@@ -114,7 +120,8 @@ class Profile extends Component {
                   </p>
                 ) : (
                   <p>
-                    No bio <EditButton onClick={this.showBioEditor}>(add)</EditButton>
+                    No bio
+                    <EditButton onClick={this.showBioEditor}>(add)</EditButton>
                   </p>
                 )}
                 <BioModal

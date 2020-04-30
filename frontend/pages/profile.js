@@ -1,20 +1,35 @@
-import React, { Component } from "react";
+import React from "react";
+import cookie from "cookie";
+import axios from "axios";
 import Profile from "../components/Profile";
-import { UserConsumer } from "../components/UserProvider";
 import MainLayout from "../components/MainLayout";
+import config from "../config.json";
 
-class ProfilePage extends Component {
-  render() {
-    return (
-      <MainLayout>
-        <div>
-          <UserConsumer>
-            {context => <Profile context={context} />}
-          </UserConsumer>
-        </div>
-      </MainLayout>
-    );
-  }
+const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+
+export async function getServerSideProps({ req }) {
+  console.log(
+    "In profile page -> getServerSideProps, cookies = ",
+    cookie.parse(req?.headers?.cookie)
+  );
+
+  console.log("request URL = ", `http:${backendUrl}/auth/view`);
+
+  const response = await axios({
+    url: `http:${backendUrl}/auth/view`,
+    headers: { cookie: req?.headers?.cookie }
+  });
+  console.log("response = ", response.data);
+
+  return { props: {} };
+}
+
+function ProfilePage(props) {
+  return (
+    <MainLayout>
+      <Profile />
+    </MainLayout>
+  );
 }
 
 export default ProfilePage;

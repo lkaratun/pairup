@@ -7,17 +7,18 @@ const helmet = require("helmet");
 const logger = require("morgan");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 const activitiesRouter = require("./routes/activities");
 require("./middleware/localAuth");
 const authRouter = require("./routes/auth");
 const eventsRouter = require("./routes/events");
 const placesRouter = require("./routes/places");
 const usersRouter = require("./routes/users");
-const compression = require("compression");
 const fs = require("fs");
 const spdy = require("spdy");
 const config = require("../config.json");
-const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
+
+const { FRONTEND_URL } = config[process.env.NODE_ENV];
 
 const httpPort = process.env.PORT || 8000;
 const httpsPort = process.env.HTTPS_PORT || 8443;
@@ -33,7 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRouter);
-app.use("/users", passport.authenticate("jwt"), usersRouter);
+app.use("/users", passport.authenticate("userRequired"), usersRouter);
 app.use("/activities", activitiesRouter);
 app.use("/places", placesRouter);
 app.use("/events", eventsRouter);

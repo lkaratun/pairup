@@ -1,10 +1,10 @@
 const passport = require("passport");
 const express = require("express");
+const omit = require("lodash/omit");
 const User = require("../models/User");
 require("../middleware/googleAuth");
 require("../middleware/localAuth");
 const addMonths = require("date-fns/addMonths");
-const omit = require("lodash/omit");
 const config = require("../../config.json");
 
 const router = express.Router();
@@ -19,7 +19,8 @@ function loginSuccessRedirect(req, res) {
   res
     .cookie("token", token, {
       expires: addMonths(new Date(), 1),
-      httpOnly: true
+      httpOnly: true,
+      domain: FRONTEND_DOMAIN
     })
     .cookie("firstName", req.user.first_name, {
       expires: addMonths(new Date(), 1),
