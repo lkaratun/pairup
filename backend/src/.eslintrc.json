@@ -10,6 +10,7 @@
     "fetch": false
   },
   "rules": {
+    "no-restricted-syntax": 0,
     "import/order": 0,
     "dot-notation": 0,
     "no-plusplus": 0,
