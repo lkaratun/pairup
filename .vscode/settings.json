@@ -2,5 +2,8 @@
   "workbench.colorCustomizations": {
     "titleBar.activeBackground": "#0A155B",
     "titleBar.activeForeground": "#FDFAF6"
-  }
+  },
+  "cSpell.words": [
+    "camelcase"
+  ]
 }
