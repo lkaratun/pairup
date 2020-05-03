@@ -1,7 +1,18 @@
 const pick = require("lodash/pick");
 const { snakeCase } = require("snake-case");
+const camelCase = require("camelcase");
 
 const db = require("./db");
+
+function camelCaseObjectKeys(object) {
+  for (const key of Object.keys(object)) {
+    if (key !== camelCase(key)) {
+      object[camelCase(key)] = object[key];
+      delete object[key];
+    }
+  }
+  return object;
+}
 
 class Table {
   constructor(tableName, pk, data = {}) {
@@ -112,7 +123,9 @@ class Table {
       ", "
     )}) RETURNING ${this.ACCEPTED_FIELDS.map(snakeCase).join(", ")}`;
 
-    return db.query(text, prepared.values);
+    return db
+      .query(text, prepared.values)
+      .then(res => camelCaseObjectKeys(res));
   }
 
   read(customText = null) {
@@ -137,7 +150,7 @@ class Table {
       text += ` OFFSET ${this.opts.offset}`;
     }
 
-    return db.query(text, values);
+    return db.query(text, values).then(res => camelCaseObjectKeys(res));
   }
 
   update() {
@@ -161,7 +174,10 @@ class Table {
       snakeCase
     ).join(", ")};`;
     prepared.values.push(id);
-    return db.query(text, prepared.values).then(res => res[0]);
+    return db
+      .query(text, prepared.values)
+      .then(res => res[0])
+      .then(res => camelCaseObjectKeys(res));
   }
 
   delete() {

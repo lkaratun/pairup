@@ -2,22 +2,11 @@ const express = require("express");
 const User = require("../models/User");
 const Attendee = require("../models/EventAttendee");
 const omit = require("lodash/omit");
-const camelCase = require("camelcase");
 
 const router = express.Router();
 const upload = require("../utils/upload");
 
 const SENSITIVE_FIELDS = ["google_access_token", "google_refresh_token"];
-
-function camelCaseObjectKeys(object) {
-  for (const key of Object.keys(object)) {
-    if (key !== camelCase(key)) {
-      object[camelCase(key)] = object[key];
-      delete object[key];
-    }
-  }
-  return object;
-}
 
 router.get("/", (req, res) => {
   const user = new User({ id: req.user.id });
@@ -25,7 +14,7 @@ router.get("/", (req, res) => {
     .read()
     .then(() => {
       const userData = omit(user.data, SENSITIVE_FIELDS);
-      return res.json(camelCaseObjectKeys(userData));
+      return res.json(userData);
     })
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
