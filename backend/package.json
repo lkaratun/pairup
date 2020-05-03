@@ -39,6 +39,7 @@
     "passport-local": "^1.0.0",
     "passport-strategy": "^1.0.0",
     "pg": "^7.18.2",
+    "snake-case": "^3.0.3",
     "spdy": "^4.0.2"
   },
   "devDependencies": {
