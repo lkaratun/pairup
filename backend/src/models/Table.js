@@ -4,7 +4,10 @@ const camelCase = require("camelcase");
 
 const db = require("./db");
 
-function camelCaseObjectKeys(object) {
+function cleanUpObjectKeys(object) {
+  const SENSITIVE_FIELDS = ["google_access_token", "google_refresh_token"];
+  SENSITIVE_FIELDS.forEach(field => delete object[field]);
+
   for (const key of Object.keys(object)) {
     if (key !== camelCase(key)) {
       object[camelCase(key)] = object[key];
@@ -123,9 +126,7 @@ class Table {
       ", "
     )}) RETURNING ${this.ACCEPTED_FIELDS.map(snakeCase).join(", ")}`;
 
-    return db
-      .query(text, prepared.values)
-      .then(res => camelCaseObjectKeys(res));
+    return db.query(text, prepared.values).then(res => cleanUpObjectKeys(res));
   }
 
   read(customText = null) {
@@ -150,7 +151,7 @@ class Table {
       text += ` OFFSET ${this.opts.offset}`;
     }
 
-    return db.query(text, values).then(res => camelCaseObjectKeys(res));
+    return db.query(text, values).then(res => cleanUpObjectKeys(res));
   }
 
   update() {
@@ -177,7 +178,7 @@ class Table {
     return db
       .query(text, prepared.values)
       .then(res => res[0])
-      .then(res => camelCaseObjectKeys(res));
+      .then(res => cleanUpObjectKeys(res));
   }
 
   delete() {

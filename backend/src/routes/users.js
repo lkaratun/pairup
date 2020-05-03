@@ -6,15 +6,12 @@ const omit = require("lodash/omit");
 const router = express.Router();
 const upload = require("../utils/upload");
 
-const SENSITIVE_FIELDS = ["google_access_token", "google_refresh_token"];
-
 router.get("/", (req, res) => {
   const user = new User({ id: req.user.id });
   user
     .read()
     .then(() => {
-      const userData = omit(user.data, SENSITIVE_FIELDS);
-      return res.json(userData);
+      return res.json(user.data);
     })
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
@@ -37,7 +34,7 @@ router.put("/", (req, res) => {
   const user = new User({ id: req.user.id, ...newData });
   user
     .update()
-    .then(data => res.json(omit(data, SENSITIVE_FIELDS)))
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
