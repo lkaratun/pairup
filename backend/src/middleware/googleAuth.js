@@ -19,12 +19,12 @@ passport.use(
           .read()
           // user found, return it
           .then(async userData => {
-            next(null, userData[0]);
+            next(null, userData);
             user.set({
               google_access_token: accessToken,
               google_refresh_token: refreshToken
             });
-            const updatedUser = await user.update();
+            user.update();
           })
 
           // if user not found

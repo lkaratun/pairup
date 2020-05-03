@@ -151,7 +151,11 @@ class Table {
       text += ` OFFSET ${this.opts.offset}`;
     }
 
-    return db.query(text, values).then(res => cleanUpObjectKeys(res));
+    return db
+      .query(text, values)
+      .then(
+        res => console.log("res in Table = ", res) || cleanUpObjectKeys(res[0])
+      );
   }
 
   update() {

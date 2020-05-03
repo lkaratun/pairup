@@ -1,21 +1,12 @@
 const express = require("express");
 const User = require("../models/User");
 const Attendee = require("../models/EventAttendee");
-const omit = require("lodash/omit");
 
 const router = express.Router();
 const upload = require("../utils/upload");
 
 router.get("/", (req, res) => {
-  const user = new User({ id: req.user.id });
-  user
-    .read()
-    .then(() => {
-      return res.json(user.data);
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
-    });
+  return res.json(req.user);
 });
 
 router.delete("/", (req, res) => {

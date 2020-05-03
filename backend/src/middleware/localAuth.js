@@ -28,14 +28,19 @@ passport.use(
 
           // refuse to authenticate if user db record has no password
           if (!userData.password) {
-            throw new ApiError("This account can be authenticated with google only", 403);
+            throw new ApiError(
+              "This account can be authenticated with google only",
+              403
+            );
           }
           return bcrypt.compare(password, userData.password) ? userData : null;
         })
         .then(
           userData =>
             console.log({ userData }) ||
-            (userData ? done(null, userData) : done("Incorrect username or password", null))
+            (userData
+              ? done(null, userData)
+              : done("Incorrect username or password", null))
         )
         .catch(err => done(err, null));
     }
@@ -57,12 +62,9 @@ passport.use(
       const user = new User({ id: token.id });
       user
         .read()
-        .then(userData => {
-          done(null, userData[0]);
-        })
+        .then(userData => done(null, userData))
         .catch(err => {
-          console.error(err);
-
+          console.error("Error in userRequired middleware: ", err);
           done(err, false);
         });
     }
