@@ -4,7 +4,7 @@ class EventAttendee extends Table {
   constructor(rawData = {}) {
     const pk = "id";
     const tableName = "event_attendees";
-    const ACCEPTED_FIELDS = ["id", "event_id", "user_id"];
+    const ACCEPTED_FIELDS = ["id", "eventId", "userId"];
     const cleanData = {};
     Object.keys(rawData).forEach(key => {
       if (ACCEPTED_FIELDS.includes(key)) {

@@ -1,4 +1,5 @@
 const pick = require("lodash/pick");
+const { snakeCase } = require("snake-case");
 
 const db = require("./db");
 
@@ -60,7 +61,9 @@ class Table {
     let i = 1;
     return Object.keys(this.data).reduce(
       (acc, key) => {
-        acc.text.push(`${this.tableName}.${key} ${this.opts.compare} $${i++}`);
+        acc.text.push(
+          `${this.tableName}.${snakeCase(key)} ${this.opts.compare} $${i++}`
+        );
         acc.values.push(this.data[key]);
         return acc;
       },
@@ -69,7 +72,9 @@ class Table {
   }
 
   getMissingFields() {
-    return this.REQUIRED_FIELDS.filter(f => Object.keys(this.data).indexOf(f) === -1);
+    return this.REQUIRED_FIELDS.filter(
+      f => Object.keys(this.data).indexOf(f) === -1
+    );
   }
 
   set(params) {
@@ -83,21 +88,29 @@ class Table {
     const fieldsMissing = this.getMissingFields();
     if (fieldsMissing.length > 0) {
       return new Promise((resolve, reject) => {
-        reject(new Error(`Field(s) ${fieldsMissing.map(f => `'${f}'`).join(", ")} is(are) missing`));
+        reject(
+          new Error(
+            `Field(s) ${fieldsMissing
+              .map(f => `'${f}'`)
+              .join(", ")} is(are) missing`
+          )
+        );
       });
     }
     const prepared = Object.keys(this.data).reduce(
       (acc, key) => {
-        acc.keys.push(key);
+        acc.keys.push(snakeCase(key));
         acc.indexes.push(`$${index++}`);
         acc.values.push(this.data[key]);
         return acc;
       },
       { keys: [], indexes: [], values: [] }
     );
-    const text = `INSERT INTO ${this.tableName} (${prepared.keys.join(", ")}) VALUES (${prepared.indexes.join(
+    const text = `INSERT INTO ${this.tableName} (${prepared.keys.join(
       ", "
-    )}) RETURNING ${this.ACCEPTED_FIELDS.join(", ")}`;
+    )}) VALUES (${prepared.indexes.join(
+      ", "
+    )}) RETURNING ${this.ACCEPTED_FIELDS.map(snakeCase).join(", ")}`;
 
     return db.query(text, prepared.values);
   }
@@ -136,17 +149,19 @@ class Table {
     let index = 1;
     const prepared = Object.keys(rest).reduce(
       (acc, key) => {
-        acc.keys.push(`${key} = $${index++}`);
+        acc.keys.push(`${snakeCase(key)} = $${index++}`);
         acc.values.push(`${rest[key]}`);
         return acc;
       },
       { keys: [], values: [] }
     );
-    const text = `UPDATE ${this.tableName} SET ${prepared.keys.join(", ")} WHERE ${
-      this.pk
-    } = $${index} RETURNING ${this.ACCEPTED_FIELDS.join(", ")};`;
+    const text = `UPDATE ${this.tableName} SET ${prepared.keys.join(
+      ", "
+    )} WHERE ${this.pk} = $${index} RETURNING ${this.ACCEPTED_FIELDS.map(
+      snakeCase
+    ).join(", ")};`;
     prepared.values.push(id);
-    return db.query(text, prepared.values);
+    return db.query(text, prepared.values).then(res => res[0]);
   }
 
   delete() {

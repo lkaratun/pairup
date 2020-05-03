@@ -7,15 +7,15 @@ class Event extends Table {
     const ACCEPTED_FIELDS = [
       "id",
       "name",
-      "author_id",
+      "authorId",
       "image",
       "description",
-      "activity_id",
-      "place_id",
-      "date_from",
-      "date_to",
-      "min_people",
-      "max_people"
+      "activityId",
+      "placeId",
+      "dateFrom",
+      "dateTo",
+      "minPeople",
+      "maxPeople"
     ];
     const cleanData = {};
     Object.keys(rawData).forEach(key => {
@@ -25,7 +25,7 @@ class Event extends Table {
     });
     super(tableName, pk, cleanData);
     this.ACCEPTED_FIELDS = ACCEPTED_FIELDS;
-    this.REQUIRED_FIELDS = ["name", "activity_id", "author_id"];
+    this.REQUIRED_FIELDS = ["name", "activityId", "authorId"];
     this.parseOpts(rawData);
   }
 

@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const APIError = require("../utils/APIError.js");
 const Table = require("./Table");
+const pick = require("lodash/pick");
 
 if (!process.env.JWT_SECRET) throw new Error("JWT_SECRET env.var missing!");
 const SECRET = process.env.JWT_SECRET;
@@ -14,23 +15,17 @@ class User extends Table {
     const ACCEPTED_FIELDS = [
       "id",
       "email",
-      "first_name",
-      "last_name",
+      "firstName",
+      "lastName",
       "password",
       "bio",
       "image",
-      "google_access_token",
-      "google_refresh_token"
+      "googleAccessToken",
+      "googleRefreshToken"
     ];
-    const cleanData = {};
-    Object.keys(rawData).forEach(key => {
-      if (ACCEPTED_FIELDS.includes(key)) {
-        cleanData[key] = rawData[key];
-      }
-    });
+    const cleanData = pick(rawData, ACCEPTED_FIELDS);
     super(tableName, pk, cleanData);
     this.ACCEPTED_FIELDS = ACCEPTED_FIELDS;
-    this.REQUIRED_FIELDS = ["email"];
     this.parseOpts(rawData);
   }
 
@@ -82,7 +77,9 @@ class User extends Table {
   }
 
   update() {
-    return "password" in this.data ? this.hashPassword().then(() => super.update()) : super.update();
+    return "password" in this.data
+      ? this.hashPassword().then(() => super.update())
+      : super.update();
   }
 }
 
