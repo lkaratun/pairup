@@ -10,6 +10,7 @@
     "fetch": false
   },
   "rules": {
+    "import/extensions": 0,
     "dot-notation": 0,
     "no-plusplus": 0,
     "no-use-before-define": 0,
