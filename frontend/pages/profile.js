@@ -15,7 +15,7 @@ export async function getServerSideProps({ req }) {
     axios({
       url: `http:${backendUrl}/events`,
       headers: { cookie: req?.headers?.cookie || "" }
-    }).then(res => res.data.events)
+    }).then(res => res.data)
   ]);
 
   return { props: { userData, events } };

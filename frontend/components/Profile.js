@@ -26,8 +26,8 @@ function Profile(props) {
 
   const { lastName, email, image, bio } = userData;
 
-  // const renderEvents = eventsArray =>
-  //   eventsArray.map(event => <Event {...event} key={event.id} />);
+  const renderEvents = eventsArray =>
+    eventsArray.map(event => <Event {...event} key={event.id} />);
 
   // const showBioEditor = () => setBioEditorOpened(true);
 
@@ -104,7 +104,7 @@ function Profile(props) {
 
           <MainContent>
             <h2 style={{ marginTop: "0", marginBottom: "0" }}>My events</h2>
-            {/* {events} */}
+            {renderEvents(props.events)}
           </MainContent>
         </GridWrapper>
       ) : (
