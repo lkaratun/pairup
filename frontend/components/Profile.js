@@ -1,20 +1,16 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import axios from "axios";
 import ImageUploader from "./ImageUploader";
 import { UserContext } from "./UserProvider";
 import Event from "./Event";
 import BioModal from "./BioModal";
 import NameModal from "./NameModal";
-import config from "../config.json";
-
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 function Profile(props) {
   // const firstName = this.props.
   const [userData, setUserData] = useState({
-    lastName: props.lastName,
+    lastName: props.userData.lastName,
     email: props.userData.email,
     image: props.userData.image || "../static/no_photo.jpg",
     bio: props.userData.bio
@@ -29,22 +25,7 @@ function Profile(props) {
   const renderEvents = eventsArray =>
     eventsArray.map(event => <Event {...event} key={event.id} />);
 
-  // const showBioEditor = () => setBioEditorOpened(true);
-
-  // const hideBioEditor = () => setBioEditorOpened(false);
-
   const showNameEditor = () => setNameEditorOpened(true);
-
-  // const hideNameEditor = () => setNameEditorOpened(false);
-
-  // const setName = (firstName, lastName) => {
-  //   axios
-  //     .put(`${backendUrl}/users`, {
-  //       first_name: firstName,
-  //       last_name: lastName
-  //     })
-  //     .catch(err => console.error(err.response));
-  // };
 
   return (
     <Container>
@@ -95,8 +76,18 @@ function Profile(props) {
               <NameModal
                 showModal={nameEditorOpened}
                 hide={() => setNameEditorOpened(false)}
+                initialLastName={userData.lastName}
                 confirm={(newFirstName, newLastName) =>
-                  updateUser({ firstName: newFirstName, lastName: newLastName })
+                  updateUser({
+                    firstName: newFirstName,
+                    lastName: newLastName
+                  }).then(res =>
+                    setUserData({
+                      ...userData,
+                      firstName: res.firstName,
+                      lastName: res.lastName
+                    })
+                  )
                 }
               />
             </PersonalInfo>

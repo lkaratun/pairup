@@ -22,7 +22,7 @@ Modal.setAppElement("#__next");
 class EditModal extends React.Component {
   state = {
     firstName: this.context.firstName,
-    lastName: this.context.lastName
+    lastName: this.props.initialLastName
   };
 
   handleKeyPress = e => {

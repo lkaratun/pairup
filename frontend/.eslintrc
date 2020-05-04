@@ -1,7 +1,7 @@
 {
   "extends": [
-    "react-app",
     "airbnb",
+    "react-app",
     "prettier"
   ],
   "globals": {
@@ -28,6 +28,7 @@
         "props": false
       }
     ],
+    "react/jsx-curly-newline": 0,
     "react/prefer-stateless-function": 0,
     "react/jsx-filename-extension": 0,
     "react/jsx-one-expression-per-line": 0,
