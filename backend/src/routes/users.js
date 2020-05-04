@@ -4,6 +4,10 @@ const Attendee = require("../models/EventAttendee");
 
 const router = express.Router();
 const upload = require("../utils/upload");
+const addMonths = require("date-fns/addMonths");
+const config = require("../../config.json");
+
+const { FRONTEND_DOMAIN } = config[process.env.NODE_ENV];
 
 router.get("/", (req, res) => {
   return res.json(req.user);
@@ -20,15 +24,19 @@ router.delete("/", (req, res) => {
     });
 });
 
-router.put("/", (req, res) => {
+router.put("/", async (req, res) => {
   const { id, ...newData } = req.body;
   const user = new User({ id: req.user.id, ...newData });
-  user
-    .update()
-    .then(data => res.json(data))
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
+  const userData = await user.update().catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
+
+  if (newData?.firstName)
+    res.cookie("firstName", userData.firstName, {
+      expires: addMonths(new Date(), 1),
+      domain: FRONTEND_DOMAIN
     });
+  res.json(userData);
 });
 
 router.get("/events", (req, res) => {

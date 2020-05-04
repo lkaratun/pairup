@@ -1,6 +1,5 @@
 const passport = require("passport");
 const express = require("express");
-const omit = require("lodash/omit");
 const User = require("../models/User");
 require("../middleware/googleAuth");
 require("../middleware/localAuth");
@@ -23,10 +22,6 @@ function loginSuccessRedirect(req, res) {
       domain: FRONTEND_DOMAIN
     })
     .cookie("firstName", req.user.first_name, {
-      expires: addMonths(new Date(), 1),
-      domain: FRONTEND_DOMAIN
-    })
-    .cookie("userId", req.user.id, {
       expires: addMonths(new Date(), 1),
       domain: FRONTEND_DOMAIN
     });
@@ -69,31 +64,41 @@ router.get("/view", (req, res) => {
 });
 
 // Register using login/password
-router.post("/register", (req, res) => {
-  const { password } = req.body;
-  // ToDo: replace with proper validation
-  if (!password) {
-    return res.status(400).json({ message: "password not set" });
-  }
-  const user = new User(req.body);
-  user
-    .create()
-    .then(() => {
-      res.status(201).json({ ...user.data, token: user.refreshToken() });
-    })
-    .catch(err => {
-      res.status(err.statusCode || 500).json({ message: err.message });
-    });
-});
+router.post(
+  "/register",
+  (req, res, next) => {
+    const { password } = req.body;
+    // ToDo: replace with proper validation
+    if (!password) {
+      return res.status(400).json({ message: "password not set" });
+    }
+    const user = new User(req.body);
+    return user
+      .create()
+      .then(() => {
+        req.user = user.data;
+        res.status(201);
+        next();
+      })
+      .catch(err => {
+        res.status(err.statusCode || 500).json({ message: err.message });
+      });
+  },
+  loginSuccessRedirect
+);
 
 // Log in using username/password
-router.post("/login", passport.authenticate("userRequired"), (req, res) => {
-  console.log("In login route");
-  console.log(req.user);
-
-  const token = new User({ id: req.user.id }).refreshToken();
-  res.status(201).json({ ...req.user, token });
-});
+router.post(
+  "/login",
+  passport.authenticate("userRequired"),
+  (req, res, next) => {
+    console.log("In login route");
+    console.log(req.user);
+    res.status(201);
+    return next();
+  },
+  loginSuccessRedirect
+);
 
 // Log out
 router.get("/logout", (req, res) => {
