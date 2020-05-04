@@ -8,7 +8,7 @@ function Navbar() {
   const userContext = useContext(UserContext) || {};
   console.log("UserContext = ", userContext);
 
-  const { firstName, token } = userContext;
+  const { firstName } = userContext;
 
   return (
     <StyledNav>
@@ -30,7 +30,9 @@ function Navbar() {
           <NavAuthButtons>
             <AuthSection>
               <Link href="/profile">
-                <NavLink>{`Hi ${firstName}!`}</NavLink>
+                <>
+                  Logged in as: {firstName}. <NavLink>Profile</NavLink>
+                </>
               </Link>
               <NavLink onClick={userContext.logOut}>Logout</NavLink>
             </AuthSection>

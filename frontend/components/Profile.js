@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -11,145 +11,102 @@ import config from "../config.json";
 
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
-class Profile extends Component {
-  state = { events: [], bioEditorOpened: false, nameEditorOpened: false };
+function Profile(props) {
+  // const firstName = this.props.
+  const [userData, setUserData] = useState({
+    lastName: props.lastName,
+    email: props.email,
+    image: props.image || "../static/no_photo.jpg",
+    bio: props.bio
+  });
+  const [bioEditorOpened, setBioEditorOpened] = useState(false);
+  const [nameEditorOpened, setNameEditorOpened] = useState(false);
+  const userContext = useContext(UserContext) || {};
+  const { firstName, updateUser } = userContext;
 
-  async componentDidMount() {
-    // Have to get token from localStorage on page reload b/c context is empty
-    this.token = this.context.token || localStorage.getItem("token");
-    const events = await this.getEventsFromBackend();
-    this.setState({ events });
-  }
+  const { lastName, email, image, bio } = userData;
 
-  async getEventsFromBackend() {
-    if (this.token == null) return [];
-    try {
-      return (
-        await axios
-          .get(`${backendUrl}/users/events`, {
-            headers: { Authorization: `Bearer ${this.token}` }
-          })
-          .catch(res => console.error(res.response))
-      ).data.events;
-    } catch (err) {
-      return [];
-    }
-  }
+  // const renderEvents = eventsArray =>
+  //   eventsArray.map(event => <Event {...event} key={event.id} />);
 
-  makeEventsDomElements = events =>
-    events.map(event => <Event {...event} key={event.id} />);
+  // const showBioEditor = () => setBioEditorOpened(true);
 
-  showBioEditor = () => this.setState({ bioEditorOpened: true });
+  // const hideBioEditor = () => setBioEditorOpened(false);
 
-  hideBioEditor = () => this.setState({ bioEditorOpened: false });
+  const showNameEditor = () => setNameEditorOpened(true);
 
-  showNameEditor = () => this.setState({ nameEditorOpened: true });
+  // const hideNameEditor = () => setNameEditorOpened(false);
 
-  hideNameEditor = () => this.setState({ nameEditorOpened: false });
+  // const setName = (firstName, lastName) => {
+  //   axios
+  //     .put(`${backendUrl}/users`, {
+  //       first_name: firstName,
+  //       last_name: lastName
+  //     })
+  //     .catch(err => console.error(err.response));
+  // };
 
-  setBio = text => {
-    axios
-      .put(
-        `${backendUrl}/users`,
-        { bio: text },
-        {
-          headers: { Authorization: `Bearer ${this.token}` }
-        }
-      )
-      .catch(err => console.error(err.response));
-    this.context.updateUser("bio", text);
-  };
-
-  setName = (firstName, lastName) => {
-    axios
-      .put(
-        `${backendUrl}/users`,
-        { first_name: firstName, last_name: lastName },
-        {
-          headers: { Authorization: `Bearer ${this.token}` }
-        }
-      )
-      .catch(err => console.error(err.response));
-    this.context.updateUser("firstName", firstName);
-    this.context.updateUser("lastName", lastName);
-  };
-
-  updateImage = url => {
-    this.context.updateUser("image", url);
-  };
-
-  render() {
-    const { firstName } = this.context;
-    const events = this.makeEventsDomElements(this.state.events);
-
-    const imageSrc =
-      this.context.image !== "null" && this.context.image !== null
-        ? this.context.image
-        : "../static/no_photo.jpg";
-
-    const lastName = null;
-    const bio = null;
-    const email = null;
-
-    return (
-      <Container>
-        {firstName ? (
-          <GridWrapper>
-            <SideBar>
-              <ProfileImage src={imageSrc} />
-              <ImageUploader
-                url="/users/images"
-                onCompletion={this.updateImage}
-                style={{ gridColumn: "1 / span 1", gridRow: "2 / span 1" }}
+  return (
+    <>
+      {firstName ? (
+        <GridWrapper>
+          <SideBar>
+            <ProfileImage src={image} />
+            <ImageUploader
+              url="/users/images"
+              // onCompletion={updateImage}
+              style={{ gridColumn: "1 / span 1", gridRow: "2 / span 1" }}
+            />
+            <PersonalInfo>
+              <FirstLastName>
+                {firstName} {lastName}
+              </FirstLastName>
+              <EditButton onClick={showNameEditor}>(edit)</EditButton>
+              <br />
+              <strong>Email</strong> <br />
+              {email}
+              <br />
+              {bio !== null && bio !== "null" && bio !== "" ? (
+                <p>
+                  <strong>Bio</strong>
+                  <EditButton onClick={() => setBioEditorOpened(true)}>
+                    (edit)
+                  </EditButton>
+                  <br /> {bio}
+                </p>
+              ) : (
+                <p>
+                  No bio
+                  <EditButton onClick={() => setBioEditorOpened(true)}>
+                    (add)
+                  </EditButton>
+                </p>
+              )}
+              <BioModal
+                showModal={bioEditorOpened}
+                hide={() => setBioEditorOpened(false)}
+                // confirm={setBio}
               />
-              <PersonalInfo>
-                <FirstLastName>
-                  {firstName}
-                  {lastName}
-                </FirstLastName>
-                <EditButton onClick={this.showNameEditor}>(edit)</EditButton>
-                <br />
-                <strong>Email</strong> <br />
-                {email}
-                <br />
-                {bio !== null && bio !== "null" && bio !== "" ? (
-                  <p>
-                    <strong>Bio</strong>{" "}
-                    <EditButton onClick={this.showBioEditor}>(edit)</EditButton>
-                    <br /> {bio}
-                  </p>
-                ) : (
-                  <p>
-                    No bio
-                    <EditButton onClick={this.showBioEditor}>(add)</EditButton>
-                  </p>
-                )}
-                <BioModal
-                  showModal={this.state.bioEditorOpened}
-                  hide={this.hideBioEditor}
-                  confirm={this.setBio}
-                />
-                <NameModal
-                  showModal={this.state.nameEditorOpened}
-                  hide={this.hideNameEditor}
-                  confirm={this.setName}
-                />
-              </PersonalInfo>
-            </SideBar>
+              <NameModal
+                showModal={nameEditorOpened}
+                hide={() => setNameEditorOpened(false)}
+                confirm={(newFirstName, newLastName) =>
+                  updateUser({ firstName: newFirstName, lastName: newLastName })
+                }
+              />
+            </PersonalInfo>
+          </SideBar>
 
-            <MainContent>
-              <>
-                <h2 style={{ marginTop: "0", marginBottom: "0" }}>My events</h2>
-                {events}
-              </>
-            </MainContent>
-          </GridWrapper>
-        ) : (
-          "Please log in to view this page"
-        )}
-      </Container>
-    );
-  }
+          <MainContent>
+            <h2 style={{ marginTop: "0", marginBottom: "0" }}>My events</h2>
+            {/* {events} */}
+          </MainContent>
+        </GridWrapper>
+      ) : (
+        "Please log in to view this page"
+      )}
+    </>
+  );
 }
 
 Profile.contextType = UserContext;
