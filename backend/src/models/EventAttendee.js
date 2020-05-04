@@ -21,7 +21,7 @@ class EventAttendee extends Table {
     const text = `
       SELECT users.id, users.first_name, users.last_name, users.image FROM users
       INNER JOIN ${this.tableName} ON users.id = ${this.tableName}.user_id`;
-    return super.read(text);
+    return super.readAll(text);
   }
 
   getAllEvents() {
@@ -34,7 +34,7 @@ class EventAttendee extends Table {
       INNER JOIN activities ON events.activity_id = activities.id
       INNER JOIN users ON events.author_id = users.id
       LEFT JOIN places ON places.id = events.place_id`;
-    return super.read(text);
+    return super.readAll(text);
   }
 }
 

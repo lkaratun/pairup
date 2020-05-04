@@ -21,7 +21,7 @@ function loginSuccessRedirect(req, res) {
       httpOnly: true,
       domain: FRONTEND_DOMAIN
     })
-    .cookie("firstName", req.user.first_name, {
+    .cookie("firstName", req.user.firstName, {
       expires: addMonths(new Date(), 1),
       domain: FRONTEND_DOMAIN
     });

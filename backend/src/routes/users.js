@@ -43,9 +43,7 @@ router.get("/events", (req, res) => {
   const attendee = new Attendee({ user_id: req.user[req.user.pk] });
   attendee
     .getAllEvents()
-    .then(data => {
-      res.json({ events: data });
-    })
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });

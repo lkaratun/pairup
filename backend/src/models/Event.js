@@ -29,7 +29,7 @@ class Event extends Table {
     this.parseOpts(rawData);
   }
 
-  read() {
+  readAll() {
     const text = `SELECT
     events.id, events.name, author_id, CONCAT(users.first_name, ' ', users.last_name) as author, events.image, events.description,
     activities.name as activity, places.country, places.city,
@@ -38,7 +38,9 @@ class Event extends Table {
     LEFT JOIN users ON users.id = events.author_id
     LEFT JOIN activities ON activities.id = events.activity_id
     LEFT JOIN places ON places.id = events.place_id`;
-    return super.read(text);
+    console.log("Event search SQL query = ", text);
+
+    return super.readAll(text);
   }
 }
 

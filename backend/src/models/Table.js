@@ -129,7 +129,7 @@ class Table {
     return db.query(text, prepared.values).then(res => cleanUpObjectKeys(res));
   }
 
-  read(customText = null) {
+  readAll(customText = null) {
     let text = customText || `SELECT * FROM ${this.tableName}`;
     const pk = this.data[this.pk];
     let values;
@@ -151,7 +151,14 @@ class Table {
       text += ` OFFSET ${this.opts.offset}`;
     }
 
-    return db.query(text, values).then(res => cleanUpObjectKeys(res[0]));
+    return db
+      .query(text, values)
+      .then(res => console.log("Event search result = ", res) || res)
+      .then(res => res.map(cleanUpObjectKeys));
+  }
+
+  read(customText) {
+    return this.readAll(customText).then(data => data[0]);
   }
 
   update() {

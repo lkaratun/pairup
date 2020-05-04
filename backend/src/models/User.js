@@ -65,7 +65,7 @@ class User extends Table {
       if (data.length === 0) {
         throw new APIError("user not found", 404);
       } else if (data.length === 1) {
-        const { password, ...rest } = data[0];
+        const { password, ...rest } = data;
         this.data = rest;
         this[this.pk] = this.data[this.pk];
       }

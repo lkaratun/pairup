@@ -4,7 +4,6 @@ const Event = require("../models/Event");
 const Attendee = require("../models/EventAttendee");
 const APIError = require("../utils/APIError.js");
 const upload = require("../utils/upload");
-const authenticate = require("../middleware/localAuth");
 
 const router = express.Router();
 
@@ -13,9 +12,7 @@ router.get("/", (req, res) => {
   const newEvent = new Event(req.query);
   newEvent
     .read()
-    .then(data => {
-      res.json({ events: data });
-    })
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
@@ -85,7 +82,10 @@ router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       } else if (data.author_id !== req.user.data.id) {
-        throw new APIError(`you are not the author of event #${req.params.id}`, 403);
+        throw new APIError(
+          `you are not the author of event #${req.params.id}`,
+          403
+        );
       }
       return newEvent.delete();
     })
@@ -107,7 +107,10 @@ router.put("/:id", passport.authenticate("jwt"), (req, res) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       } else if (data.author_id !== req.user.data.id) {
-        throw new APIError(`you are not the author of event #${req.params.id}`, 403);
+        throw new APIError(
+          `you are not the author of event #${req.params.id}`,
+          403
+        );
       }
       return newEvent.update();
     })
@@ -167,7 +170,10 @@ router.post("/:id/images", passport.authenticate("jwt"), (req, res) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       } else if (data.author_id !== req.user.data.id) {
-        throw new APIError(`you are not the author of event #${req.params.id}`, 403);
+        throw new APIError(
+          `you are not the author of event #${req.params.id}`,
+          403
+        );
       }
     })
     .then(() => {
