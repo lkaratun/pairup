@@ -63,9 +63,6 @@ class UserProvider extends React.Component {
     const { children, cookies: existingCookies } = this.props;
     console.log("this.props.cookies = ", existingCookies);
 
-    const { firstName, token } = existingCookies;
-
-    console.log("{ firstName, token }", { firstName, token });
     return (
       <UserContext.Provider value={{ ...this.state }}>
         {children}

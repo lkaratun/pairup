@@ -15,9 +15,9 @@ function Profile(props) {
   // const firstName = this.props.
   const [userData, setUserData] = useState({
     lastName: props.lastName,
-    email: props.email,
-    image: props.image || "../static/no_photo.jpg",
-    bio: props.bio
+    email: props.userData.email,
+    image: props.userData.image || "../static/no_photo.jpg",
+    bio: props.userData.bio
   });
   const [bioEditorOpened, setBioEditorOpened] = useState(false);
   const [nameEditorOpened, setNameEditorOpened] = useState(false);
@@ -47,7 +47,7 @@ function Profile(props) {
   // };
 
   return (
-    <>
+    <Container>
       {firstName ? (
         <GridWrapper>
           <SideBar>
@@ -85,7 +85,12 @@ function Profile(props) {
               <BioModal
                 showModal={bioEditorOpened}
                 hide={() => setBioEditorOpened(false)}
-                // confirm={setBio}
+                initialBio={userData.bio}
+                confirm={newBio =>
+                  updateUser({ bio: newBio }).then(res =>
+                    setUserData({ ...userData, bio: res.bio })
+                  )
+                }
               />
               <NameModal
                 showModal={nameEditorOpened}
@@ -105,24 +110,9 @@ function Profile(props) {
       ) : (
         "Please log in to view this page"
       )}
-    </>
+    </Container>
   );
 }
-
-Profile.contextType = UserContext;
-
-Profile.propTypes = {
-  context: PropTypes.shape({
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    email: PropTypes.string,
-    loggedIn: PropTypes.bool,
-    image: PropTypes.string,
-    token: PropTypes.string,
-    bio: PropTypes.string,
-    updateUser: PropTypes.func
-  }).isRequired
-};
 
 export default Profile;
 

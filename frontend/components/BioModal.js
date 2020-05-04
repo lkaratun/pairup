@@ -20,7 +20,7 @@ const customStyles = {
 Modal.setAppElement("#__next");
 
 class EditModal extends React.Component {
-  state = { bio: this.context.bio };
+  state = { bio: this.props.initialBio };
 
   handleInput = e => this.setState({ bio: e.target.value });
 
@@ -110,5 +110,3 @@ EditModal.propTypes = {
   hide: PropTypes.func.isRequired,
   confirm: PropTypes.func.isRequired
 };
-
-EditModal.contextType = UserContext;
