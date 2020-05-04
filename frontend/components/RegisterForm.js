@@ -31,8 +31,8 @@ function RegisterForm() {
         {
           email: state.email,
           password: state.password,
-          first_name: state.firstName,
-          last_name: state.lastName,
+          firstName: state.firstName,
+          lastName: state.lastName,
           bio: state.bio
         },
         {
@@ -46,7 +46,11 @@ function RegisterForm() {
       })
       .catch(err => {
         console.error(err.response);
-        setState({ ...state, registrationFailed: true, failReason: err.response.data.message });
+        setState({
+          ...state,
+          registrationFailed: true,
+          failReason: err.response.data.message
+        });
       });
   };
 
@@ -99,7 +103,9 @@ function RegisterForm() {
         <TextArea placeholder="Short Bio" onChange={handleInput} />
         <LoginButton text="Register" />
         {registrationFailed && (
-          <StyledErrorMsg>Registration failed. Reason: {state.failReason}</StyledErrorMsg>
+          <StyledErrorMsg>
+            Registration failed. Reason: {state.failReason}
+          </StyledErrorMsg>
         )}
       </form>
     </>
