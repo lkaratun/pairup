@@ -1,7 +1,7 @@
 import React from "react";
 import Router from "next/router";
 import styled from "styled-components";
-import axios from "axios";
+import axios from "utils/request";
 import MainLayout from "../components/MainLayout";
 import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
@@ -44,7 +44,9 @@ class NewEvent extends React.Component {
           <InputSection>
             <Title>Create New Event</Title>
             <NewEventForm createEvent={this.createEvent} />
-            {serverPostFail && <p style={{ color: "red" }}>Event creation failed, try again</p>}
+            {serverPostFail && (
+              <p style={{ color: "red" }}>Event creation failed, try again</p>
+            )}
           </InputSection>
         </EventWrapper>
       </MainLayout>

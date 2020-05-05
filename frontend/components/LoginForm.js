@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
+import axios from "utils/request";
 import Input from "./Input";
 import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
@@ -62,10 +62,16 @@ export default () => {
         <LoginButton text="Log in" />
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
       </form>
-      <button type="button" onClick={() => router.push(`${backendUrl}/auth/google`)}>
+      <button
+        type="button"
+        onClick={() => router.push(`${backendUrl}/auth/google`)}
+      >
         Log in with Google
       </button>
-      <button type="button" onClick={() => router.push(`${backendUrl}/auth/view`)}>
+      <button
+        type="button"
+        onClick={() => router.push(`${backendUrl}/auth/view`)}
+      >
         View cookies
       </button>
     </>

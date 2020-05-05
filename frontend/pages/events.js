@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import axios from "axios";
+import axios from "utils/request";
 import MainLayout from "../components/MainLayout";
 import EventList from "../components/EventList";
 import device from "../styles/device";
@@ -13,9 +13,12 @@ import DynamicActivitySearch from "../components/DynamicActivitySearch";
 
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
-const DateSelectorDynamic = dynamic(() => import("../components/DateSelector"), {
-  ssr: false
-});
+const DateSelectorDynamic = dynamic(
+  () => import("../components/DateSelector"),
+  {
+    ssr: false
+  }
+);
 
 class Dashboard extends Component {
   state = {
@@ -110,7 +113,10 @@ class Dashboard extends Component {
               <br />
               or check out existing events below
             </h4>
-            <DownArrow src=".././static/down-arrow.svg" alt="arrow-pointing-down" />
+            <DownArrow
+              src=".././static/down-arrow.svg"
+              alt="arrow-pointing-down"
+            />
           </div>
         </TopPanel>
         <Divider>
@@ -162,7 +168,11 @@ const TopPanel = styled.div`
   padding-top: 50px;
   padding-bottom: 50px;
   background: rgb(22, 67, 75);
-  background: linear-gradient(90deg, rgba(22, 67, 75, 1) 0%, rgba(28, 12, 91, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(22, 67, 75, 1) 0%,
+    rgba(28, 12, 91, 1) 100%
+  );
   color: white;
   display: grid;
   grid-template-columns: 1fr;

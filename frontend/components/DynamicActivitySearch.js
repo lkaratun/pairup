@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "axios";
+import axios from "utils/request";
 import PropTypes from "prop-types";
 import config from "../config.json";
 import Input from "./Input";
@@ -8,31 +8,24 @@ import Input from "./Input";
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class DynamicActivitySearch extends React.Component {
-  constructor(props) {
-    super(props);
-    this.setPopupRef = this.setPopupRef.bind(this);
-    this.state = {
-      inputVal: "",
-      suggestions: [],
-      matchingSuggestions: [],
-      selectionID: null,
-      selectionName: null,
-      showSuggestions: false,
-      showAddButton: true,
-      focusedItem: null
-    };
-  }
+  state = {
+    inputVal: "",
+    suggestions: [],
+    matchingSuggestions: [],
+    selectionID: null,
+    selectionName: null,
+    showSuggestions: false,
+    showAddButton: true,
+    focusedItem: null
+  };
 
   async componentDidMount() {
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
     const suggestions = await axios({
       method: "get",
-      url: `${backendUrl}/activities`,
-      headers: {
-        Authorization: AuthStr
-      }
+      url: `${backendUrl}/activities`
     });
+    console.log("suggestions.data = ", suggestions.data);
+
     const suggestionArray = suggestions.data["activities"];
     if (suggestionArray.length === 0) {
       this.setState({ suggestions: [], showSuggestions: false });
@@ -64,9 +57,9 @@ class DynamicActivitySearch extends React.Component {
   }
 
   // Setting ref for click outside element functionality
-  setPopupRef(node) {
+  setPopupRef = node => {
     this.popupRef = node;
-  }
+  };
 
   // Add suggestion based on the input
   handleAdd = () => {
@@ -85,7 +78,9 @@ class DynamicActivitySearch extends React.Component {
   getSuggestions = async input => {
     const { suggestions } = this.state;
     const regex = new RegExp(input, "gmi");
-    const matchingSuggestions = suggestions.filter(activity => activity.name.match(regex));
+    const matchingSuggestions = suggestions.filter(activity =>
+      activity.name.match(regex)
+    );
     if (matchingSuggestions.length === 0) {
       this.setState({ showSuggestions: false, matchingSuggestions: [] });
     } else {
@@ -176,9 +171,15 @@ class DynamicActivitySearch extends React.Component {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       e.stopPropagation();
-      if (focusedItem <= matchingSuggestions.length - 1 && focusedItem === null) {
+      if (
+        focusedItem <= matchingSuggestions.length - 1 &&
+        focusedItem === null
+      ) {
         this.setState({ focusedItem: 0 });
-      } else if (focusedItem < matchingSuggestions.length - 1 && focusedItem !== null) {
+      } else if (
+        focusedItem < matchingSuggestions.length - 1 &&
+        focusedItem !== null
+      ) {
         this.setState(prevState => ({
           focusedItem: prevState.focusedItem + 1
         }));
@@ -223,7 +224,9 @@ class DynamicActivitySearch extends React.Component {
   hoverFocus = suggestion => {
     const { matchingSuggestions } = this.state;
     // find index of the dropdown that is being hovered on
-    const index = matchingSuggestions.findIndex(value => value.id === suggestion.id);
+    const index = matchingSuggestions.findIndex(
+      value => value.id === suggestion.id
+    );
     this.setState({ focusedItem: index });
   };
 
@@ -264,12 +267,15 @@ class DynamicActivitySearch extends React.Component {
               onKeyDown={e => this.handleKeyDown(e)}
             />
           </label>
-          {allowNew && inputVal && showAddButton && matchingSuggestions.length === 0 && (
-            <AddButton onClick={this.handleAdd} tabIndex={0}>
-              <span>+</span>
-              Add
-            </AddButton>
-          )}
+          {allowNew &&
+            inputVal &&
+            showAddButton &&
+            matchingSuggestions.length === 0 && (
+              <AddButton onClick={this.handleAdd} tabIndex={0}>
+                <span>+</span>
+                Add
+              </AddButton>
+            )}
           {showSuggestions && <Suggestions>{suggestionsList}</Suggestions>}
         </SearchBarWrapper>
       </>

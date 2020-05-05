@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Router from "next/router";
-import axios from "axios";
+import axios from "utils/request";
 import Input from "./Input";
 import { WideButton } from "./shared/Buttons";
 import SelectParticipantRange from "./SelectParticipantRange";
@@ -43,7 +43,10 @@ class EventForm extends Component {
     // validate new object
     const REQUIRED_FIELDS = ["name", "activity_id", "max_people"];
     for (let i = 0; i < REQUIRED_FIELDS.length; i++) {
-      if (newEvent[REQUIRED_FIELDS[i]] === null || newEvent[REQUIRED_FIELDS[i]] === "") {
+      if (
+        newEvent[REQUIRED_FIELDS[i]] === null ||
+        newEvent[REQUIRED_FIELDS[i]] === ""
+      ) {
         this.setState({ valid: false });
         return;
       }
@@ -151,19 +154,30 @@ class EventForm extends Component {
           placeholder="Activity"
           allowNew
         />
-        <DynamicLocationSearch updateLocation={this.updateLocation} placeholder="City" allowNew />
-        <SelectParticipantRange updateParticipantRange={this.updateParticipantRange} />
+        <DynamicLocationSearch
+          updateLocation={this.updateLocation}
+          placeholder="City"
+          allowNew
+        />
+        <SelectParticipantRange
+          updateParticipantRange={this.updateParticipantRange}
+        />
         <DateRangePicker updateDateRange={this.updateDateRange} />
         {!valid && (
           <ErrorMsg>
-            Please make sure you filled name, activity and max people fields to continue!
+            Please make sure you filled name, activity and max people fields to
+            continue!
           </ErrorMsg>
         )}
         <ButtonWrapper>
           <WideButton onClick={this.handleBackButton} color="red">
             Back
           </WideButton>
-          <WideButton onClick={this.handleBackButton} type="submit" color="purple">
+          <WideButton
+            onClick={this.handleBackButton}
+            type="submit"
+            color="purple"
+          >
             Create
           </WideButton>
         </ButtonWrapper>

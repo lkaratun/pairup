@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "utils/request";
 import Profile from "../components/Profile";
 import MainLayout from "../components/MainLayout";
 import config from "../config.json";

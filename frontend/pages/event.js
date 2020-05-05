@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "utils/request";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { withRouter } from "next/router";
@@ -77,7 +77,9 @@ export class event extends Component {
       min_people: minPeople,
       author_id: authorID
     } = currentEvent.data;
-    const dateFromFormat = dateFrom ? format(dateFrom, "MMMM DD YYYY") : "not set";
+    const dateFromFormat = dateFrom
+      ? format(dateFrom, "MMMM DD YYYY")
+      : "not set";
     const dateToFormat = dateTo ? format(dateTo, "MMMM DD YYYY") : "not set";
 
     this.setState({
@@ -231,7 +233,10 @@ export class event extends Component {
               </InfoWrapper>
               <Attendees attendees={eventAttendees} />
               <JoinPanel>
-                <AvailableSpotsLeftNotice spotsLeft={spotsLeft} maxPeople={maxPeople} />
+                <AvailableSpotsLeftNotice
+                  spotsLeft={spotsLeft}
+                  maxPeople={maxPeople}
+                />
                 <ControlledAttendenceButtons
                   userID={userID}
                   authorID={authorID}

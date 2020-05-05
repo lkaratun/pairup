@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import { useRouter } from "next/router";
-import axios from "axios";
+import axios from "utils/request";
 import Input from "./Input";
 import TextArea from "./TextArea";
 import LoginButton from "./LoginButton";
