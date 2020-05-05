@@ -31,7 +31,7 @@ function Navbar() {
             <AuthSection>
               <Link href="/profile">
                 <>
-                  Logged in as: {firstName}. <NavLink>Profile</NavLink>
+                  Logged in as: {firstName} <NavLink>Profile</NavLink>
                 </>
               </Link>
               <NavLink onClick={userContext.logOut}>Logout</NavLink>

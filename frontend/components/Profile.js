@@ -35,7 +35,9 @@ function Profile(props) {
             <ProfileImage src={image} />
             <ImageUploader
               url="/users/images"
-              // onCompletion={updateImage}
+              onCompletion={newImage =>
+                setUserData({ ...userData, image: newImage })
+              }
               style={{ gridColumn: "1 / span 1", gridRow: "2 / span 1" }}
             />
             <PersonalInfo>

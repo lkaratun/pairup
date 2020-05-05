@@ -62,6 +62,8 @@ router.get("/:id/events", (req, res) => {
 });
 
 router.post("/images", (req, res) => {
+  console.log("req.user", req.user);
+
   const imageHandler = upload("users", {
     width: 500,
     height: 500,
@@ -73,7 +75,8 @@ router.post("/images", (req, res) => {
     } else if (!req.file) {
       res.status(400).json({ message: "file is not set" });
     } else {
-      new User({ id: req.user.data.id, image: req.file.secure_url })
+      console.log("req.file", req.file);
+      new User({ id: req.user.id, image: req.file.secure_url })
         .update()
         .catch(e => res.status(400).json({ message: e.message }));
       res.status(201).json({ url: req.file.secure_url });

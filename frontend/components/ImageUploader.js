@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
+import axios from "utils/request";
 import { UserContext } from "./UserProvider";
 import config from "../config.json";
 import { WideButton } from "./shared/Buttons";
@@ -19,11 +19,12 @@ class ImageUploader extends Component {
     axios
       .post(url, formData, {
         headers: {
-          Authorization: `Bearer ${this.context.token}`,
           "Content-Type": "multipart/form-data"
         }
       })
       .then(res => {
+        console.log("Image res =", res);
+
         // At this point, image is already uploaded to the cloud and inserted into DB
         const newImageUrl = res.data.url;
         this.props.onCompletion(newImageUrl);

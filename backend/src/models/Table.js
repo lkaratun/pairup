@@ -151,10 +151,7 @@ class Table {
       text += ` OFFSET ${this.opts.offset}`;
     }
 
-    return db
-      .query(text, values)
-      .then(res => console.log("Event search result = ", res) || res)
-      .then(res => res.map(cleanUpObjectKeys));
+    return db.query(text, values).then(res => res.map(cleanUpObjectKeys));
   }
 
   read(customText) {
