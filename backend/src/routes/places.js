@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   const place = new Place(req.query);
   place
-    .read()
+    .readAll()
     .then(data => {
       res.json({ places: data });
     })

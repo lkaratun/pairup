@@ -20,6 +20,17 @@ const DateSelectorDynamic = dynamic(
   }
 );
 
+export async function getServerSideProps() {
+  // Default fetch is any event from today with a limit of 5
+  console.log("events URL = ", `${backendUrl}/events?limit=5`);
+
+  const events = await axios({
+    url: `http:${backendUrl}/events?limit=5`
+  }).catch(err => console.error(err.response));
+  console.log("events = ", events);
+  return { props: { events: events.data } };
+}
+
 class Dashboard extends Component {
   state = {
     eventFilters: { date_from: null, city: null, activity: null },
@@ -30,34 +41,20 @@ class Dashboard extends Component {
   };
 
   async componentDidMount() {
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-
-    // Default fetch is any event from today with a limit of 5
-    const eventsPromise = axios({
-      method: "get",
-      url: `${backendUrl}/events?&limit=5`,
-      headers: {
-        Authorization: AuthStr
-      }
-    }).catch(err => console.error(err.response));
-    const events = await eventsPromise;
-    console.log(events);
-    if (events && events.data) this.setState({ events: events.data.events });
     // determine if user is on mobile (required for data picker component)
     const screenWidth = window.innerWidth;
     this.setState({ screenWidth });
   }
 
   updateDate = date => {
-    const oldState = Object.assign({}, this.state);
+    const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
     oldFilters["date_from"] = date;
     this.setState({ eventFilters: oldFilters, cleared: false });
   };
 
   updateActivity = data => {
-    const oldState = Object.assign({}, this.state);
+    const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
     oldFilters["activity"] = data.name;
     // updated the cleared state and filters
@@ -65,7 +62,7 @@ class Dashboard extends Component {
   };
 
   updateLocation = data => {
-    const oldState = Object.assign({}, this.state);
+    const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
     oldFilters["city"] = data.city;
     this.setState({ eventFilters: oldFilters, cleared: false });
@@ -99,7 +96,8 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { events, eventFilters, cleared, screenWidth } = this.state;
+    const { eventFilters, cleared, screenWidth } = this.state;
+    const { events } = this.props;
     const mobile = screenWidth && screenWidth < 415;
     return (
       <MainLayout>

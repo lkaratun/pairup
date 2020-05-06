@@ -2,14 +2,13 @@ const express = require("express");
 const passport = require("passport");
 const Activity = require("../models/Activity");
 const APIError = require("../utils/APIError.js");
-const authenticate = require("../middleware/localAuth");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
   const activity = new Activity(req.query);
   activity
-    .read()
+    .readAll()
     .then(data => {
       res.json({ activities: data });
     })
