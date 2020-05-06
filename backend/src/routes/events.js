@@ -4,6 +4,7 @@ const Event = require("../models/Event");
 const Attendee = require("../models/EventAttendee");
 const APIError = require("../utils/APIError.js");
 const upload = require("../utils/upload");
+const { userOptional } = require("../middleware/localAuth.js");
 
 const router = express.Router();
 
@@ -40,14 +41,17 @@ router.post("/", passport.authenticate("jwt"), (req, res) => {
 });
 
 // get event info
-router.get("/:id", (req, res) => {
+router.get("/:id", userOptional, (req, res) => {
   const newEvent = new Event({ id: req.params.id });
+  console.log("req.user in events = ", req.user);
+
   newEvent
     .read()
-    .then(([data]) => {
+    .then(data => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       }
+
       res.json(data);
     })
     .catch(err => {

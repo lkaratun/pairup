@@ -21,6 +21,24 @@ function getAttendance(userID, eventAttendees) {
   return false;
 }
 
+export async function getServerSideProps({ query }) {
+  const [currentEvent, attendees] = await Promise.all([
+    axios({
+      url: `${backendUrl}/events/${query.id}`
+    }),
+    axios({
+      url: `${backendUrl}/events/${query.id}/attendees`
+    })
+  ]);
+
+  return {
+    props: {
+      currentEvent,
+      attendees
+    }
+  };
+}
+
 export class event extends Component {
   state = {
     authorID: "",
@@ -43,25 +61,9 @@ export class event extends Component {
   };
 
   async componentDidMount() {
-    const { router } = this.props;
-    const { tokenCtx, id } = this.context;
-    const token = tokenCtx || localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
+    const { id } = this.context;
     const userID = id || localStorage.getItem("id");
     this.setState({ userID });
-    const currentEvent = await axios({
-      method: "get",
-      url: `${backendUrl}/events/${router.query.id}`,
-      headers: {
-        Authorization: AuthStr
-      }
-    });
-
-    const attendees = await axios({
-      method: "get",
-      url: `${backendUrl}/events/${router.query.id}/attendees`,
-      headers: { Authorization: AuthStr }
-    });
 
     const userIsAttending = getAttendance(userID, attendees.data);
 

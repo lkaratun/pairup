@@ -84,3 +84,12 @@ passport.use(
     }
   )
 );
+
+module.exports.userOptional = function(req, res, next) {
+  passport.authenticate("getUserDataFromToken", function(err, user, info) {
+    console.log("In error handler");
+    console.log({ err, user, info_msg: info && info.message });
+    req.user = user || {};
+    return next(err);
+  })(req, res, next);
+};

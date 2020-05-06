@@ -3,6 +3,7 @@ const express = require("express");
 const User = require("../models/User");
 require("../middleware/googleAuth");
 require("../middleware/localAuth");
+const { userOptional } = require("../middleware/localAuth.js");
 const addMonths = require("date-fns/addMonths");
 const config = require("../../config.json");
 
@@ -112,25 +113,11 @@ router.get("/logout", (req, res) => {
 });
 
 // Get user data from token
-router.get(
-  "/getUserFromToken",
-  function(req, res, next) {
-    console.log("Entered getUserFromToken handler2");
+router.get("/getUserFromToken", userOptional, (req, res) => {
+  console.log("In getUserFromToken route!");
+  console.log("req.user = ", req.user);
 
-    passport.authenticate("getUserDataFromToken", function(err, user, info) {
-      console.log("In error handler");
-      console.log({ err, user, info_msg: info && info.message });
-      // if (user === false && info && info.message === "No auth token") return next();
-      req.user = user || {};
-      return next(err);
-    })(req, res, next);
-  },
-  (req, res) => {
-    console.log("In getUserFromToken route!");
-    console.log("req.user = ", req.user);
-
-    res.send(req.user);
-  }
-);
+  res.send(req.user);
+});
 
 module.exports = router;
