@@ -41,29 +41,31 @@ router.post("/", passport.authenticate("jwt"), (req, res) => {
 });
 
 // get event info
-router.get("/:id", userOptional, (req, res) => {
-  const newEvent = new Event({ id: req.params.id });
+router.get("/:id", userOptional, async (req, res) => {
   console.log("req.user in events = ", req.user);
 
-  newEvent
-    .read()
-    .then(data => {
-      if (data === undefined) {
-        throw new APIError(`event #${req.params.id} not found`, 404);
-      }
+  const [event, attendees] = await Promise.all([
+    new Event({ id: req.params.id }).read(),
+    new Attendee({ event_id: req.params.id }).getAllAttendees()
+  ]).catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
 
-      res.json(data);
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
-    });
+  if (!event) {
+    throw new APIError(`event #${req.params.id} not found`, 404);
+  }
+  event.currentUserAttending = attendees
+    .map(person => person.id)
+    .includes(req.user.id);
+
+  res.json(event);
 });
 
 router.get("/:id/attendees", (req, res) => {
   const attendees = new Attendee({ event_id: req.params.id });
   new Event({ id: req.params.id })
     .read()
-    .then(([data]) => {
+    .then(data => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       }
