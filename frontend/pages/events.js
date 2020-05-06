@@ -34,7 +34,7 @@ export async function getServerSideProps() {
 class Dashboard extends Component {
   state = {
     eventFilters: { date_from: null, city: null, activity: null },
-    events: [],
+    events: this.props.events || [],
     offset: 0,
     cleared: null,
     screenWidth: null
@@ -78,26 +78,23 @@ class Dashboard extends Component {
   loadMoreEvents = async () => {
     const { offset } = this.state;
     const newOffset = offset + 5;
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-
     const newEvents = await axios({
       method: "get",
-      url: `${backendUrl}/events?&limit=5&offset=${newOffset}`,
-      headers: {
-        Authorization: AuthStr
-      }
+      url: `http:${backendUrl}/events?&limit=5&offset=${newOffset}`
     });
+    console.log(
+      "More events URL = ",
+      `http:${backendUrl}/events?&limit=5&offset=${newOffset}`
+    );
 
     this.setState(prevState => ({
-      events: [...prevState.events, ...newEvents.data.events],
+      events: [...prevState.events, ...newEvents.data],
       offset: newOffset
     }));
   };
 
   render() {
-    const { eventFilters, cleared, screenWidth } = this.state;
-    const { events } = this.props;
+    const { events, eventFilters, cleared, screenWidth } = this.state;
     const mobile = screenWidth && screenWidth < 415;
     return (
       <MainLayout>
