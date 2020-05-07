@@ -46,7 +46,7 @@ router.get("/:id", userOptional, async (req, res) => {
 
   const [event, attendees] = await Promise.all([
     new Event({ id: req.params.id }).read(),
-    new Attendee({ event_id: req.params.id }).getAllAttendees()
+    new Attendee({ event_id: req.params.id }).getAttendeesForEvent()
   ]).catch(err => {
     res.status(err.statusCode || 400).json({ message: err.message });
   });
@@ -61,22 +61,21 @@ router.get("/:id", userOptional, async (req, res) => {
   res.json(event);
 });
 
-router.get("/:id/attendees", (req, res) => {
+router.get("/:id/attendees", async (req, res) => {
   const attendees = new Attendee({ event_id: req.params.id });
-  new Event({ id: req.params.id })
-    .read()
-    .then(data => {
-      if (data === undefined) {
-        throw new APIError(`event #${req.params.id} not found`, 404);
-      }
-      return attendees.getAllAttendees();
-    })
-    .then(data => {
-      res.json(data);
-    })
+  const eventData = await new Event({ id: req.params.id }).read().catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
+
+  if (eventData === undefined) {
+    throw new APIError(`event #${req.params.id} not found`, 404);
+  }
+  const attendeeData = await attendees
+    .getAttendeesForEvent(eventData.id)
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
+  res.json(attendeeData);
 });
 
 // delete an event

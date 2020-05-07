@@ -42,7 +42,7 @@ router.put("/", async (req, res) => {
 router.get("/events", (req, res) => {
   const attendee = new Attendee({ user_id: req.user[req.user.pk] });
   attendee
-    .getAllEvents()
+    .getEventsForAttendee()
     .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
@@ -52,7 +52,7 @@ router.get("/events", (req, res) => {
 router.get("/:id/events", (req, res) => {
   const attendee = new Attendee({ user_id: req.params.id });
   attendee
-    .getAllEvents()
+    .getEventsForAttendee()
     .then(data => {
       res.json({ events: data });
     })

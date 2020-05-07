@@ -5,7 +5,11 @@ const camelCase = require("camelcase");
 const db = require("./db");
 
 function cleanUpObjectKeys(object) {
-  const SENSITIVE_FIELDS = ["google_access_token", "google_refresh_token"];
+  const SENSITIVE_FIELDS = [
+    "google_access_token",
+    "google_refresh_token",
+    "password"
+  ];
   SENSITIVE_FIELDS.forEach(field => delete object[field]);
 
   for (const key of Object.keys(object)) {

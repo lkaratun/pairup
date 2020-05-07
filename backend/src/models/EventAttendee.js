@@ -17,23 +17,19 @@ class EventAttendee extends Table {
     this.parseOpts(rawData);
   }
 
-  getAllAttendees() {
-    const text = `
-      SELECT users.id, users.first_name, users.last_name, users.image FROM users
-      INNER JOIN ${this.tableName} ON users.id = ${this.tableName}.user_id`;
+  getAttendeesForEvent(eventId) {
+    const text = `SELECT users.*
+    FROM event_attendees INNER JOIN users
+    ON event_attendees.user_id = users.id
+    WHERE event_attendees.event_id = ${eventId}`;
     return super.readAll(text);
   }
 
-  getAllEvents() {
-    const text = `SELECT
-      events.id, events.name, users.id as author_id, CONCAT(users.first_name, ' ', users.last_name) AS author_name,
-      events.image, events.description, activities.name AS activity, places.country, places.city, events.date_from,
-      events.date_to, events.min_people, events.max_people
-      FROM events
-      INNER JOIN ${this.tableName} ON events.id = ${this.tableName}.event_id
-      INNER JOIN activities ON events.activity_id = activities.id
-      INNER JOIN users ON events.author_id = users.id
-      LEFT JOIN places ON places.id = events.place_id`;
+  getEventsForAttendee(userId) {
+    const text = `SELECT * 
+    FROM event_attendees INNER JOIN events
+    ON event_attendees.event_id = events.id
+    WHERE event_attendees.user_id = ${userId}`;
     return super.readAll(text);
   }
 }
