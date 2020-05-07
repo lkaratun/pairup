@@ -17,19 +17,17 @@ class EventAttendee extends Table {
     this.parseOpts(rawData);
   }
 
-  getAttendeesForEvent(eventId) {
+  getAttendeesForEvent() {
     const text = `SELECT users.*
     FROM event_attendees INNER JOIN users
-    ON event_attendees.user_id = users.id
-    WHERE event_attendees.event_id = ${eventId}`;
+    ON event_attendees.user_id = users.id`;
     return super.readAll(text);
   }
 
-  getEventsForAttendee(userId) {
+  getEventsForAttendee() {
     const text = `SELECT * 
     FROM event_attendees INNER JOIN events
-    ON event_attendees.event_id = events.id
-    WHERE event_attendees.user_id = ${userId}`;
+    ON event_attendees.event_id = events.id`;
     return super.readAll(text);
   }
 }

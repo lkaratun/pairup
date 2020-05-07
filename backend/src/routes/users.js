@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/User");
 const Attendee = require("../models/EventAttendee");
+const APIError = require("../utils/APIError.js");
 
 const router = express.Router();
 const upload = require("../utils/upload");
@@ -49,16 +50,19 @@ router.get("/events", (req, res) => {
     });
 });
 
-router.get("/:id/events", (req, res) => {
-  const attendee = new Attendee({ user_id: req.params.id });
-  attendee
-    .getEventsForAttendee()
-    .then(data => {
-      res.json({ events: data });
-    })
+router.get("/:id/events", async (req, res) => {
+  const userData = await new User({ id: req.params.id }).read().catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
+  if (!userData) {
+    throw new APIError(`User #${req.params.id} not found`, 404);
+  }
+  const attendeeData = await new Attendee({ userId: req.params.id })
+    .getEventsForAttendee(userData.id)
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
+  res.json(attendeeData);
 });
 
 router.post("/images", (req, res) => {

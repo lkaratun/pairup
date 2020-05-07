@@ -62,7 +62,6 @@ router.get("/:id", userOptional, async (req, res) => {
 });
 
 router.get("/:id/attendees", async (req, res) => {
-  const attendees = new Attendee({ event_id: req.params.id });
   const eventData = await new Event({ id: req.params.id }).read().catch(err => {
     res.status(err.statusCode || 400).json({ message: err.message });
   });
@@ -70,7 +69,7 @@ router.get("/:id/attendees", async (req, res) => {
   if (eventData === undefined) {
     throw new APIError(`event #${req.params.id} not found`, 404);
   }
-  const attendeeData = await attendees
+  const attendeeData = await new Attendee({ eventId: req.params.id })
     .getAttendeesForEvent(eventData.id)
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });

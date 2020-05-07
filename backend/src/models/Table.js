@@ -154,7 +154,6 @@ class Table {
     if (this.opts.offset) {
       text += ` OFFSET ${this.opts.offset}`;
     }
-
     return db.query(text, values).then(res => res.map(cleanUpObjectKeys));
   }
 
