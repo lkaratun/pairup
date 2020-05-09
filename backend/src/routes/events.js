@@ -20,14 +20,14 @@ router.get("/", (req, res) => {
 });
 
 // create an event
-router.post("/", passport.authenticate("jwt"), (req, res) => {
-  const newEvent = new Event({ author_id: req.user.data.id, ...req.body });
+router.post("/", passport.authenticate("userRequired"), (req, res) => {
+  const newEvent = new Event({ author_id: req.user.id, ...req.body });
   newEvent
     .create()
     .then(([data]) => {
       newEvent.data = data;
       const attendee = new Attendee({
-        user_id: req.user.data.id,
+        user_id: req.user.id,
         event_id: data.id
       });
       return attendee.create();
@@ -78,14 +78,14 @@ router.get("/:id/attendees", async (req, res) => {
 });
 
 // delete an event
-router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
+router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
   const newEvent = new Event({ id: req.params.id });
   newEvent
     .read()
     .then(([data]) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
-      } else if (data.author_id !== req.user.data.id) {
+      } else if (data.author_id !== req.user.id) {
         throw new APIError(
           `you are not the author of event #${req.params.id}`,
           403
@@ -102,7 +102,7 @@ router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
 });
 
 // update an event
-router.put("/:id", passport.authenticate("jwt"), (req, res) => {
+router.put("/:id", passport.authenticate("userRequired"), (req, res) => {
   const { id, ...newData } = req.body;
   const newEvent = new Event({ id: req.params.id, ...newData });
   new Event({ id: req.params.id })
@@ -110,7 +110,7 @@ router.put("/:id", passport.authenticate("jwt"), (req, res) => {
     .then(([data]) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
-      } else if (data.author_id !== req.user.data.id) {
+      } else if (data.author_id !== req.user.id) {
         throw new APIError(
           `you are not the author of event #${req.params.id}`,
           403
@@ -126,112 +126,125 @@ router.put("/:id", passport.authenticate("jwt"), (req, res) => {
     });
 });
 
-// subscribe to attend an event
-router.post("/:id/attend", passport.authenticate("jwt"), (req, res) => {
-  const attendees = new Attendee({ event_id: req.params.id });
-  const attendee = new Attendee({
-    user_id: req.user.data.id,
-    event_id: req.params.id
-  });
-  let maxPeople;
-  new Event({ id: req.params.id })
-    .read()
-    .then(([data]) => {
-      if (!data) {
-        throw new APIError(`event #${req.params.id} not found`, 404);
-      } else if (Number(data.author_id) === Number(req.user.data.id)) {
-        throw new APIError("cant subscribe your own event", 403);
-      }
-      maxPeople = Number(data.max_people);
-      return attendees.read();
-    })
-    .then(data => {
-      if (data.filter(user => user.user_id === req.user.data.id).length === 1) {
-        throw new APIError("you are already in the attendees list", 400);
-      } else if (maxPeople && data.length >= maxPeople) {
-        throw new APIError("event is completely booked", 403);
-      }
-      return attendee.create();
-    })
-    .then(() => {
-      res.status(201).json();
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
+// attend an event
+router.post(
+  "/:id/attend",
+  passport.authenticate("userRequired"),
+  (req, res) => {
+    const attendees = new Attendee({ eventId: req.params.id });
+    const attendee = new Attendee({
+      userId: req.user.id,
+      eventId: req.params.id
     });
-});
-
-router.post("/:id/images", passport.authenticate("jwt"), (req, res) => {
-  const imageHandler = upload("events", {
-    width: 500,
-    height: 500,
-    crop: "limit"
-  }).single("file");
-  // check if event exists
-  new Event({ id: req.params.id })
-    .read()
-    .then(([data]) => {
-      if (data === undefined) {
-        throw new APIError(`event #${req.params.id} not found`, 404);
-      } else if (data.author_id !== req.user.data.id) {
-        throw new APIError(
-          `you are not the author of event #${req.params.id}`,
-          403
-        );
-      }
-    })
-    .then(() => {
-      // upload image
-      imageHandler(req, res, err => {
-        if (err) {
-          // upload failed
-          res.status(400).json({ message: err.message });
-        } else if (!req.file) {
-          res.status(400).json({ message: "File is not set" });
-        } else {
-          new Event({ id: req.params.id, image: req.file.secure_url })
-            .update()
-            // update failed
-            .catch(e => res.status(400).json({ message: e.message }));
-          res.status(201).json({ url: req.file.secure_url });
+    let maxPeople;
+    new Event({ id: req.params.id })
+      .read()
+      .then(data => {
+        if (!data) {
+          throw new APIError(`event #${req.params.id} not found`, 404);
+        } else if (Number(data.authorId) === Number(req.user.id)) {
+          throw new APIError("cant subscribe your own event", 403);
         }
+        maxPeople = Number(data.maxPeople);
+        return attendees.readAll();
+      })
+      .then(data => {
+        console.log("data", data);
+        if (data.filter(user => user.userId === req.user.id).length === 1) {
+          throw new APIError("you are already in the attendees list", 400);
+        } else if (maxPeople && data.length >= maxPeople) {
+          throw new APIError("event is completely booked", 403);
+        }
+        return attendee.create();
+      })
+      .then(result => res.status(201).json(result))
+      .catch(err => {
+        res.status(err.statusCode || 400).json({ message: err.message });
       });
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
-    });
-  return res;
-});
+  }
+);
 
-// unsubscribe from attending an event
-router.delete("/:id/attend", passport.authenticate("jwt"), (req, res) => {
-  const attendee = new Attendee({
-    user_id: req.user.data.id,
-    event_id: req.params.id
-  });
-  new Event({ id: req.params.id })
-    .read()
-    .then(([data]) => {
-      if (!data) {
-        throw new APIError(`event not #${req.params.id} found`, 404);
-      } else if (Number(data.author_id) === Number(req.user.data.id)) {
-        throw new APIError("cant unsubscribe from your own event", 403);
-      }
-      return attendee.read();
-    })
-    .then(([data]) => {
-      if (!data) {
-        throw new APIError("you are not attendee of this event", 400);
-      }
-      attendee.data.id = data.id;
-      return attendee.delete();
-    })
-    .then(() => {
-      res.status(204).json();
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
+// Cancel attendance for an event
+router.delete(
+  "/:id/attend",
+  passport.authenticate("userRequired"),
+  (req, res) => {
+    const attendee = new Attendee({
+      userId: req.user.id,
+      eventId: req.params.id
     });
-});
+    new Event({ id: req.params.id })
+      .read()
+      .then(data => {
+        if (!data) {
+          throw new APIError(`event not #${req.params.id} found`, 404);
+        } else if (Number(data.author_id) === Number(req.user.id)) {
+          throw new APIError("cant unsubscribe from your own event", 403);
+        }
+        return attendee.read();
+      })
+      .then(data => {
+        console.log("data", data);
+        if (!data) {
+          throw new APIError("you are not attendee of this event", 400);
+        }
+        attendee.data.id = data.id;
+        console.log("attendee", attendee);
+        return attendee.delete();
+      })
+      .then(response => {
+        res.status(204).json(response);
+      })
+      .catch(err => {
+        res.status(err.statusCode || 400).json({ message: err.message });
+      });
+  }
+);
+
+router.post(
+  "/:id/images",
+  passport.authenticate("userRequired"),
+  (req, res) => {
+    const imageHandler = upload("events", {
+      width: 500,
+      height: 500,
+      crop: "limit"
+    }).single("file");
+    // check if event exists
+    new Event({ id: req.params.id })
+      .read()
+      .then(([data]) => {
+        if (data === undefined) {
+          throw new APIError(`event #${req.params.id} not found`, 404);
+        } else if (data.author_id !== req.user.id) {
+          throw new APIError(
+            `you are not the author of event #${req.params.id}`,
+            403
+          );
+        }
+      })
+      .then(() => {
+        // upload image
+        imageHandler(req, res, err => {
+          if (err) {
+            // upload failed
+            res.status(400).json({ message: err.message });
+          } else if (!req.file) {
+            res.status(400).json({ message: "File is not set" });
+          } else {
+            new Event({ id: req.params.id, image: req.file.secure_url })
+              .update()
+              // update failed
+              .catch(e => res.status(400).json({ message: e.message }));
+            res.status(201).json({ url: req.file.secure_url });
+          }
+        });
+      })
+      .catch(err => {
+        res.status(err.statusCode || 400).json({ message: err.message });
+      });
+    return res;
+  }
+);
 
 module.exports = router;

@@ -13,7 +13,7 @@ class EventAttendee extends Table {
     });
     super(tableName, pk, cleanData);
     this.ACCEPTED_FIELDS = ACCEPTED_FIELDS;
-    this.REQUIRED_FIELDS = ["event_id", "user_id"];
+    this.REQUIRED_FIELDS = ["eventId", "userId"];
     this.parseOpts(rawData);
   }
 

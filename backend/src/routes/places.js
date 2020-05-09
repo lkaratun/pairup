@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 });
 
 // Create
-router.post("/", passport.authenticate("jwt"), (req, res) => {
+router.post("/", passport.authenticate("userRequired"), (req, res) => {
   const place = new Place(req.body);
   place
     .create()
@@ -49,7 +49,7 @@ router.get("/:id", (req, res) => {
 });
 
 // delete one
-router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
+router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
   const place = new Place({ id: req.params.id });
   place
     .delete()
@@ -62,7 +62,7 @@ router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
 });
 
 // update one
-router.put("/:id", passport.authenticate("jwt"), (req, res) => {
+router.put("/:id", passport.authenticate("userRequired"), (req, res) => {
   const { id, ...newData } = req.body;
   const place = new Place({ id: req.params.id, ...newData });
   place

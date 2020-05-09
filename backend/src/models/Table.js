@@ -130,7 +130,10 @@ class Table {
       ", "
     )}) RETURNING ${this.ACCEPTED_FIELDS.map(snakeCase).join(", ")}`;
 
-    return db.query(text, prepared.values).then(res => cleanUpObjectKeys(res));
+    return db
+      .query(text, prepared.values)
+      .then(res => console.log("created, res = ", res) || res)
+      .then(res => cleanUpObjectKeys(res[0]));
   }
 
   readAll(customText = null) {
@@ -154,6 +157,8 @@ class Table {
     if (this.opts.offset) {
       text += ` OFFSET ${this.opts.offset}`;
     }
+    console.log("readAll -> text", text);
+    console.log("readAll -> values", values);
     return db.query(text, values).then(res => res.map(cleanUpObjectKeys));
   }
 
@@ -191,6 +196,8 @@ class Table {
   delete() {
     const text = `DELETE FROM ${this.tableName} WHERE ${this.pk} = $1;`;
     const values = [this.data[this.pk]];
+    console.log("delete -> text", text);
+    console.log("delete -> values", values);
     return db.query(text, values);
   }
 }

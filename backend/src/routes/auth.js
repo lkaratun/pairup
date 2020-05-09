@@ -25,6 +25,10 @@ function loginSuccessRedirect(req, res) {
     .cookie("firstName", req.user.firstName, {
       expires: addMonths(new Date(), 1),
       domain: FRONTEND_DOMAIN
+    })
+    .cookie("userId", req.user.id, {
+      expires: addMonths(new Date(), 1),
+      domain: FRONTEND_DOMAIN
     });
   res.redirect(FRONTEND_URL);
 }

@@ -38,8 +38,6 @@ class Event extends Table {
     LEFT JOIN users ON users.id = events.author_id
     LEFT JOIN activities ON activities.id = events.activity_id
     LEFT JOIN places ON places.id = events.place_id`;
-    console.log("Event search SQL query = ", text);
-
     return super.readAll(text);
   }
 }
