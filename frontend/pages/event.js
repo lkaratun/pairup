@@ -13,12 +13,7 @@ export async function getServerSideProps({ query }) {
     axios({
       url: `http:${backendUrl}/events/${query.id}/attendees`
     })
-  ]);
-  console.log(
-    "getServerSideProps -> eventDetails, attendees",
-    eventDetails.data,
-    attendees.data
-  );
+  ]).catch(() => [{ data: {} }, { data: {} }]);
 
   return {
     props: {

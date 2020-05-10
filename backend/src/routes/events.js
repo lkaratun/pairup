@@ -52,7 +52,7 @@ router.get("/:id", userOptional, async (req, res) => {
   });
 
   if (!event) {
-    throw new APIError(`event #${req.params.id} not found`, 404);
+    return res.status(404).json(`event #${req.params.id} not found`);
   }
   event.currentUserAttending = attendees
     .map(person => person.id)
@@ -82,7 +82,7 @@ router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
   const newEvent = new Event({ id: req.params.id });
   newEvent
     .read()
-    .then(([data]) => {
+    .then(data => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       } else if (data.authorId !== req.user.id) {
@@ -93,12 +93,10 @@ router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
       }
       return newEvent.delete();
     })
-    .then(() => {
-      res.status(204).json();
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
-    });
+    .then(res.status(204).json())
+    .catch(err =>
+      res.status(err.statusCode || 400).json({ message: err.message })
+    );
 });
 
 // update an event

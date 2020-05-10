@@ -1,9 +1,8 @@
-import React, { Component, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "utils/request";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { withRouter } from "next/router";
-import PropTypes from "prop-types";
 import { UserContext } from "components/UserProvider";
 import MainLayout from "./MainLayout";
 import Attendees from "./Attendees";
@@ -22,20 +21,26 @@ function isUserAttending(userId, attendees) {
 
 function EventPage(props) {
   const {
-    // id,
     name,
-    // author,
-    image,
     description,
     country,
     city,
     authorId,
     dateFrom,
     dateTo,
-    // minPeople,
     maxPeople
-    // currentUserAttending,
   } = props;
+
+  if (!name)
+    return (
+      <MainLayout>
+        <Container>
+          <EventCard>
+            <Name>Event not found</Name>
+          </EventCard>
+        </Container>
+      </MainLayout>
+    );
 
   const [attendees, setAttendees] = useState(props.attendees);
   const [modalIsVisible, setModalVisible] = useState(false);
@@ -51,35 +56,15 @@ function EventPage(props) {
     isUserAttending(userId, attendees)
   );
 
-  //   = async () => {
-  //   const { router } = props;
-  //   const { tokenCtx, id } = context;
-  //   const token = tokenCtx || localStorage.getItem("token");
-  //   const AuthStr = `Bearer ${token}`;
-  //   const userId = id || localStorage.getItem("id");
-  //   const attendees = await axios({
-  //     method: "get",
-  //     url: `http:${backendUrl}/events/${router.query.id}/attendees`,
-  //     headers: { Authorization: AuthStr }
-  //   });
-  //   const userIsAttending = getAttendance(userId, attendees.data);
-  //   setState({ userIsAttending, attendees: attendees.data });
-  // };
-
-  // deleteEvent = () => {
-  //   const { router } = props;
-  //   const token = localStorage.getItem("token");
-  //   const AuthStr = `Bearer ${token}`;
-  //   axios({
-  //     method: "delete",
-  //     url: `http:${backendUrl}/events/${router.query.id}`,
-  //     headers: { Authorization: AuthStr }
-  //   })
-  //     .then(() => {
-  //       router.push("/events");
-  //     })
-  //     .catch(error => console.error(error.response));
-  // };
+  const deleteEvent = () => {
+    const { router } = props;
+    axios({
+      url: `http:${backendUrl}/events/${router.query.id}`,
+      method: "delete"
+    })
+      .then(router.push("/events"))
+      .catch(error => console.error(error.response));
+  };
 
   const updateAttendees = async () => {
     const { router } = props;
@@ -175,7 +160,6 @@ function EventPage(props) {
             />
           </JoinPanel>
           <ControlButtons>
-            {/* <BackButton onClick={() => router.push("/events")} /> */}
             {Number(userId) === Number(authorId) && (
               <DeleteButton onClick={() => setModalVisible(true)}>
                 Delete
@@ -185,7 +169,7 @@ function EventPage(props) {
           <Modal
             showModal={modalIsVisible}
             hide={() => setModalVisible(false)}
-            // confirm={deleteEvent}
+            confirm={deleteEvent}
           />
         </EventCard>
       </Container>
@@ -236,7 +220,7 @@ const Container = styled.div`
 `;
 
 const EventCard = styled.div`
-  min-height: 60vh;
+  min-height: 20vh;
   padding: 2em;
   margin: 0.5em 0;
   border-radius: 0.25em;
@@ -338,28 +322,5 @@ const DeleteButton = styled.button`
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   margin-left: 10px;
 `;
-const BackButton = styled.button`
-  font-size: 1.4rem;
-  padding: 4px;
-  cursor: pointer;
-  outline: 0;
-  margin: 0;
-  color: white;
-  border: 0;
-  background: yellowgreen;
-  border-radius: 3px;
-  padding-left: 10px;
-  padding-right: 10px;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-`;
-
-EventPage.propTypes = {
-  router: PropTypes.object.isRequired
-};
-
-AvailableSpotsLeftNotice.propTypes = {
-  spotsLeft: PropTypes.number.isRequired,
-  maxPeople: PropTypes.string
-};
 
 export default withRouter(EventPage);
