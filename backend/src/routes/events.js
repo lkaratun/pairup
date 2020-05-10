@@ -21,14 +21,14 @@ router.get("/", (req, res) => {
 
 // create an event
 router.post("/", passport.authenticate("userRequired"), (req, res) => {
-  const newEvent = new Event({ author_id: req.user.id, ...req.body });
+  const newEvent = new Event({ authorId: req.user.id, ...req.body });
   newEvent
     .create()
     .then(([data]) => {
       newEvent.data = data;
       const attendee = new Attendee({
-        user_id: req.user.id,
-        event_id: data.id
+        userId: req.user.id,
+        eventId: data.id
       });
       return attendee.create();
     })
@@ -46,7 +46,7 @@ router.get("/:id", userOptional, async (req, res) => {
 
   const [event, attendees] = await Promise.all([
     new Event({ id: req.params.id }).read(),
-    new Attendee({ event_id: req.params.id }).getAttendeesForEvent()
+    new Attendee({ eventId: req.params.id }).getAttendeesForEvent()
   ]).catch(err => {
     res.status(err.statusCode || 400).json({ message: err.message });
   });
@@ -85,7 +85,7 @@ router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
     .then(([data]) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
-      } else if (data.author_id !== req.user.id) {
+      } else if (data.authorId !== req.user.id) {
         throw new APIError(
           `you are not the author of event #${req.params.id}`,
           403
@@ -110,7 +110,7 @@ router.put("/:id", passport.authenticate("userRequired"), (req, res) => {
     .then(([data]) => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
-      } else if (data.author_id !== req.user.id) {
+      } else if (data.authorId !== req.user.id) {
         throw new APIError(
           `you are not the author of event #${req.params.id}`,
           403
@@ -178,7 +178,7 @@ router.delete(
       .then(data => {
         if (!data) {
           throw new APIError(`event not #${req.params.id} found`, 404);
-        } else if (Number(data.author_id) === Number(req.user.id)) {
+        } else if (Number(data.authorId) === Number(req.user.id)) {
           throw new APIError("cant unsubscribe from your own event", 403);
         }
         return attendee.read();
@@ -213,10 +213,10 @@ router.post(
     // check if event exists
     new Event({ id: req.params.id })
       .read()
-      .then(([data]) => {
+      .then(data => {
         if (data === undefined) {
           throw new APIError(`event #${req.params.id} not found`, 404);
-        } else if (data.author_id !== req.user.id) {
+        } else if (data.authorId !== req.user.id) {
           throw new APIError(
             `you are not the author of event #${req.params.id}`,
             403

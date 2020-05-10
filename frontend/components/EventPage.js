@@ -39,6 +39,9 @@ function EventPage(props) {
 
   const [attendees, setAttendees] = useState(props.attendees);
   const [modalIsVisible, setModalVisible] = useState(false);
+  const [imageUrl, setImageUrl] = useState(
+    props.image || "../static/stock-event.jpg"
+  );
   const user = useContext(UserContext);
   console.log("EventPage -> user", user);
   const userId = user.id;
@@ -47,13 +50,6 @@ function EventPage(props) {
   const [userIsAttending, setUserIsAttending] = useState(
     isUserAttending(userId, attendees)
   );
-
-  //   const dateFromFormat = dateFrom
-  //     ? format(dateFrom, "MMMM DD YYYY")
-  //     : "not set";
-  //   const dateToFormat = dateTo ? format(dateTo, "MMMM DD YYYY") : "not set";
-
-  // }
 
   //   = async () => {
   //   const { router } = props;
@@ -119,11 +115,8 @@ function EventPage(props) {
       .catch(error => console.log(error));
   };
 
-  // updateImage = url => setState({ image: url });
-
   // const { router } = props;
 
-  const eventImage = image || "../static/stock-event.jpg";
   const spotsLeft = maxPeople - attendees.length;
 
   return (
@@ -149,19 +142,21 @@ function EventPage(props) {
               </div>
               <div>
                 <Title>Starts: </Title>
-                <SubTitle>{dateFrom}</SubTitle>
+                <SubTitle>{format(dateFrom, "MMMM DD, YYYY")}</SubTitle>
               </div>
               <div>
                 <Title>Ends: </Title>
-                <SubTitle>{dateTo}</SubTitle>
+                <SubTitle>{format(dateTo, "MMMM DD, YYYY")}</SubTitle>
               </div>
             </InfoPanel>
             <div>
-              <EventImage src={eventImage} alt="people in a group" />
-              <ImageUploader
-                url={`/events/${props.router.query.id}/images`}
-                // onCompletion={updateImage}
-              />
+              <EventImage src={imageUrl} alt="people in a group" />
+              {userId === authorId && (
+                <ImageUploader
+                  url={`/events/${props.router.query.id}/images`}
+                  onCompletion={setImageUrl}
+                />
+              )}
             </div>
           </InfoWrapper>
           <Attendees attendees={attendees} />
