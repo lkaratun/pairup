@@ -22,7 +22,7 @@ class DynamicActivitySearch extends React.Component {
   async componentDidMount() {
     const suggestions = await axios({
       method: "get",
-      url: `${backendUrl}/activities`
+      url: `http:${backendUrl}/activities`
     });
     console.log("suggestions.data = ", suggestions.data);
 

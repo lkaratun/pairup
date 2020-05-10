@@ -31,7 +31,7 @@ class DynamicLocationSearch extends React.Component {
     const AuthStr = `Bearer ${token}`;
     const suggestions = await axios({
       method: "get",
-      url: `${backendUrl}/places`,
+      url: `http:${backendUrl}/places`,
       headers: {
         Authorization: AuthStr
       }

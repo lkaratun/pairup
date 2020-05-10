@@ -10,6 +10,7 @@ const UserContext = React.createContext();
 class UserProvider extends React.Component {
   state = {
     firstName: this.props.cookies.firstName,
+    id: parseInt(this.props.cookies.userId, 10),
 
     logIn: ({ data, method }) => {
       if (!["oauth", "password"].includes(method))
@@ -36,14 +37,11 @@ class UserProvider extends React.Component {
       console.log(
         `Logged in as ${this.state.firstName} ${this.state.lastName}`
       );
-      Object.entries(state).forEach(([key, value]) => {
-        localStorage.setItem(key, value);
-      });
     },
 
     logOut: () => {
       axios({
-        url: `${backendUrl}/auth/logout`,
+        url: `http:${backendUrl}/auth/logout`,
         withCredentials: true
       });
     },
@@ -51,7 +49,7 @@ class UserProvider extends React.Component {
     updateUser: async newData => {
       if (Object.keys(newData).length === 0) return null;
       const response = await axios
-        .put(`${backendUrl}/users`, newData)
+        .put(`http:${backendUrl}/users`, newData)
         .then(res => res.data)
         .catch(err => console.error(err.response));
       this.setState(response);

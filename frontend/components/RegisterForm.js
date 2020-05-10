@@ -27,7 +27,7 @@ function RegisterForm() {
     // Handle Success register state -> redirect
     axios
       .post(
-        `${backendUrl}/auth/register`,
+        `http:${backendUrl}/auth/register`,
         {
           email: state.email,
           password: state.password,

@@ -22,7 +22,7 @@ const DateSelectorDynamic = dynamic(
 
 export async function getServerSideProps() {
   // Default fetch is any event from today with a limit of 5
-  console.log("events URL = ", `${backendUrl}/events?limit=5`);
+  console.log("events URL = ", `http:${backendUrl}/events?limit=5`);
 
   const events = await axios({
     url: `http:${backendUrl}/events?limit=5`

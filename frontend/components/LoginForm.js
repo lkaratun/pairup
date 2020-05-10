@@ -19,7 +19,7 @@ export default () => {
     // Handle Success register state -> redirect
     axios
       .post(
-        `${backendUrl}/auth/login`,
+        `http:${backendUrl}/auth/login`,
         {
           email,
           password

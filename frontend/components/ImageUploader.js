@@ -15,7 +15,7 @@ class ImageUploader extends Component {
     this.setState({ selectedFile: imageFile });
     const formData = new FormData();
     formData.append("file", imageFile, imageFile.name);
-    const url = `${backendUrl}${this.props.url}`;
+    const url = `http:${backendUrl}${this.props.url}`;
     axios
       .post(url, formData, {
         headers: {

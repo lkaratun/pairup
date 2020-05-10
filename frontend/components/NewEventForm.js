@@ -78,7 +78,7 @@ class EventForm extends Component {
       };
       axios({
         method: "post",
-        url: `${backendUrl}/activities`,
+        url: `http:${backendUrl}/activities`,
         data,
         headers: {
           Authorization: AuthStr
@@ -105,7 +105,7 @@ class EventForm extends Component {
       };
       axios({
         method: "post",
-        url: `${backendUrl}/places`,
+        url: `http:${backendUrl}/places`,
         data,
         headers: {
           Authorization: AuthStr

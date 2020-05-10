@@ -157,7 +157,7 @@ router.post(
         }
         return attendee.create();
       })
-      .then(result => res.status(201).json(result))
+      .then(() => res.status(201).json(req.user))
       .catch(err => {
         res.status(err.statusCode || 400).json({ message: err.message });
       });

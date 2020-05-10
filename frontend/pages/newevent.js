@@ -20,7 +20,7 @@ class NewEvent extends React.Component {
     console.log(event);
     axios({
       method: "post",
-      url: `${backendUrl}/events`,
+      url: `http:${backendUrl}/events`,
       data: event,
       headers: {
         Authorization: AuthStr
