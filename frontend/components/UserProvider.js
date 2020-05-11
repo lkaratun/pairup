@@ -39,11 +39,12 @@ class UserProvider extends React.Component {
       );
     },
 
-    logOut: () => {
-      axios({
-        url: `http:${backendUrl}/auth/logout`,
-        withCredentials: true
+    logOut: async () => {
+      await axios({
+        url: `http:${backendUrl}/auth/logout`
       });
+      this.state.firstName = undefined;
+      this.state.id = undefined;
     },
 
     updateUser: async newData => {

@@ -109,7 +109,7 @@ router.post(
 router.get("/logout", (req, res) => {
   console.log("In logout route");
   res
-    .clearCookie("token")
+    .clearCookie("token", { domain: FRONTEND_DOMAIN, httpOnly: true })
     .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
     .clearCookie("userId", { domain: FRONTEND_DOMAIN })
     .status(204)

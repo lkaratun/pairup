@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import { UserContext } from "./UserProvider";
 import device from "../styles/device";
 
@@ -8,7 +9,8 @@ function Navbar() {
   const userContext = useContext(UserContext) || {};
   console.log("UserContext = ", userContext);
 
-  const { firstName } = userContext;
+  const { firstName, logOut } = userContext;
+  const router = useRouter();
 
   return (
     <StyledNav>
@@ -34,7 +36,9 @@ function Navbar() {
                   Logged in as: {firstName} <NavLink>Profile</NavLink>
                 </>
               </Link>
-              <NavLink onClick={userContext.logOut}>Logout</NavLink>
+              <NavLink onClick={() => logOut().then(router.push("/"))}>
+                Log out
+              </NavLink>
             </AuthSection>
           </NavAuthButtons>
         ) : (
