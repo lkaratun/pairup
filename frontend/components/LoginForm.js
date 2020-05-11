@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import styled from "styled-components";
 import axios from "utils/request";
 import Input from "./Input";
 import LoginButton from "./LoginButton";
@@ -59,25 +60,22 @@ export default () => {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <LoginButton text="Log in" />
+        <HalfWidthButton>Log in</HalfWidthButton>
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
+        <HalfWidthButton
+          type="button"
+          onClick={() => router.push(`${backendUrl}/auth/google`)}
+        >
+          Log in with Google
+        </HalfWidthButton>
       </form>
-      <button
-        type="button"
-        onClick={() => router.push(`${backendUrl}/auth/google`)}
-      >
-        Log in with Google
-      </button>
-      <button
-        type="button"
-        onClick={() => router.push(`${backendUrl}/auth/view`)}
-      >
-        View cookies
-      </button>
     </>
   );
 };
 
-// LoginForm.propTypes = {
-//   context: PropTypes.object
-// };
+const HalfWidthButton = styled(LoginButton)`
+  width: 49%;
+  &:first-of-type {
+    margin-right: 2%;
+  }
+`;

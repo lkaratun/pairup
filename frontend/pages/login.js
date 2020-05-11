@@ -1,19 +1,11 @@
-import React, { Component, useContext } from "react";
+import React from "react";
 
 import Link from "next/link";
 import styled from "styled-components";
 import LoginForm from "../components/LoginForm";
 import MainLayout from "../components/MainLayout";
-import { UserConsumer, UserContext } from "../components/UserProvider";
+import { UserConsumer } from "../components/UserProvider";
 import device from "../styles/device";
-
-export async function getServerSideProps() {
-  console.log("In LoginPage -> getServerSideProps");
-  // const context = useContext(UserContext);
-  // console.log("In LoginPage -> context", context);
-
-  return { props: {} };
-}
 
 function LoginPage() {
   return (
@@ -27,7 +19,9 @@ function LoginPage() {
               <StyledLink>register!</StyledLink>
             </Link>
           </LinkWrapper>
-          <UserConsumer>{context => <LoginForm context={context} />}</UserConsumer>
+          <UserConsumer>
+            {context => <LoginForm context={context} />}
+          </UserConsumer>
         </InputSection>
       </LoginWrapper>
     </MainLayout>
