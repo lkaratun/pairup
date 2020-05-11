@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import ImageUploader from "./ImageUploader";
 import { UserContext } from "./UserProvider";
 import Event from "./Event";
@@ -8,7 +7,6 @@ import BioModal from "./BioModal";
 import NameModal from "./NameModal";
 
 function Profile(props) {
-  // const firstName = this.props.
   const [userData, setUserData] = useState({
     lastName: props.userData.lastName,
     email: props.userData.email,
