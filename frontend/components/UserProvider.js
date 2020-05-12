@@ -13,30 +13,9 @@ class UserProvider extends React.Component {
     id: parseInt(this.props.cookies.userId, 10),
 
     logIn: ({ data, method }) => {
-      if (!["oauth", "password"].includes(method))
-        throw new Error("Auth method not recognized");
-      const allowedFields = [
-        "first_name",
-        "last_name",
-        "email",
-        "token",
-        "bio",
-        "image",
-        "id"
-      ];
-
-      const newState = { loggedIn: true };
-      Object.entries(data).forEach(([key, value]) => {
-        if (allowedFields.includes(key)) {
-          if (key === "first_name") newState["firstName"] = value;
-          else if (key === "last_name") newState["lastName"] = value;
-          else newState[key] = value;
-        }
-      });
-      this.setState(newState);
-      console.log(
-        `Logged in as ${this.state.firstName} ${this.state.lastName}`
-      );
+      const { firstName, id } = data;
+      this.setState({ firstName, id });
+      console.log(`Logged in as ${firstName}`);
     },
 
     logOut: async () => {

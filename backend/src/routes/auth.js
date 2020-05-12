@@ -12,7 +12,7 @@ const router = express.Router();
 const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
 console.log({ env: process.env.NODE_ENV, FRONTEND_DOMAIN, FRONTEND_URL });
 
-function loginSuccessRedirect(req, res) {
+function loginSuccessRedirect(req, res, next) {
   const token = new User(req.user).refreshToken();
   console.log("new token = ", token);
 
@@ -30,7 +30,7 @@ function loginSuccessRedirect(req, res) {
       expires: addMonths(new Date(), 1),
       domain: FRONTEND_DOMAIN
     });
-  res.redirect(FRONTEND_URL);
+  next();
 }
 
 // Create an account using google oAuth
@@ -47,7 +47,8 @@ router.get(
 router.get(
   "/googleAuthSuccess",
   passport.authenticate("google"),
-  loginSuccessRedirect
+  loginSuccessRedirect,
+  (req, res) => res.redirect(FRONTEND_URL)
 );
 
 // Test route to view current user info and token
@@ -83,13 +84,19 @@ router.post(
       .then(() => {
         req.user = user.data;
         res.status(201);
+
         next();
       })
       .catch(err => {
+        console.error(err);
+
         res.status(err.statusCode || 500).json({ message: err.message });
       });
   },
-  loginSuccessRedirect
+  loginSuccessRedirect,
+  (req, res) => {
+    res.json(req.user);
+  }
 );
 
 // Log in using username/password

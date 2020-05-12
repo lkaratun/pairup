@@ -53,7 +53,7 @@ class User extends Table {
   create() {
     return this.hashPassword()
       .then(() => super.create())
-      .then(([data]) => {
+      .then(data => {
         this.data = data;
         delete this.data.password;
         return this.data;
