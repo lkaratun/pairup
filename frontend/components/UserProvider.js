@@ -12,8 +12,17 @@ class UserProvider extends React.Component {
     firstName: this.props.cookies.firstName,
     id: parseInt(this.props.cookies.userId, 10),
 
-    logIn: ({ data, method }) => {
-      const { firstName, id } = data;
+    logIn: async ({ email, password }) => {
+      const { firstName, id } = await axios
+        .post(`http:${backendUrl}/auth/login`, {
+          email,
+          password
+        })
+        .then(res => res.data)
+        .catch(err => {
+          console.error(err.response);
+        });
+
       this.setState({ firstName, id });
       console.log(`Logged in as ${firstName}`);
     },
@@ -22,8 +31,7 @@ class UserProvider extends React.Component {
       await axios({
         url: `http:${backendUrl}/auth/logout`
       });
-      this.state.firstName = undefined;
-      this.state.id = undefined;
+      this.setState({ firstName: undefined, id: undefined });
     },
 
     updateUser: async newData => {

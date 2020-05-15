@@ -21,10 +21,13 @@ router.get("/", (req, res) => {
 
 // create an event
 router.post("/", passport.authenticate("userRequired"), (req, res) => {
+  console.log("In create event route");
+
   const newEvent = new Event({ authorId: req.user.id, ...req.body });
   newEvent
     .create()
-    .then(([data]) => {
+    .then(data => {
+      console.log("data", data);
       newEvent.data = data;
       const attendee = new Attendee({
         userId: req.user.id,
@@ -32,8 +35,9 @@ router.post("/", passport.authenticate("userRequired"), (req, res) => {
       });
       return attendee.create();
     })
-    .then(() => {
-      res.status(201).json(newEvent.data);
+    .then(attendee => {
+      console.log("attendee", attendee);
+      return res.status(201).json(newEvent.data);
     })
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
@@ -105,7 +109,7 @@ router.put("/:id", passport.authenticate("userRequired"), (req, res) => {
   const newEvent = new Event({ id: req.params.id, ...newData });
   new Event({ id: req.params.id })
     .read()
-    .then(([data]) => {
+    .then(data => {
       if (data === undefined) {
         throw new APIError(`event #${req.params.id} not found`, 404);
       } else if (data.authorId !== req.user.id) {

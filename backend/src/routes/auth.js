@@ -13,6 +13,8 @@ const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
 console.log({ env: process.env.NODE_ENV, FRONTEND_DOMAIN, FRONTEND_URL });
 
 function loginSuccessRedirect(req, res, next) {
+  console.log("In loginSuccessRedirect, user = ", req.user);
+
   const token = new User(req.user).refreshToken();
   console.log("new token = ", token);
 
@@ -102,14 +104,22 @@ router.post(
 // Log in using username/password
 router.post(
   "/login",
-  passport.authenticate("userRequired"),
+  function(req, res, next) {
+    passport.authenticate("local", function handleAuthFail(err, user) {
+      if (err) return res.status(401).json(err);
+      req.user = user;
+      return next(null, user);
+    })(req, res, next);
+  },
+
   (req, res, next) => {
-    console.log("In login route");
     console.log(req.user);
-    res.status(201);
     return next();
   },
-  loginSuccessRedirect
+  loginSuccessRedirect,
+  (req, res) => {
+    res.json(req.user);
+  }
 );
 
 // Log out

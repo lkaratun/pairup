@@ -62,9 +62,7 @@ class User extends Table {
 
   read() {
     return super.read().then(data => {
-      if (data.length === 0) {
-        throw new APIError("user not found", 404);
-      } else if (data.length === 1) {
+      if (data) {
         const { password, ...rest } = data;
         this.data = rest;
         this[this.pk] = this.data[this.pk];

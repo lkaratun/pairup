@@ -17,12 +17,12 @@ class EventForm extends Component {
   state = {
     name: "",
     description: "",
-    activity_id: null,
-    place_id: null,
-    date_from: null,
-    date_to: null,
-    min_people: null,
-    max_people: null,
+    activityId: null,
+    placeId: null,
+    dateFrom: null,
+    dateTo: null,
+    minPeople: null,
+    maxPeople: null,
     valid: true
   };
 
@@ -31,17 +31,17 @@ class EventForm extends Component {
     // create new event object to be sent to API
     const newEvent = {
       name: this.state.name,
-      min_people: this.state.min_people,
-      max_people: this.state.max_people,
-      activity_id: this.state.activity_id,
-      place_id: this.state.place_id,
+      minPeople: this.state.minPeople,
+      maxPeople: this.state.maxPeople,
+      activityId: this.state.activityId,
+      placeId: this.state.placeId,
       description: this.state.description,
-      date_from: this.state.date_from,
-      date_to: this.state.date_to
+      dateFrom: this.state.dateFrom,
+      dateTo: this.state.dateTo
     };
 
     // validate new object
-    const REQUIRED_FIELDS = ["name", "activity_id", "max_people"];
+    const REQUIRED_FIELDS = ["name", "activityId", "maxPeople"];
     for (let i = 0; i < REQUIRED_FIELDS.length; i++) {
       if (
         newEvent[REQUIRED_FIELDS[i]] === null ||
@@ -68,7 +68,7 @@ class EventForm extends Component {
   updateActivity = (payload, existsInDB) => {
     // existsInDB flag is used to determine if that is a brand new attribute coming and needs to be created in DB or it is existing one
     if (existsInDB) {
-      this.setState({ activity_id: payload.id });
+      this.setState({ activityId: payload.id });
     } else {
       // create new instance of attribute with the ID
       const token = localStorage.getItem("token");
@@ -85,7 +85,7 @@ class EventForm extends Component {
         }
       })
         .then(response => {
-          this.setState({ activity_id: response.data.id });
+          this.setState({ activityId: response.data.id });
         })
         .catch(error => console.error(error));
     }
@@ -94,7 +94,7 @@ class EventForm extends Component {
   updateLocation = (payload, existsInDB) => {
     // existsInDB flag is used to determine if that is a brand new attribute coming and needs to be created in DB or it is existing one
     if (existsInDB) {
-      this.setState({ place_id: payload.id });
+      this.setState({ placeId: payload.id });
     } else {
       // create new instance of attribute with the ID
       const token = localStorage.getItem("token");
@@ -112,20 +112,20 @@ class EventForm extends Component {
         }
       })
         .then(response => {
-          this.setState({ place_id: response.data.id });
+          this.setState({ placeId: response.data.id });
         })
         .catch(error => console.error(error));
     }
   };
 
   updateParticipantRange = (min, max) => {
-    this.setState({ min_people: min, max_people: max });
+    this.setState({ minPeople: min, maxPeople: max });
   };
 
   updateDateRange = (startDate, endDate) => {
     this.setState({
-      date_from: startDate,
-      date_to: endDate
+      dateFrom: startDate,
+      dateTo: endDate
     });
   };
 

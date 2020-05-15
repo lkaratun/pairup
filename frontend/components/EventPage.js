@@ -31,6 +31,19 @@ function EventPage(props) {
     maxPeople
   } = props;
 
+  const [attendees, setAttendees] = useState(props.attendees);
+  const [modalIsVisible, setModalVisible] = useState(false);
+  const [imageUrl, setImageUrl] = useState(
+    props.image || "../static/stock-event.jpg"
+  );
+  const user = useContext(UserContext);
+  console.log("EventPage -> user", user);
+  const userId = user.id;
+  console.log("EventPage -> userId", userId);
+  const [userIsAttending, setUserIsAttending] = useState(
+    isUserAttending(userId, attendees)
+  );
+
   if (!name)
     return (
       <MainLayout>
@@ -41,21 +54,6 @@ function EventPage(props) {
         </Container>
       </MainLayout>
     );
-
-  const [attendees, setAttendees] = useState(props.attendees);
-  const [modalIsVisible, setModalVisible] = useState(false);
-  const [imageUrl, setImageUrl] = useState(
-    props.image || "../static/stock-event.jpg"
-  );
-  const user = useContext(UserContext);
-  console.log("EventPage -> user", user);
-  const userId = user.id;
-  console.log("EventPage -> userId", userId);
-
-  const [userIsAttending, setUserIsAttending] = useState(
-    isUserAttending(userId, attendees)
-  );
-
   const deleteEvent = () => {
     const { router } = props;
     axios({

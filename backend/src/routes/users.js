@@ -11,6 +11,8 @@ const config = require("../../config.json");
 const { FRONTEND_DOMAIN } = config[process.env.NODE_ENV];
 
 router.get("/", (req, res) => {
+  console.log("In users/ route");
+
   return res.json(req.user);
 });
 
@@ -41,7 +43,7 @@ router.put("/", async (req, res) => {
 });
 
 router.get("/events", (req, res) => {
-  const attendee = new Attendee({ user_id: req.user[req.user.pk] });
+  const attendee = new Attendee({ userId: req.user[req.user.pk] });
   attendee
     .getEventsForAttendee()
     .then(data => res.json(data))

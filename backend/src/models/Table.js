@@ -4,6 +4,16 @@ const camelCase = require("camelcase");
 
 const db = require("./db");
 
+function camelCaseObjectKeys(object) {
+  for (const key of Object.keys(object)) {
+    if (key !== camelCase(key)) {
+      object[camelCase(key)] = object[key];
+      delete object[key];
+    }
+  }
+  return object;
+}
+
 function cleanUpObjectKeys(object) {
   const SENSITIVE_FIELDS = [
     "google_access_token",
@@ -12,13 +22,7 @@ function cleanUpObjectKeys(object) {
   ];
   SENSITIVE_FIELDS.forEach(field => delete object[field]);
 
-  for (const key of Object.keys(object)) {
-    if (key !== camelCase(key)) {
-      object[camelCase(key)] = object[key];
-      delete object[key];
-    }
-  }
-  return object;
+  return camelCaseObjectKeys(object);
 }
 
 class Table {
@@ -129,14 +133,16 @@ class Table {
     )}) VALUES (${prepared.indexes.join(
       ", "
     )}) RETURNING ${this.ACCEPTED_FIELDS.map(snakeCase).join(", ")}`;
-
+    console.log("create -> text", text);
+    console.log("create -> values", prepared.values);
     return db
       .query(text, prepared.values)
       .then(res => console.log("created, res = ", res) || res)
-      .then(res => cleanUpObjectKeys(res[0]));
+      .then(res => cleanUpObjectKeys(res[0]))
+      .catch(err => console.error("DB error: ", err) || err);
   }
 
-  readAll(customText = null) {
+  baseRead(customText = null) {
     let text = customText || `SELECT * FROM ${this.tableName}`;
     const pk = this.data[this.pk];
     let values;
@@ -159,11 +165,23 @@ class Table {
     }
     console.log("readAll -> text", text);
     console.log("readAll -> values", values);
-    return db.query(text, values).then(res => res.map(cleanUpObjectKeys));
+    return db
+      .query(text, values)
+      .then(d => console.log("db read result = ", d) || d);
+  }
+
+  readAll(customText) {
+    return this.baseRead(customText).then(res => res.map(cleanUpObjectKeys));
   }
 
   read(customText) {
     return this.readAll(customText).then(data => data[0]);
+  }
+
+  unsafeRead(customText) {
+    return this.baseRead(customText)
+      .then(data => data[0])
+      .then(camelCaseObjectKeys);
   }
 
   update() {
