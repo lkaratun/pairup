@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { darken } from "polished";
 import { UserContext } from "./UserProvider";
 import device from "../styles/device";
 
@@ -17,9 +18,7 @@ function Navbar() {
       <ul>
         <li>
           <Link href="/">
-            <LogoWrapper>
-              <Logo src=".././static/logo.svg" alt="logo" />
-            </LogoWrapper>
+            <Logo src=".././static/logo.svg" alt="logo" />
           </Link>
         </li>
         <li>
@@ -27,7 +26,6 @@ function Navbar() {
             <NavLink>Events</NavLink>
           </Link>
         </li>
-        <Logo />
         {firstName ? (
           <NavAuthButtons>
             <AuthSection>
@@ -64,12 +62,12 @@ export default Navbar;
 const StyledNav = styled.nav`
   box-sizing: border-box;
   height: 3rem;
-  background: rgb(22, 67, 75);
   background: linear-gradient(
     90deg,
-    rgba(22, 67, 75, 1) 0%,
-    rgba(28, 12, 91, 1) 100%
+    ${darken("0.05", "rgba(22, 67, 75, 1)")} 0%,
+    ${darken("0.05", "rgba(28, 12, 91, 1)")} 100%
   );
+
   color: white;
   padding: 8px;
 
@@ -91,25 +89,21 @@ const StyledNav = styled.nav`
   }
 
   a {
-    cursor: pointer;
     transition: all 300ms ease-out;
     text-decoration: none;
   }
 `;
 
-const LogoWrapper = styled.div`
-  cursor: pointer;
+const Logo = styled.img`
+  width: 100px;
   margin-right: 10px;
   margin-left: 15px;
+  cursor: pointer;
 
   ${device.mobileL`
     margin-right: 10px;
     margin-left: 3px;
   `}
-`;
-
-const Logo = styled.img`
-  width: 100px;
 `;
 
 const NavAuthButtons = styled.li`
@@ -129,6 +123,7 @@ const NavAuthButtonsLoggedIn = styled.li`
 `;
 
 const NavLink = styled.a`
+  cursor: pointer;
   color: inherit;
   margin-left: 20px;
   &:hover {
