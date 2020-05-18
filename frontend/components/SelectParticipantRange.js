@@ -6,7 +6,7 @@ import StyledErrorMsg from "../styles/StyledErrorMsg";
 class SelectParticipantRange extends React.Component {
   state = {
     minValue: 2,
-    maxValue: "",
+    maxValue: 4,
     inputError: false,
     inputErrorMsg: null
   };
@@ -17,12 +17,12 @@ class SelectParticipantRange extends React.Component {
     if (minValue < 2 || maxValue < 2) {
       this.setState({
         inputError: true,
-        inputErrorMsg: "Participants cannot be less than 2"
+        inputErrorMsg: "Number of participants can't be less than 2"
       });
     } else if (maxValue > 100 || minValue > 100) {
       this.setState({
         inputError: true,
-        inputErrorMsg: "Participants cannot be higher than 100"
+        inputErrorMsg: "Number of participants can't be higher than 100"
       });
     } else if (maxValue < minValue) {
       this.setState({
