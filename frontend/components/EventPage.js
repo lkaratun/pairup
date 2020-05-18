@@ -28,7 +28,8 @@ function EventPage(props) {
     authorId,
     dateFrom,
     dateTo,
-    maxPeople
+    maxPeople,
+    activity
   } = props;
 
   const [attendees, setAttendees] = useState(props.attendees);
@@ -109,10 +110,10 @@ function EventPage(props) {
           <Name>{name}</Name>
           <InfoWrapper>
             <InfoPanel>
-              <Description>
-                <Title>Description</Title>
-                <SubTitle>{description}</SubTitle>
-              </Description>
+              <Title>Activity</Title>
+              <SubTitle>{activity}</SubTitle>
+              <Title>Description</Title>
+              <SubTitle>{description}</SubTitle>
               <div>
                 <Title>Location: </Title>
                 {city ? (
@@ -261,10 +262,6 @@ const Name = styled.div`
   text-transform: capitalize;
   font-size: 3rem;
   margin-bottom: 25px;
-`;
-const Description = styled.div`
-  border-bottom: 1px dotted #1b115a;
-  margin-bottom: 5px;
 `;
 
 const JoinPanel = styled.div`
