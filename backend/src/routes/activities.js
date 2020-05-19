@@ -9,9 +9,7 @@ router.get("/", (req, res) => {
   const activity = new Activity(req.query);
   activity
     .readAll()
-    .then(data => {
-      res.json({ activities: data });
-    })
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });

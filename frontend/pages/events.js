@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import axios from "utils/request";
+import axios, { serverSideRequest } from "utils/request";
 import MainLayout from "../components/MainLayout";
 import EventList from "../components/EventList";
 import device from "../styles/device";
 import config from "../config.json";
+
 import { ColoredButton } from "../components/shared/Buttons";
 import DynamicLocationSearch from "../components/DynamicLocationSearch";
 import DynamicActivitySearch from "../components/DynamicActivitySearch";
@@ -20,15 +21,23 @@ const DateSelectorDynamic = dynamic(
   }
 );
 
-export async function getServerSideProps() {
-  // Default fetch is any event from today with a limit of 5
+export async function getServerSideProps({ req }) {
+  // By default, fetch 5 future events
   console.log("events URL = ", `http:${backendUrl}/events?limit=5`);
 
-  const events = await axios({
-    url: `http:${backendUrl}/events?limit=5`
-  }).catch(err => console.error(err.response));
-  console.log("events = ", events);
-  return { props: { events: events.data } };
+  const [events, activities, places] = await Promise.all([
+    serverSideRequest(req)({ url: `http:${backendUrl}/events?limit=5` }),
+    serverSideRequest(req)({ url: `http:${backendUrl}/activities` }),
+    serverSideRequest(req)({ url: `http:${backendUrl}/places` })
+  ]).catch(err => console.error(err.response));
+
+  return {
+    props: {
+      events: events.data,
+      activities: activities.data,
+      places: places.data
+    }
+  };
 }
 
 class Dashboard extends Component {
@@ -79,7 +88,6 @@ class Dashboard extends Component {
     const { offset } = this.state;
     const newOffset = offset + 5;
     const newEvents = await axios({
-      method: "get",
       url: `http:${backendUrl}/events?&limit=5&offset=${newOffset}`
     });
     console.log(
@@ -121,10 +129,11 @@ class Dashboard extends Component {
         </Divider>
         <FilterControlPanel>
           <DynamicActivitySearch
-            placeholder="Activity"
+            // placeholder="Activity"
             allowNew={false}
             updateActivity={this.updateActivity}
             cleared={cleared}
+            activities={this.props.activities}
           />
           <DynamicLocationSearch
             placeholder="City"

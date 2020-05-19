@@ -1,42 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "utils/request";
 import PropTypes from "prop-types";
-import config from "../config.json";
 import Input from "./Input";
-
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 class DynamicActivitySearch extends React.Component {
   state = {
     inputVal: "",
-    suggestions: [],
-    matchingSuggestions: [],
+    suggestions: this.props.activities,
+    matchingSuggestions: this.props.activities,
     selectionID: null,
     selectionName: null,
     showSuggestions: false,
     showAddButton: true,
     focusedItem: null
   };
-
-  async componentDidMount() {
-    const suggestions = await axios({
-      method: "get",
-      url: `http:${backendUrl}/activities`
-    });
-    console.log("suggestions.data = ", suggestions.data);
-
-    const suggestionArray = suggestions.data["activities"];
-    if (suggestionArray.length === 0) {
-      this.setState({ suggestions: [], showSuggestions: false });
-    } else {
-      this.setState({
-        suggestions: suggestionArray,
-        matchingSuggestions: suggestionArray,
-        showSuggestions: false
-      });
-    }
-  }
 
   componentDidUpdate(prevProps) {
     // adding click handlers for click outside div to hide functionality
@@ -262,7 +239,7 @@ class DynamicActivitySearch extends React.Component {
               onClick={this.handleInputClick}
               onChange={this.handleChange}
               type="text"
-              placeholder={placeholder}
+              placeholder="Activities"
               value={inputVal}
               onKeyDown={e => this.handleKeyDown(e)}
             />
