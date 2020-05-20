@@ -7,7 +7,7 @@
     "migrate": "node-pg-migrate",
     "dev": "NODE_ENV=development nodemon --exec babel-node src/server.js --watch src",
     "test": "mocha",
-    "start": "NODE_ENV=production forever start src/server.js",
+    "start": "NODE_ENV=production forever start -c babel-node src/server.js",
     "stop": "forever stop src/server.js",
     "restart": "NODE_ENV=production forever restart src/server.js"
   },
