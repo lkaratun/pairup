@@ -142,11 +142,14 @@ class Table {
       .catch(err => console.error("DB error: ", err) || err);
   }
 
-  baseRead(customText = null) {
+  baseRead(customText = null, where, whereValues) {
     let text = customText || `SELECT * FROM ${this.tableName}`;
     const pk = this.data[this.pk];
     let values;
-    if (pk) {
+    if (where) {
+      text += where;
+      values = whereValues;
+    } else if (pk) {
       text += ` WHERE ${this.tableName}.${this.pk} = $1`;
       values = [pk];
     } else if (Object.keys(this.data).length !== 0) {
@@ -170,12 +173,14 @@ class Table {
       .then(d => console.log("db read result = ", d) || d);
   }
 
-  readAll(customText) {
-    return this.baseRead(customText).then(res => res.map(cleanUpObjectKeys));
+  readAll(customText, where, whereValues) {
+    return this.baseRead(customText, where, whereValues).then(res =>
+      res.map(cleanUpObjectKeys)
+    );
   }
 
-  read(customText) {
-    return this.readAll(customText).then(data => data[0]);
+  read(customText, where, whereValues) {
+    return this.readAll(customText, where, whereValues).then(data => data[0]);
   }
 
   unsafeRead(customText) {

@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   const newEvent = new Event(req.query);
   newEvent
-    .readAll()
+    .readAll(req.query?.timestamp)
     .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
