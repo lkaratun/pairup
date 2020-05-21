@@ -43,18 +43,17 @@ function RegisterForm() {
       )
       .then(res => {
         console.log("RegisterForm -> res", res);
-
-        user.logIn({ data: res.data, method: "password" });
+        user.setUser({ ...res.data });
         router.push("/");
       })
       .catch(err => {
         console.log("err = ", err);
 
-        // setState({
-        //   ...state,
-        //   registrationFailed: true,
-        //   failReason: err.response.data.message
-        // });
+        setState({
+          ...state,
+          registrationFailed: true,
+          failReason: err.response.data.message
+        });
       });
   };
 

@@ -34,6 +34,11 @@ class UserProvider extends React.Component {
       this.setState({ firstName: undefined, id: undefined });
     },
 
+    setUser: ({ firstName, id }) => {
+      this.setState({ firstName, id });
+      console.log(`Logged in as ${firstName}`);
+    },
+
     updateUser: async newData => {
       if (Object.keys(newData).length === 0) return null;
       const response = await axios
