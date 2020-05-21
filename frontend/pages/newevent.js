@@ -1,7 +1,7 @@
 import React from "react";
 import Router from "next/router";
 import styled from "styled-components";
-import axios from "utils/request";
+import axios, { serverSideRequest } from "utils/request";
 import MainLayout from "../components/MainLayout";
 import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
@@ -9,22 +9,35 @@ import config from "../config.json";
 
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
+export async function getServerSideProps({ req }) {
+  // By default, fetch 5 future events
+  console.log("events URL = ", `http:${backendUrl}/events?limit=5`);
+
+  const [activities, locations] = await Promise.all([
+    serverSideRequest(req)({ url: `http:${backendUrl}/activities` }),
+    serverSideRequest(req)({ url: `http:${backendUrl}/places` })
+  ]).catch(err => console.error(err.response));
+  console.log("getServerSideProps -> activities", activities.data);
+  console.log("getServerSideProps -> locations", locations.data);
+
+  return {
+    props: {
+      activities: activities.data,
+      locations: locations.data
+    }
+  };
+}
+
 class NewEvent extends React.Component {
   state = {
     serverPostFail: false
   };
 
   createEvent = event => {
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-    console.log(event);
     axios({
       method: "post",
       url: `http:${backendUrl}/events`,
-      data: event,
-      headers: {
-        Authorization: AuthStr
-      }
+      data: event
     })
       .then(() => {
         this.setState({ serverPostFail: false });
@@ -43,7 +56,7 @@ class NewEvent extends React.Component {
         <EventWrapper>
           <InputSection>
             <Title>Create New Event</Title>
-            <NewEventForm createEvent={this.createEvent} />
+            <NewEventForm createEvent={this.createEvent} {...this.props} />
             {serverPostFail && (
               <p style={{ color: "red" }}>Event creation failed, try again</p>
             )}

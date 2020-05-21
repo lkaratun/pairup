@@ -121,7 +121,7 @@ function EventPage(props) {
                     {city}, {country}
                   </SubTitle>
                 ) : (
-                  <SubTitle>not set</SubTitle>
+                  <SubTitle>TBD</SubTitle>
                 )}
               </div>
               <div>

@@ -1,57 +1,26 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "utils/request";
 import PropTypes from "prop-types";
-import config from "../config.json";
 import Input from "./Input";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
-
 class DynamicLocationSearch extends React.Component {
+  state = {
+    inputVal: "",
+    inputCountryVal: "",
+    suggestions: this.props.locations,
+    matchingSuggestions: this.props.locations,
+    selectionID: null,
+    selectionCity: null,
+    selectionCountry: null,
+    showSuggestions: false,
+    showAddButton: true,
+    showCountryInput: false,
+    focusedItem: null
+  };
+
   constructor(props) {
     super(props);
     this.setPopupRef = this.setPopupRef.bind(this);
-    this.state = {
-      inputVal: "",
-      inputCountryVal: "",
-      suggestions: [],
-      matchingSuggestions: [],
-      selectionID: null,
-      selectionCity: null,
-      selectionCountry: null,
-      showSuggestions: false,
-      showAddButton: true,
-      showCountryInput: false,
-      focusedItem: null
-    };
-  }
-
-  async componentDidMount() {
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-    const suggestions = await axios({
-      method: "get",
-      url: `http:${backendUrl}/places`,
-      headers: {
-        Authorization: AuthStr
-      }
-    });
-
-    const suggestionArray = suggestions.data["places"];
-    if (suggestionArray.length === 0) {
-      // no results found
-      this.setState({
-        showSuggestions: false,
-        suggestions: suggestionArray,
-        matchingSuggestions: []
-      });
-    } else {
-      this.setState({
-        matchingSuggestions: suggestionArray.slice(0, 10),
-        suggestions: suggestionArray,
-        showSuggestions: false
-      });
-    }
   }
 
   componentDidUpdate(prevProps) {

@@ -11,8 +11,8 @@ class Event extends Component {
       name,
       activity,
       description,
-      date_from: dateFromRaw,
-      date_to: dateToRaw,
+      dateFrom: dateFromRaw,
+      dateTo: dateToRaw,
       image
     } = this.props;
 
@@ -90,8 +90,8 @@ Event.propTypes = {
   name: PropTypes.string.isRequired,
   activity: PropTypes.string.isRequired,
   description: PropTypes.string,
-  date_from: PropTypes.string,
-  date_to: PropTypes.string,
+  dateFrom: PropTypes.string,
+  dateTo: PropTypes.string,
   image: PropTypes.string
 };
 

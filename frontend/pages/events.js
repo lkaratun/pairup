@@ -23,9 +23,7 @@ const DateSelectorDynamic = dynamic(
 
 export async function getServerSideProps({ req }) {
   // By default, fetch 5 future events
-  console.log("events URL = ", `http:${backendUrl}/events?limit=5`);
-
-  const [events, activities, places] = await Promise.all([
+  const [events, activities, locations] = await Promise.all([
     serverSideRequest(req)({ url: `http:${backendUrl}/events?limit=5` }),
     serverSideRequest(req)({ url: `http:${backendUrl}/activities` }),
     serverSideRequest(req)({ url: `http:${backendUrl}/places` })
@@ -35,14 +33,14 @@ export async function getServerSideProps({ req }) {
     props: {
       events: events.data,
       activities: activities.data,
-      places: places.data
+      locations: locations.data
     }
   };
 }
 
 class Dashboard extends Component {
   state = {
-    eventFilters: { date_from: null, city: null, activity: null },
+    eventFilters: { dateFrom: null, city: null, activity: null },
     events: this.props.events || [],
     offset: 0,
     cleared: null,
@@ -56,9 +54,10 @@ class Dashboard extends Component {
   }
 
   updateDate = date => {
+    console.log("Dashboard -> date", date);
     const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
-    oldFilters["date_from"] = date;
+    oldFilters["dateFrom"] = date;
     this.setState({ eventFilters: oldFilters, cleared: false });
   };
 
@@ -79,7 +78,7 @@ class Dashboard extends Component {
 
   clearFilters = () => {
     this.setState({
-      eventFilters: { date_from: null, city: null, activity: null },
+      eventFilters: { dateFrom: null, city: null, activity: null },
       cleared: true
     });
   };
@@ -140,6 +139,7 @@ class Dashboard extends Component {
             updateLocation={this.updateLocation}
             allowNew={false}
             cleared={cleared}
+            locations={this.props.locations}
           />
           <DateSelectorDynamic
             placeholder="date"

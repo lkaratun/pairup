@@ -149,12 +149,14 @@ class EventForm extends Component {
           onChange={this.handleInput}
         />
         <DynamicActivitySearch
+          activities={this.props.activities}
           updateActivity={this.updateActivity}
           type="activities"
           placeholder="Activity"
           allowNew
         />
         <DynamicLocationSearch
+          locations={this.props.locations}
           updateLocation={this.updateLocation}
           placeholder="City"
           allowNew

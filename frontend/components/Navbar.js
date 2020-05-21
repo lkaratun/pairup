@@ -8,7 +8,6 @@ import device from "../styles/device";
 
 function Navbar() {
   const userContext = useContext(UserContext) || {};
-  console.log("UserContext = ", userContext);
 
   const { firstName, logOut } = userContext;
   const router = useRouter();

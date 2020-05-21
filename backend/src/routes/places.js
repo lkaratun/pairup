@@ -2,7 +2,6 @@ const express = require("express");
 const passport = require("passport");
 const Place = require("../models/Place");
 const APIError = require("../utils/APIError.js");
-const authenticate = require("../middleware/localAuth");
 
 const router = express.Router();
 
@@ -11,9 +10,7 @@ router.get("/", (req, res) => {
   const place = new Place(req.query);
   place
     .readAll()
-    .then(data => {
-      res.json({ places: data });
-    })
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
