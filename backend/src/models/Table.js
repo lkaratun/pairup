@@ -139,7 +139,10 @@ class Table {
       .query(text, prepared.values)
       .then(res => console.log("created, res = ", res) || res)
       .then(res => cleanUpObjectKeys(res[0]))
-      .catch(err => console.error("DB error: ", err) || err);
+      .catch(err => {
+        console.error("DB error: ", err);
+        throw err;
+      });
   }
 
   baseRead(customText = null, where, whereValues) {

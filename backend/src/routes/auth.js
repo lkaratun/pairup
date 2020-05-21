@@ -86,7 +86,6 @@ router.post(
       .then(() => {
         req.user = user.data;
         res.status(201);
-
         next();
       })
       .catch(err => {
