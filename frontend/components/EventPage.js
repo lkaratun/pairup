@@ -10,7 +10,7 @@ import Modal from "./Modal";
 import ImageUploader from "./ImageUploader";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 function isUserAttending(userId, attendees) {
   console.log("isUserAttending -> attendees", attendees);
@@ -58,7 +58,7 @@ function EventPage(props) {
   const deleteEvent = () => {
     const { router } = props;
     axios({
-      url: `http:${backendUrl}/events/${router.query.id}`,
+      url: `${backendUrlFull}/events/${router.query.id}`,
       method: "delete"
     })
       .then(router.push("/events"))
@@ -68,7 +68,7 @@ function EventPage(props) {
   const updateAttendees = async () => {
     const { router } = props;
     const newAttendees = await axios({
-      url: `${backendUrl}/events/${router.query.id}/attendees`
+      url: `${backendUrlFull}/events/${router.query.id}/attendees`
     });
     setAttendees(newAttendees.data);
   };
@@ -77,7 +77,7 @@ function EventPage(props) {
     const { router } = props;
     axios({
       method: "post",
-      url: `http:${backendUrl}/events/${router.query.id}/attend`
+      url: `${backendUrlFull}/events/${router.query.id}/attend`
     })
       .then(async () => {
         await setUserIsAttending(true);
@@ -89,7 +89,7 @@ function EventPage(props) {
   const leaveEvent = () => {
     const { router } = props;
     axios({
-      url: `http:${backendUrl}/events/${router.query.id}/attend`,
+      url: `${backendUrlFull}/events/${router.query.id}/attend`,
       method: "delete"
     })
       .then(async () => {
@@ -98,8 +98,6 @@ function EventPage(props) {
       })
       .catch(error => console.log(error));
   };
-
-  // const { router } = props;
 
   const spotsLeft = maxPeople - attendees.length;
 

@@ -11,7 +11,7 @@ import DynamicActivitySearch from "./DynamicActivitySearch";
 import DynamicLocationSearch from "./DynamicLocationSearch";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 class EventForm extends Component {
   state = {
@@ -78,7 +78,7 @@ class EventForm extends Component {
       };
       axios({
         method: "post",
-        url: `http:${backendUrl}/activities`,
+        url: `${backendUrlFull}/activities`,
         data,
         headers: {
           Authorization: AuthStr
@@ -105,7 +105,7 @@ class EventForm extends Component {
       };
       axios({
         method: "post",
-        url: `http:${backendUrl}/places`,
+        url: `${backendUrlFull}/places`,
         data,
         headers: {
           Authorization: AuthStr

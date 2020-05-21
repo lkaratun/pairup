@@ -5,7 +5,7 @@ import { UserContext } from "./UserProvider";
 import config from "../config.json";
 import { WideButton } from "./shared/Buttons";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 class ImageUploader extends Component {
   state = { selectedFile: null };
@@ -15,7 +15,7 @@ class ImageUploader extends Component {
     this.setState({ selectedFile: imageFile });
     const formData = new FormData();
     formData.append("file", imageFile, imageFile.name);
-    const url = `http:${backendUrl}${this.props.url}`;
+    const url = `${backendUrlFull}${this.props.url}`;
     axios
       .post(url, formData, {
         headers: {

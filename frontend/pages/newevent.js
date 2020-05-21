@@ -7,18 +7,16 @@ import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 export async function getServerSideProps({ req }) {
   // By default, fetch 5 future events
-  console.log("events URL = ", `http:${backendUrl}/events?limit=5`);
+  console.log("events URL = ", `${backendUrlFull}/events?limit=5`);
 
   const [activities, locations] = await Promise.all([
-    serverSideRequest(req)({ url: `http:${backendUrl}/activities` }),
-    serverSideRequest(req)({ url: `http:${backendUrl}/places` })
+    serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
+    serverSideRequest(req)({ url: `${backendUrlFull}/places` })
   ]).catch(err => console.error(err.response));
-  console.log("getServerSideProps -> activities", activities.data);
-  console.log("getServerSideProps -> locations", locations.data);
 
   return {
     props: {
@@ -36,7 +34,7 @@ class NewEvent extends React.Component {
   createEvent = event => {
     axios({
       method: "post",
-      url: `http:${backendUrl}/events`,
+      url: `${backendUrlFull}/events`,
       data: event
     })
       .then(() => {

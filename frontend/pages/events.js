@@ -12,7 +12,7 @@ import { ColoredButton } from "../components/shared/Buttons";
 import DynamicLocationSearch from "../components/DynamicLocationSearch";
 import DynamicActivitySearch from "../components/DynamicActivitySearch";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 const DateSelectorDynamic = dynamic(
   () => import("../components/DateSelector"),
@@ -24,9 +24,9 @@ const DateSelectorDynamic = dynamic(
 export async function getServerSideProps({ req }) {
   // By default, fetch 5 future events
   const [events, activities, locations] = await Promise.all([
-    serverSideRequest(req)({ url: `http:${backendUrl}/events?limit=5` }),
-    serverSideRequest(req)({ url: `http:${backendUrl}/activities` }),
-    serverSideRequest(req)({ url: `http:${backendUrl}/places` })
+    serverSideRequest(req)({ url: `${backendUrlFull}/events?limit=5` }),
+    serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
+    serverSideRequest(req)({ url: `${backendUrlFull}/places` })
   ]).catch(err => console.error(err.response));
 
   return {
@@ -87,11 +87,11 @@ class Dashboard extends Component {
     const { offset } = this.state;
     const newOffset = offset + 5;
     const newEvents = await axios({
-      url: `http:${backendUrl}/events?&limit=5&offset=${newOffset}`
+      url: `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
     });
     console.log(
       "More events URL = ",
-      `http:${backendUrl}/events?&limit=5&offset=${newOffset}`
+      `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
     );
 
     this.setState(prevState => ({

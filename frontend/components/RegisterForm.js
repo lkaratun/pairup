@@ -8,7 +8,7 @@ import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 function RegisterForm() {
   const router = useRouter();
@@ -29,7 +29,7 @@ function RegisterForm() {
     // Handle Success register state -> redirect
     axios
       .post(
-        `http:${backendUrl}/auth/register`,
+        `${backendUrlFull}/auth/register`,
         {
           email: state.email,
           password: state.password,

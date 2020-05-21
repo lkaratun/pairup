@@ -2,7 +2,7 @@ import config from "../config.json";
 
 const axios = require("axios");
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 export default axios.create({
   withCredentials: true
@@ -10,6 +10,6 @@ export default axios.create({
 
 export const serverSideRequest = req =>
   axios.create({
-    baseURL: `http:${backendUrl}`,
+    baseURL: `${backendUrlFull}`,
     headers: { cookie: req?.headers?.cookie || "" }
   });

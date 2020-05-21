@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import axios from "../utils/request.js";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 const UserContext = React.createContext();
 
@@ -14,7 +14,7 @@ class UserProvider extends React.Component {
 
     logIn: async ({ email, password }) => {
       const { firstName, id } = await axios
-        .post(`http:${backendUrl}/auth/login`, {
+        .post(`${backendUrlFull}/auth/login`, {
           email,
           password
         })
@@ -29,7 +29,7 @@ class UserProvider extends React.Component {
 
     logOut: async () => {
       await axios({
-        url: `http:${backendUrl}/auth/logout`
+        url: `${backendUrlFull}/auth/logout`
       });
       this.setState({ firstName: undefined, id: undefined });
     },
@@ -37,7 +37,7 @@ class UserProvider extends React.Component {
     updateUser: async newData => {
       if (Object.keys(newData).length === 0) return null;
       const response = await axios
-        .put(`http:${backendUrl}/users`, newData)
+        .put(`${backendUrlFull}/users`, newData)
         .then(res => res.data)
         .catch(err => console.error(err.response));
       this.setState(response);
