@@ -21,8 +21,8 @@ class EventForm extends Component {
     placeId: null,
     dateFrom: null,
     dateTo: null,
-    minPeople: null,
-    maxPeople: null,
+    minPeople: 2,
+    maxPeople: 4,
     valid: true
   };
 
@@ -43,10 +43,7 @@ class EventForm extends Component {
     // validate new object
     const REQUIRED_FIELDS = ["name", "activityId", "maxPeople"];
     for (let i = 0; i < REQUIRED_FIELDS.length; i++) {
-      if (
-        newEvent[REQUIRED_FIELDS[i]] === null ||
-        newEvent[REQUIRED_FIELDS[i]] === ""
-      ) {
+      if (!newEvent[REQUIRED_FIELDS[i]]) {
         this.setState({ valid: false });
         return;
       }
@@ -176,7 +173,7 @@ class EventForm extends Component {
             Back
           </WideButton>
           <WideButton
-            onClick={this.handleBackButton}
+            // onClick={this.handleBackButton}
             type="submit"
             color="purple"
           >
