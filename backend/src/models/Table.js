@@ -173,7 +173,11 @@ class Table {
     console.log("readAll -> values", values);
     return db
       .query(text, values)
-      .then(d => console.log("db read result = ", d) || d);
+      .then(d => console.log("db read result = ", d) || d)
+      .catch(err => {
+        console.error("DB error: ", err);
+        throw err;
+      });
   }
 
   readAll(customText, where, whereValues) {
@@ -215,6 +219,10 @@ class Table {
     prepared.values.push(id);
     return db
       .query(text, prepared.values)
+      .catch(err => {
+        console.error("DB error: ", err);
+        throw err;
+      })
       .then(res => res[0])
       .then(res => cleanUpObjectKeys(res));
   }
@@ -224,7 +232,10 @@ class Table {
     const values = [this.data[this.pk]];
     console.log("delete -> text", text);
     console.log("delete -> values", values);
-    return db.query(text, values);
+    return db.query(text, values).catch(err => {
+      console.error("DB error: ", err);
+      throw err;
+    });
   }
 }
 
