@@ -8,6 +8,28 @@ const { userOptional } = require("../middleware/localAuth.js");
 
 const router = express.Router();
 
+// get event info
+router.get("/:id", userOptional, async (req, res) => {
+  console.log("req.user in events = ", req.user);
+  console.log("req.params.id", req.params.id);
+
+  const [event, attendees] = await Promise.all([
+    new Event({ id: req.params.id }).read(),
+    new Attendee({ eventId: req.params.id }).getAttendeesForEvent()
+  ]).catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
+
+  if (!event) {
+    return res.status(404).json(`event #${req.params.id} not found`);
+  }
+  event.currentUserAttending = attendees
+    .map(person => person.id)
+    .includes(req.user.id);
+
+  return res.json(event);
+});
+
 // list all events, with parameters
 router.get("/", (req, res) => {
   const newEvent = new Event(req.query);
@@ -42,27 +64,6 @@ router.post("/", passport.authenticate("userRequired"), (req, res) => {
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
-});
-
-// get event info
-router.get("/:id", userOptional, async (req, res) => {
-  console.log("req.user in events = ", req.user);
-
-  const [event, attendees] = await Promise.all([
-    new Event({ id: req.params.id }).read(),
-    new Attendee({ eventId: req.params.id }).getAttendeesForEvent()
-  ]).catch(err => {
-    res.status(err.statusCode || 400).json({ message: err.message });
-  });
-
-  if (!event) {
-    return res.status(404).json(`event #${req.params.id} not found`);
-  }
-  event.currentUserAttending = attendees
-    .map(person => person.id)
-    .includes(req.user.id);
-
-  res.json(event);
 });
 
 router.get("/:id/attendees", async (req, res) => {

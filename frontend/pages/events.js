@@ -24,7 +24,9 @@ const DateSelectorDynamic = dynamic(
 export async function getServerSideProps({ req }) {
   // By default, fetch 5 future events
   const [events, activities, locations] = await Promise.all([
-    serverSideRequest(req)({ url: `${backendUrlFull}/events?limit=5` }),
+    serverSideRequest(req)({
+      url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5`
+    }),
     serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
     serverSideRequest(req)({ url: `${backendUrlFull}/places` })
   ]).catch(err => console.error(err.response));

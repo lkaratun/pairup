@@ -44,9 +44,6 @@ class Event extends Table {
     if (timestamp) {
       where = " WHERE to_timestamp($1) BETWEEN date_from AND date_to";
       whereValues = [timestamp / 1000];
-    } else {
-      where = " WHERE date_to >= to_timestamp($1)";
-      whereValues = [Date.now() / 1000];
     }
     return super.readAll(text, where, whereValues);
   }
