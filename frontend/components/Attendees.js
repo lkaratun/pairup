@@ -3,12 +3,13 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 function Attendees({ attendees }) {
+  if (!attendees.length) return <h4>No one is attending so far</h4>;
   const PeopleList = attendees.map(att => {
     const image = att.image || "../static/no_photo.jpg";
     return (
       <li key={att.id}>
         <Img src={image} alt="avatar" />
-        <Name>{att.first_name}</Name>
+        <Name>{att.firstName}</Name>
       </li>
     );
   });

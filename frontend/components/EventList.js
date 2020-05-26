@@ -1,19 +1,20 @@
 import React from "react";
-import { format } from "date-fns";
+import { isBefore, isAfter } from "date-fns";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Event from "./Event";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 
-function applyEventsFilter(events, filters) {
+function filterEvents(events, filters) {
   function compareEventAndFilter(event, filtersObject) {
     let everyFilterMatching = true;
     Object.keys(filtersObject).forEach(filter => {
-      if (filter === "date_from") {
+      if (filter === "dateFrom") {
         if (filters[filter] !== null) {
-          const filterDate = format(filters[filter], "YYYY-MM-DD");
-          const eventDate = format(event[filter], "YYYY-MM-DD");
-          if (filterDate !== eventDate) {
+          const filterDate = new Date(filters.dateFrom);
+          const eventFrom = new Date(event.dateFrom);
+          const eventTo = new Date(event.dateTo);
+          if (isAfter(eventFrom, filterDate) || isBefore(eventTo, filterDate)) {
             everyFilterMatching = false;
           }
         }
@@ -49,9 +50,7 @@ const makeEventsDomElements = events =>
 
 const EventList = props => {
   const { filters, events } = props;
-  const eventsToShow = makeEventsDomElements(
-    applyEventsFilter(events, filters)
-  );
+  const eventsToShow = makeEventsDomElements(filterEvents(events, filters));
   if (eventsToShow.length === 0)
     return <StyledErrorMsg>No events found</StyledErrorMsg>;
   return <StyledList>{eventsToShow}</StyledList>;
@@ -62,7 +61,7 @@ export default EventList;
 EventList.propTypes = {
   events: PropTypes.arrayOf(PropTypes.object).isRequired,
   filters: PropTypes.shape({
-    date_from: PropTypes.string,
+    dateFrom: PropTypes.string,
     city: PropTypes.string,
     activity: PropTypes.string
   }).isRequired

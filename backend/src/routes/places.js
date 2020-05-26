@@ -2,7 +2,6 @@ const express = require("express");
 const passport = require("passport");
 const Place = require("../models/Place");
 const APIError = require("../utils/APIError.js");
-const authenticate = require("../middleware/localAuth");
 
 const router = express.Router();
 
@@ -10,17 +9,15 @@ const router = express.Router();
 router.get("/", (req, res) => {
   const place = new Place(req.query);
   place
-    .read()
-    .then(data => {
-      res.json({ places: data });
-    })
+    .readAll()
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
 });
 
 // Create
-router.post("/", passport.authenticate("jwt"), (req, res) => {
+router.post("/", passport.authenticate("userRequired"), (req, res) => {
   const place = new Place(req.body);
   place
     .create()
@@ -49,7 +46,7 @@ router.get("/:id", (req, res) => {
 });
 
 // delete one
-router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
+router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
   const place = new Place({ id: req.params.id });
   place
     .delete()
@@ -62,7 +59,7 @@ router.delete("/:id", passport.authenticate("jwt"), (req, res) => {
 });
 
 // update one
-router.put("/:id", passport.authenticate("jwt"), (req, res) => {
+router.put("/:id", passport.authenticate("userRequired"), (req, res) => {
   const { id, ...newData } = req.body;
   const place = new Place({ id: req.params.id, ...newData });
   place

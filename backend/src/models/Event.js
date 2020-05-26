@@ -7,15 +7,15 @@ class Event extends Table {
     const ACCEPTED_FIELDS = [
       "id",
       "name",
-      "author_id",
+      "authorId",
       "image",
       "description",
-      "activity_id",
-      "place_id",
-      "date_from",
-      "date_to",
-      "min_people",
-      "max_people"
+      "activityId",
+      "placeId",
+      "dateFrom",
+      "dateTo",
+      "minPeople",
+      "maxPeople"
     ];
     const cleanData = {};
     Object.keys(rawData).forEach(key => {
@@ -25,11 +25,11 @@ class Event extends Table {
     });
     super(tableName, pk, cleanData);
     this.ACCEPTED_FIELDS = ACCEPTED_FIELDS;
-    this.REQUIRED_FIELDS = ["name", "activity_id", "author_id"];
+    this.REQUIRED_FIELDS = ["name", "activityId", "authorId"];
     this.parseOpts(rawData);
   }
 
-  read() {
+  readAll(timestamp) {
     const text = `SELECT
     events.id, events.name, author_id, CONCAT(users.first_name, ' ', users.last_name) as author, events.image, events.description,
     activities.name as activity, places.country, places.city,
@@ -38,7 +38,14 @@ class Event extends Table {
     LEFT JOIN users ON users.id = events.author_id
     LEFT JOIN activities ON activities.id = events.activity_id
     LEFT JOIN places ON places.id = events.place_id`;
-    return super.read(text);
+
+    let where;
+    let whereValues;
+    if (timestamp) {
+      where = " WHERE to_timestamp($1) BETWEEN date_from AND date_to";
+      whereValues = [timestamp / 1000];
+    }
+    return super.readAll(text, where, whereValues);
   }
 }
 

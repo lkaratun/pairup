@@ -2,59 +2,69 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import axios from "axios";
+import axios, { serverSideRequest } from "utils/request";
 import MainLayout from "../components/MainLayout";
 import EventList from "../components/EventList";
 import device from "../styles/device";
 import config from "../config.json";
+
 import { ColoredButton } from "../components/shared/Buttons";
 import DynamicLocationSearch from "../components/DynamicLocationSearch";
 import DynamicActivitySearch from "../components/DynamicActivitySearch";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
-const DateSelectorDynamic = dynamic(() => import("../components/DateSelector"), {
-  ssr: false
-});
+const DateSelectorDynamic = dynamic(
+  () => import("../components/DateSelector"),
+  {
+    ssr: false
+  }
+);
+
+export async function getServerSideProps({ req }) {
+  // By default, fetch 5 future events
+  const [events, activities, locations] = await Promise.all([
+    serverSideRequest(req)({
+      url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5`
+    }),
+    serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
+    serverSideRequest(req)({ url: `${backendUrlFull}/places` })
+  ]).catch(err => console.error(err.response));
+
+  return {
+    props: {
+      events: events.data,
+      activities: activities.data,
+      locations: locations.data
+    }
+  };
+}
 
 class Dashboard extends Component {
   state = {
-    eventFilters: { date_from: null, city: null, activity: null },
-    events: [],
+    eventFilters: { dateFrom: null, city: null, activity: null },
+    events: this.props.events || [],
     offset: 0,
     cleared: null,
     screenWidth: null
   };
 
   async componentDidMount() {
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-
-    // Default fetch is any event from today with a limit of 5
-    const eventsPromise = axios({
-      method: "get",
-      url: `${backendUrl}/events?&limit=5`,
-      headers: {
-        Authorization: AuthStr
-      }
-    }).catch(err => console.error(err.response));
-    const events = await eventsPromise;
-    console.log(events);
-    if (events && events.data) this.setState({ events: events.data.events });
     // determine if user is on mobile (required for data picker component)
     const screenWidth = window.innerWidth;
     this.setState({ screenWidth });
   }
 
   updateDate = date => {
-    const oldState = Object.assign({}, this.state);
+    console.log("Dashboard -> date", date);
+    const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
-    oldFilters["date_from"] = date;
+    oldFilters["dateFrom"] = date;
     this.setState({ eventFilters: oldFilters, cleared: false });
   };
 
   updateActivity = data => {
-    const oldState = Object.assign({}, this.state);
+    const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
     oldFilters["activity"] = data.name;
     // updated the cleared state and filters
@@ -62,7 +72,7 @@ class Dashboard extends Component {
   };
 
   updateLocation = data => {
-    const oldState = Object.assign({}, this.state);
+    const oldState = { ...this.state };
     const oldFilters = oldState.eventFilters;
     oldFilters["city"] = data.city;
     this.setState({ eventFilters: oldFilters, cleared: false });
@@ -70,7 +80,7 @@ class Dashboard extends Component {
 
   clearFilters = () => {
     this.setState({
-      eventFilters: { date_from: null, city: null, activity: null },
+      eventFilters: { dateFrom: null, city: null, activity: null },
       cleared: true
     });
   };
@@ -78,19 +88,16 @@ class Dashboard extends Component {
   loadMoreEvents = async () => {
     const { offset } = this.state;
     const newOffset = offset + 5;
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-
     const newEvents = await axios({
-      method: "get",
-      url: `${backendUrl}/events?&limit=5&offset=${newOffset}`,
-      headers: {
-        Authorization: AuthStr
-      }
+      url: `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
     });
+    console.log(
+      "More events URL = ",
+      `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
+    );
 
     this.setState(prevState => ({
-      events: [...prevState.events, ...newEvents.data.events],
+      events: [...prevState.events, ...newEvents.data],
       offset: newOffset
     }));
   };
@@ -110,7 +117,10 @@ class Dashboard extends Component {
               <br />
               or check out existing events below
             </h4>
-            <DownArrow src=".././static/down-arrow.svg" alt="arrow-pointing-down" />
+            <DownArrow
+              src=".././static/down-arrow.svg"
+              alt="arrow-pointing-down"
+            />
           </div>
         </TopPanel>
         <Divider>
@@ -120,16 +130,18 @@ class Dashboard extends Component {
         </Divider>
         <FilterControlPanel>
           <DynamicActivitySearch
-            placeholder="Activity"
+            // placeholder="Activity"
             allowNew={false}
             updateActivity={this.updateActivity}
             cleared={cleared}
+            activities={this.props.activities}
           />
           <DynamicLocationSearch
             placeholder="City"
             updateLocation={this.updateLocation}
             allowNew={false}
             cleared={cleared}
+            locations={this.props.locations}
           />
           <DateSelectorDynamic
             placeholder="date"
@@ -162,7 +174,11 @@ const TopPanel = styled.div`
   padding-top: 50px;
   padding-bottom: 50px;
   background: rgb(22, 67, 75);
-  background: linear-gradient(90deg, rgba(22, 67, 75, 1) 0%, rgba(28, 12, 91, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(22, 67, 75, 1) 0%,
+    rgba(28, 12, 91, 1) 100%
+  );
   color: white;
   display: grid;
   grid-template-columns: 1fr;

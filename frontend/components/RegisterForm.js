@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-// import { useRouter } from "next/router";
-import axios from "axios";
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
+import { UserContext } from "components/UserProvider";
+import axios from "utils/request";
 import Input from "./Input";
 import TextArea from "./TextArea";
 import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 function RegisterForm() {
-  // const router = useRouter();
+  const router = useRouter();
+  const user = useContext(UserContext);
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
@@ -27,12 +29,12 @@ function RegisterForm() {
     // Handle Success register state -> redirect
     axios
       .post(
-        `${backendUrl}/auth/register`,
+        `${backendUrlFull}/auth/register`,
         {
           email: state.email,
           password: state.password,
-          first_name: state.firstName,
-          last_name: state.lastName,
+          firstName: state.firstName,
+          lastName: state.lastName,
           bio: state.bio
         },
         {
@@ -40,13 +42,18 @@ function RegisterForm() {
         }
       )
       .then(res => {
-        // props.context.logIn({ data: res.data, method: "password" });
-        // Cookies.set("token", res.data.token);
-        // router.push("/");
+        console.log("RegisterForm -> res", res);
+        user.setUser({ ...res.data });
+        router.push("/");
       })
       .catch(err => {
-        console.error(err.response);
-        setState({ ...state, registrationFailed: true, failReason: err.response.data.message });
+        console.log("err = ", err);
+
+        setState({
+          ...state,
+          registrationFailed: true,
+          failReason: err.response.data.message
+        });
       });
   };
 
@@ -97,9 +104,11 @@ function RegisterForm() {
           onChange={handleInput}
         />
         <TextArea placeholder="Short Bio" onChange={handleInput} />
-        <LoginButton text="Register" />
+        <LoginButton>Register</LoginButton>
         {registrationFailed && (
-          <StyledErrorMsg>Registration failed. Reason: {state.failReason}</StyledErrorMsg>
+          <StyledErrorMsg>
+            Registration failed. Reason: {state.failReason}
+          </StyledErrorMsg>
         )}
       </form>
     </>

@@ -40,6 +40,18 @@
         "preprocess": false
       }
     ],
-    "@babel/plugin-proposal-optional-chaining"
+    "@babel/plugin-proposal-optional-chaining",
+    [
+      "module-resolver",
+      {
+        "root": [
+          "."
+        ],
+        "alias": {
+          "utils": "./utils",
+          "pages": "./pages"
+        }
+      }
+    ]
   ]
 }

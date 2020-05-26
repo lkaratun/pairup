@@ -1,20 +1,19 @@
 const express = require("express");
 const User = require("../models/User");
 const Attendee = require("../models/EventAttendee");
+const APIError = require("../utils/APIError.js");
 
 const router = express.Router();
 const upload = require("../utils/upload");
+const addMonths = require("date-fns/addMonths");
+const config = require("../../config.json");
+
+const { FRONTEND_DOMAIN } = config[process.env.NODE_ENV];
 
 router.get("/", (req, res) => {
-  const user = new User({ id: req.user.id });
-  user
-    .read()
-    .then(() => {
-      res.json(user.data);
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
-    });
+  console.log("In users/ route");
+
+  return res.json(req.user);
 });
 
 router.delete("/", (req, res) => {
@@ -28,44 +27,49 @@ router.delete("/", (req, res) => {
     });
 });
 
-router.put("/", (req, res) => {
+router.put("/", async (req, res) => {
   const { id, ...newData } = req.body;
   const user = new User({ id: req.user.id, ...newData });
-  user
-    .update()
-    .then(() => {
-      res.json();
-    })
-    .catch(err => {
-      res.status(err.statusCode || 400).json({ message: err.message });
+  const userData = await user.update().catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
+
+  if (newData?.firstName)
+    res.cookie("firstName", userData.firstName, {
+      expires: addMonths(new Date(), 1),
+      domain: FRONTEND_DOMAIN
     });
+  res.json(userData);
 });
 
 router.get("/events", (req, res) => {
-  const attendee = new Attendee({ user_id: req.user[req.user.pk] });
+  const attendee = new Attendee({ userId: req.user[req.user.pk] });
   attendee
-    .getAllEvents()
-    .then(data => {
-      res.json({ events: data });
-    })
+    .getEventsForAttendee()
+    .then(data => res.json(data))
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
 });
 
-router.get("/:id/events", (req, res) => {
-  const attendee = new Attendee({ user_id: req.params.id });
-  attendee
-    .getAllEvents()
-    .then(data => {
-      res.json({ events: data });
-    })
+router.get("/:id/events", async (req, res) => {
+  const userData = await new User({ id: req.params.id }).read().catch(err => {
+    res.status(err.statusCode || 400).json({ message: err.message });
+  });
+  if (!userData) {
+    throw new APIError(`User #${req.params.id} not found`, 404);
+  }
+  const attendeeData = await new Attendee({ userId: req.params.id })
+    .getEventsForAttendee(userData.id)
     .catch(err => {
       res.status(err.statusCode || 400).json({ message: err.message });
     });
+  res.json(attendeeData);
 });
 
 router.post("/images", (req, res) => {
+  console.log("req.user", req.user);
+
   const imageHandler = upload("users", {
     width: 500,
     height: 500,
@@ -77,7 +81,8 @@ router.post("/images", (req, res) => {
     } else if (!req.file) {
       res.status(400).json({ message: "file is not set" });
     } else {
-      new User({ id: req.user.data.id, image: req.file.secure_url })
+      console.log("req.file", req.file);
+      new User({ id: req.user.id, image: req.file.secure_url })
         .update()
         .catch(e => res.status(400).json({ message: e.message }));
       res.status(201).json({ url: req.file.secure_url });

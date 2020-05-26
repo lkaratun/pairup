@@ -1,87 +1,62 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+import axios from "../utils/request.js";
+import config from "../config.json";
 
-console.log("Creating new context object");
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 const UserContext = React.createContext();
 
-class UserProvider extends Component {
-  initialState = {
-    loggedIn: false,
-    firstName: this.props.cookies?.firstName || null,
-    lastName: this.props.cookies?.lastName || null,
-    email: this.props.email || null,
-    token: null,
-    bio: null,
-    id: null,
-    image: null
-  };
+class UserProvider extends React.Component {
+  state = {
+    firstName: this.props.cookies.firstName,
+    id: parseInt(this.props.cookies.userId, 10),
 
-  state = console.log("Initializing context state") || this.initialState;
+    logIn: async ({ email, password }) => {
+      const { firstName, id } = await axios
+        .post(`${backendUrlFull}/auth/login`, {
+          email,
+          password
+        })
+        .then(res => res.data)
+        .catch(err => {
+          console.error(err.response);
+        });
 
-  // componentDidMount() {
-  //   console.log("In context didMount");
-  //   this.setState({
-  //     loggedIn: localStorage.getItem("loggedIn") === "true",
-  //     firstName: localStorage.getItem("firstName"),
-  //     lastName: localStorage.getItem("lastName"),
-  //     email: localStorage.getItem("email"),
-  //     token: localStorage.getItem("token"),
-  //     bio: localStorage.getItem("bio"),
-  //     image: localStorage.getItem("image"),
-  //     id: localStorage.getItem("id")
-  //   });
-  // }
+      this.setState({ firstName, id });
+      console.log(`Logged in as ${firstName}`);
+    },
 
-  logIn = ({ data, method }) => {
-    if (!["oauth", "password"].includes(method)) throw new Error("Auth method not recognized");
-    const allowedFields = ["first_name", "last_name", "email", "token", "bio", "image", "id"];
+    logOut: async () => {
+      await axios({
+        url: `${backendUrlFull}/auth/logout`
+      });
+      this.setState({ firstName: undefined, id: undefined });
+    },
 
-    const newState = { loggedIn: true };
-    Object.entries(data).forEach(([key, value]) => {
-      if (allowedFields.includes(key)) {
-        if (key === "first_name") newState["firstName"] = value;
-        else if (key === "last_name") newState["lastName"] = value;
-        else newState[key] = value;
-      }
-    });
-    this.setState(newState);
-    console.log(`Logged in as ${this.state.firstName} ${this.state.lastName}`);
-    Object.entries(this.state).forEach(([key, value]) => {
-      localStorage.setItem(key, value);
-    });
-  };
+    setUser: ({ firstName, id }) => {
+      this.setState({ firstName, id });
+      console.log(`Logged in as ${firstName}`);
+    },
 
-  logOut = () => {
-    this.setState(this.initialState);
-    localStorage.clear();
-  };
-
-  updateUser = (key, value) => {
-    const allowedFields = ["firstName", "lastName", "email", "token", "bio", "image"];
-    if (!allowedFields.includes(key)) return;
-    this.setState({ [key]: value });
-    localStorage.setItem(key, value);
-  };
-
-  updateImage = newImage => {
-    this.setState({ image: newImage });
-    localStorage.setItem("image", newImage);
+    updateUser: async newData => {
+      if (Object.keys(newData).length === 0) return null;
+      const response = await axios
+        .put(`${backendUrlFull}/users`, newData)
+        .then(res => res.data)
+        .catch(err => console.error(err.response));
+      this.setState(response);
+      return response;
+    }
   };
 
   render() {
-    console.log("In context render");
+    const { children, cookies: existingCookies } = this.props;
+    console.log("this.props.cookies = ", existingCookies);
+
     return (
-      <UserContext.Provider
-        value={{
-          ...this.state,
-          logIn: this.logIn,
-          logOut: this.logOut,
-          updateUser: this.updateUser,
-          updateImage: this.updateImage
-        }}
-      >
-        {this.props.children}
+      <UserContext.Provider value={{ ...this.state }}>
+        {children}
       </UserContext.Provider>
     );
   }
@@ -94,4 +69,4 @@ UserProvider.propTypes = {
 /* then make a consumer which will surface it */
 const UserConsumer = UserContext.Consumer;
 export default UserProvider;
-export { UserConsumer, UserContext };
+export { UserConsumer, UserContext, UserProvider };

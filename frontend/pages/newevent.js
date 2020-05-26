@@ -1,13 +1,30 @@
 import React from "react";
 import Router from "next/router";
 import styled from "styled-components";
-import axios from "axios";
+import axios, { serverSideRequest } from "utils/request";
 import MainLayout from "../components/MainLayout";
 import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
 import config from "../config.json";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
+
+export async function getServerSideProps({ req }) {
+  // By default, fetch 5 future events
+  console.log("events URL = ", `${backendUrlFull}/events?limit=5`);
+
+  const [activities, locations] = await Promise.all([
+    serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
+    serverSideRequest(req)({ url: `${backendUrlFull}/places` })
+  ]).catch(err => console.error(err.response));
+
+  return {
+    props: {
+      activities: activities.data,
+      locations: locations.data
+    }
+  };
+}
 
 class NewEvent extends React.Component {
   state = {
@@ -15,16 +32,10 @@ class NewEvent extends React.Component {
   };
 
   createEvent = event => {
-    const token = localStorage.getItem("token");
-    const AuthStr = `Bearer ${token}`;
-    console.log(event);
     axios({
       method: "post",
-      url: `${backendUrl}/events`,
-      data: event,
-      headers: {
-        Authorization: AuthStr
-      }
+      url: `${backendUrlFull}/events`,
+      data: event
     })
       .then(() => {
         this.setState({ serverPostFail: false });
@@ -43,8 +54,10 @@ class NewEvent extends React.Component {
         <EventWrapper>
           <InputSection>
             <Title>Create New Event</Title>
-            <NewEventForm createEvent={this.createEvent} />
-            {serverPostFail && <p style={{ color: "red" }}>Event creation failed, try again</p>}
+            <NewEventForm createEvent={this.createEvent} {...this.props} />
+            {serverPostFail && (
+              <p style={{ color: "red" }}>Event creation failed, try again</p>
+            )}
           </InputSection>
         </EventWrapper>
       </MainLayout>

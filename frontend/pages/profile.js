@@ -1,20 +1,29 @@
-import React, { Component } from "react";
+import React from "react";
+import { serverSideRequest } from "utils/request";
+import cookie from "cookie";
 import Profile from "../components/Profile";
-import { UserConsumer } from "../components/UserProvider";
 import MainLayout from "../components/MainLayout";
 
-class ProfilePage extends Component {
-  render() {
-    return (
-      <MainLayout>
-        <div>
-          <UserConsumer>
-            {context => <Profile context={context} />}
-          </UserConsumer>
-        </div>
-      </MainLayout>
-    );
-  }
+export async function getServerSideProps({ req }) {
+  const userId = cookie.parse(req?.headers?.cookie).userId;
+  if (!userId) return { props: { userData: {}, events: [] } };
+
+  const [userData, events] = await Promise.all([
+    serverSideRequest(req)({ url: "users" }),
+    serverSideRequest(req)({ url: `users/${userId}/events` })
+  ])
+    .then(arr => arr.map(i => i.data))
+    .catch(console.log);
+
+  return { props: { userData, events } };
+}
+
+function ProfilePage(props) {
+  return (
+    <MainLayout>
+      <Profile {...props} />
+    </MainLayout>
+  );
 }
 
 export default ProfilePage;

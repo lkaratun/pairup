@@ -1,24 +1,23 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import { darken } from "polished";
 import { UserContext } from "./UserProvider";
 import device from "../styles/device";
 
 function Navbar() {
   const userContext = useContext(UserContext) || {};
-  console.log("UserContext = ", userContext);
 
-  const { loggedIn, logOut, firstName } = userContext;
-  console.log("fistName = ", firstName);
+  const { firstName, logOut } = userContext;
+  const router = useRouter();
 
   return (
     <StyledNav>
       <ul>
         <li>
           <Link href="/">
-            <LogoWrapper>
-              <Logo src=".././static/logo.svg" alt="logo" />
-            </LogoWrapper>
+            <Logo src=".././static/logo.svg" alt="logo" />
           </Link>
         </li>
         <li>
@@ -26,14 +25,18 @@ function Navbar() {
             <NavLink>Events</NavLink>
           </Link>
         </li>
-        <Logo />
         {firstName ? (
           <NavAuthButtons>
             <AuthSection>
               <Link href="/profile">
-                <NavLink>{`Hi ${firstName}!`}</NavLink>
+                <NavLink>{`Logged in as: ${firstName}`}</NavLink>
               </Link>
-              <NavLink onClick={logOut}>Logout</NavLink>
+              <Link href="/profile">
+                <NavLink>Profile</NavLink>
+              </Link>
+              <NavLink onClick={() => logOut().then(router.push("/"))}>
+                Log out
+              </NavLink>
             </AuthSection>
           </NavAuthButtons>
         ) : (
@@ -58,8 +61,12 @@ export default Navbar;
 const StyledNav = styled.nav`
   box-sizing: border-box;
   height: 3rem;
-  background: rgb(22, 67, 75);
-  background: linear-gradient(90deg, rgba(22, 67, 75, 1) 0%, rgba(28, 12, 91, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    ${darken("0.05", "rgba(22, 67, 75, 1)")} 0%,
+    ${darken("0.05", "rgba(28, 12, 91, 1)")} 100%
+  );
+
   color: white;
   padding: 8px;
 
@@ -81,25 +88,21 @@ const StyledNav = styled.nav`
   }
 
   a {
-    cursor: pointer;
     transition: all 300ms ease-out;
     text-decoration: none;
   }
 `;
 
-const LogoWrapper = styled.div`
-  cursor: pointer;
+const Logo = styled.img`
+  width: 100px;
   margin-right: 10px;
   margin-left: 15px;
+  cursor: pointer;
 
   ${device.mobileL`
     margin-right: 10px;
     margin-left: 3px;
   `}
-`;
-
-const Logo = styled.img`
-  width: 100px;
 `;
 
 const NavAuthButtons = styled.li`
@@ -119,6 +122,7 @@ const NavAuthButtonsLoggedIn = styled.li`
 `;
 
 const NavLink = styled.a`
+  cursor: pointer;
   color: inherit;
   margin-left: 20px;
   &:hover {

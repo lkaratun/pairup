@@ -19,12 +19,12 @@ passport.use(
           .read()
           // user found, return it
           .then(async userData => {
-            next(null, userData[0]);
+            next(null, userData);
             user.set({
               google_access_token: accessToken,
               google_refresh_token: refreshToken
             });
-            const updatedUser = await user.update();
+            user.update();
           })
 
           // if user not found
@@ -34,11 +34,11 @@ passport.use(
             // user doesn't exist, so let's create it
             const newUser = new User({
               email: profile._json.email,
-              first_name: profile._json.given_name,
-              last_name: profile._json.family_name,
+              firstName: profile._json.given_name,
+              lastName: profile._json.family_name,
               image: profile._json.picture,
-              google_refresh_token: refreshToken,
-              google_access_token: accessToken
+              googleRefreshToken: refreshToken,
+              googleAccessToken: accessToken
             });
             const userData = await newUser.create().catch(console.error);
 

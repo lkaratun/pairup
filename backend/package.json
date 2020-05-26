@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "migrate": "node-pg-migrate",
-    "dev": "NODE_ENV=development nodemon src/server.js --watch src",
+    "dev": "NODE_ENV=development nodemon --exec babel-node src/server.js --watch src",
     "test": "mocha",
-    "start": "NODE_ENV=production forever start src/server.js",
+    "start": "NODE_ENV=production forever start -c babel-node src/server.js",
     "stop": "forever stop src/server.js",
     "restart": "NODE_ENV=production forever restart src/server.js"
   },
@@ -15,9 +15,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/preset-modules": "^0.1.3",
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
+    "camelcase": "^6.0.0",
     "cloudinary": "^1.19.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
@@ -38,6 +43,7 @@
     "passport-local": "^1.0.0",
     "passport-strategy": "^1.0.0",
     "pg": "^7.18.2",
+    "snake-case": "^3.0.3",
     "spdy": "^4.0.2"
   },
   "devDependencies": {
@@ -60,6 +66,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^7.1.0",
     "nodemon": "^2.0.2",
