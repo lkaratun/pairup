@@ -18,6 +18,10 @@ const fs = require("fs");
 const spdy = require("spdy");
 const config = require("../config.json");
 
+let t: number = 10;
+// t = "abc";
+console.log("t", t);
+
 const { FRONTEND_URL } = config[process.env.NODE_ENV];
 
 const httpPort = process.env.PORT || 8000;
