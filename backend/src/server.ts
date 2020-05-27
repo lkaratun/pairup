@@ -18,9 +18,18 @@ const fs = require("fs");
 const spdy = require("spdy");
 const config = require("../config.json");
 
-let t: number = 10;
-// t = "abc";
-console.log("t", t);
+import "reflect-metadata";
+import { createConnection } from "typeorm";
+import { ApolloServer } from "apollo-server";
+import { buildSchema } from "type-graphql";
+
+async function main() {
+  const connection = await createConnection();
+  const schema = await buildSchema();
+  const server = new ApolloServer({ schema });
+  await server.listen(4000);
+  console.log("Server has started!");
+}
 
 const { FRONTEND_URL } = config[process.env.NODE_ENV];
 
