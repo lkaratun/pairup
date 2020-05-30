@@ -18,19 +18,6 @@ const fs = require("fs");
 const spdy = require("spdy");
 const config = require("../config.json");
 
-import "reflect-metadata";
-import { createConnection } from "typeorm";
-import { ApolloServer } from "apollo-server";
-import { buildSchema } from "type-graphql";
-
-async function main() {
-  const connection = await createConnection();
-  const schema = await buildSchema();
-  const server = new ApolloServer({ schema });
-  await server.listen(4000);
-  console.log("Server has started!");
-}
-
 const { FRONTEND_URL } = config[process.env.NODE_ENV];
 
 const httpPort = process.env.PORT || 8000;

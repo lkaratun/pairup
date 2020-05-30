@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "node-pg-migrate",
-    "dev": "NODE_ENV=development nodemon --exec babel-node src/server.ts --watch src --extensions '.ts,.js'",
+    "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts --watch src --extensions '.ts,.js'",
     "check-types": "tsc",
     "test": "mocha",
     "start": "NODE_ENV=production forever start -c babel-node src/server.js",
@@ -54,6 +54,7 @@
     "reflect-metadata": "^0.1.13",
     "snake-case": "^3.0.3",
     "spdy": "^4.0.2",
+    "ts-node": "^8.10.1",
     "type-graphql": "^1.0.0-rc.2",
     "typeorm": "^0.2.25",
     "typescript": "^3.9.3"
@@ -62,6 +63,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "class-validator": "^0.12.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.10.0",

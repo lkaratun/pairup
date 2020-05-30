@@ -1,5 +1,9 @@
-node_modules/*
 .env*
-*.sql
-build
 ormconfig.json
+
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
