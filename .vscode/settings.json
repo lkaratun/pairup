@@ -4,6 +4,7 @@
     "titleBar.activeForeground": "#FDFAF6"
   },
   "cSpell.words": [
-    "camelcase"
+    "camelcase",
+    "typeorm"
   ]
 }
