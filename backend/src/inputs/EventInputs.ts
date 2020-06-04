@@ -27,7 +27,7 @@ export class UpdateEventInput {
   activityId: string;
 
   @Field(() => String, { nullable: true })
-  placeId: string;
+  locationId: string;
 
   @Field(() => String, { nullable: true })
   dateFrom: string;

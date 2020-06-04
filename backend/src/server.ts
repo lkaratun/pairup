@@ -12,7 +12,7 @@ const activitiesRouter = require("./routes/activities");
 require("./middleware/localAuth");
 const authRouter = require("./routes/auth");
 const eventsRouter = require("./routes/events");
-const placesRouter = require("./routes/places");
+const locationsRouter = require("./routes/locations");
 const usersRouter = require("./routes/users");
 const fs = require("fs");
 const spdy = require("spdy");
@@ -36,7 +36,7 @@ app.use(passport.session());
 app.use("/auth", authRouter);
 app.use("/users", passport.authenticate("userRequired"), usersRouter);
 app.use("/activities", activitiesRouter);
-app.use("/places", placesRouter);
+app.use("/locations", locationsRouter);
 app.use("/events", eventsRouter);
 app.use((err, req, res, next) =>
   res.headersSent ? next(err) : res.status(500).json({ message: err.message })

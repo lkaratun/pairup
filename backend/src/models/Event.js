@@ -11,7 +11,7 @@ class Event extends Table {
       "image",
       "description",
       "activityId",
-      "placeId",
+      "locationId",
       "dateFrom",
       "dateTo",
       "minPeople",
@@ -32,12 +32,12 @@ class Event extends Table {
   readAll(timestamp) {
     const text = `SELECT
     events.id, events.name, author_id, CONCAT(users.first_name, ' ', users.last_name) as author, events.image, events.description,
-    activities.name as activity, places.country, places.city,
+    activities.name as activity, locations.country, locations.city,
     events.date_from, events.date_to, events.min_people, events.max_people
     FROM ${this.tableName}
     LEFT JOIN users ON users.id = events.author_id
     LEFT JOIN activities ON activities.id = events.activity_id
-    LEFT JOIN places ON places.id = events.place_id`;
+    LEFT JOIN locations ON locations.id = events.location_id`;
 
     let where;
     let whereValues;

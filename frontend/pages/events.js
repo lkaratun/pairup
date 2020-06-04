@@ -28,7 +28,7 @@ export async function getServerSideProps({ req }) {
       url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5`
     }),
     serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
-    serverSideRequest(req)({ url: `${backendUrlFull}/places` })
+    serverSideRequest(req)({ url: `${backendUrlFull}/locations` })
   ]).catch(err => console.error(err.response));
 
   return {

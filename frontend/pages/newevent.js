@@ -15,7 +15,7 @@ export async function getServerSideProps({ req }) {
 
   const [activities, locations] = await Promise.all([
     serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
-    serverSideRequest(req)({ url: `${backendUrlFull}/places` })
+    serverSideRequest(req)({ url: `${backendUrlFull}/locations` })
   ]).catch(err => console.error(err.response));
 
   return {

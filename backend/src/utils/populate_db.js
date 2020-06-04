@@ -1,7 +1,7 @@
 // DB Population script, use settings from ../models/db.js
 const fs = require("fs");
 const User = require("../models/User");
-const Place = require("../models/Place");
+const Location = require("../models/Location");
 const Activity = require("../models/Activity");
 const Event = require("../models/Event");
 const Attendee = require("../models/EventAttendee");
@@ -16,7 +16,7 @@ if (myArgs.length > 1) {
 const data = JSON.parse(fs.readFileSync(myArgs[0]));
 
 Promise.all(
-  // create users, activities and places first and append their id's to base object
+  // create users, activities and locations first and append their id's to base object
   data.users.map((userData, pos) =>
     new User(userData)
       .create()
@@ -25,11 +25,11 @@ Promise.all(
       })
       .catch(console.log)
   ),
-  data.places.map((placeData, pos) =>
-    new Place(placeData)
+  data.locations.map((locationData, pos) =>
+    new Location(locationData)
       .create()
       .then(([res]) => {
-        data.places[pos].id = res.id;
+        data.locations[pos].id = res.id;
       })
       .catch(console.log)
   ),
@@ -52,8 +52,9 @@ Promise.all(
             author_id: data.users[eventData.author_id].id,
             activity_id: data.activities[eventData.activity_id].id
           };
-          if ("place_id" in eventData) {
-            fullEventData.place_id = data.places[eventData.place_id].id;
+          if ("location_id" in eventData) {
+            fullEventData.location_id =
+              data.locations[eventData.location_id].id;
           }
           return fullEventData;
         })

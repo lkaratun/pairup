@@ -1,9 +1,9 @@
 const Table = require("./Table");
 
-class Place extends Table {
+class Location extends Table {
   constructor(rawData = {}) {
     const pk = "id";
-    const tableName = "places";
+    const tableName = "locations";
     const ACCEPTED_FIELDS = ["id", "country", "city"];
     const cleanData = {};
     Object.keys(rawData).forEach(key => {
@@ -18,4 +18,4 @@ class Place extends Table {
   }
 }
 
-module.exports = Place;
+module.exports = Location;

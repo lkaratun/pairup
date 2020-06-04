@@ -40,7 +40,7 @@
 }
 ```
 
-### Place
+### Location
 
 ```JSON
 {
@@ -50,11 +50,11 @@
 }
 ```
 
-### Multiple Places
+### Multiple Locations
 
 ```JSON
 {
-    "places": [
+    "locations": [
         {
             "id": 42,
             "country": "Canada",
@@ -82,7 +82,7 @@
 
 ```JSON
 {
-    "places": [
+    "locations": [
         {
             "id": 42,
             "name": "Fishing"
@@ -134,7 +134,6 @@
     ]
 }
 ```
-
 
 ## API endpoints
 
@@ -280,15 +279,15 @@ JWT authentication required
 
 All fields are optional
 
-### Get all places
+### Get all locations
 
-`GET places`
+`GET locations`
 
-JWT authentication required, returns [Multiple places](#multiple-places)
+JWT authentication required, returns [Multiple locations](#multiple-locations)
 
-### Create a place
+### Create a location
 
-`POST places`
+`POST locations`
 
 Example request body:
 
@@ -303,21 +302,21 @@ JWT authentication required
 
 Required fields: `country`, `city`
 
-### Get the place
+### Get the location
 
-`GET places/:id`
+`GET locations/:id`
 
-JWT authentication required, returns [Place](#place)
+JWT authentication required, returns [Location](#location)
 
-### Delete the place
+### Delete the location
 
-`DELETE places/:id`
+`DELETE locations/:id`
 
 JWT authentication required
 
-### Update the place
+### Update the location
 
-`PUT places/:id`
+`PUT locations/:id`
 
 Example request body:
 
@@ -349,7 +348,7 @@ Example request body:
     "name" : "Event name",
     "description" : "Event description",
     "activity_id" : 2,
-    "place_id": 3,
+    "location_id": 3,
     "date_from" : "2018-12-07 22:00:00.0",
     "date_to" : "2018-12-07 23:00:00.0",
     "min_people" : 2,
@@ -361,7 +360,7 @@ JWT authentication required
 
 Required fields: `name`, `activity_id`, `max_people`
 
-Optional fields: `description`, `place_id`, `date_from`, `date_to`, `min_people`
+Optional fields: `description`, `location_id`, `date_from`, `date_to`, `min_people`
 
 ### Get the event
 
@@ -392,7 +391,7 @@ Example request body:
     "name" : "Event name",
     "description" : "Event description",
     "activity_id" : 2,
-    "place_id": 3,
+    "location_id": 3,
     "date_from" : "2018-12-07 22:00:00.0",
     "date_to" : "2018-12-07 23:00:00.0",
     "min_people" : 2,
@@ -432,7 +431,9 @@ Both endpoints use environmental variables to configure cloudinary:
 `CLOUDINARY_SECRET` - API secret
 
 Returns URL of an image:
+
 ```JSON
 {
     "url": "https://res.cloudinary.com/pairup/image/upload/v1547410002/events/lhdutg2dt6hyjwv81nej.jpg"
 }
+```

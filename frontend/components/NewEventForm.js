@@ -18,7 +18,7 @@ class EventForm extends Component {
     name: "",
     description: "",
     activityId: null,
-    placeId: null,
+    locationId: null,
     dateFrom: null,
     dateTo: null,
     minPeople: 2,
@@ -34,7 +34,7 @@ class EventForm extends Component {
       minPeople: this.state.minPeople,
       maxPeople: this.state.maxPeople,
       activityId: this.state.activityId,
-      placeId: this.state.placeId,
+      locationId: this.state.locationId,
       description: this.state.description,
       dateFrom: this.state.dateFrom,
       dateTo: this.state.dateTo
@@ -91,7 +91,7 @@ class EventForm extends Component {
   updateLocation = (payload, existsInDB) => {
     // existsInDB flag is used to determine if that is a brand new attribute coming and needs to be created in DB or it is existing one
     if (existsInDB) {
-      this.setState({ placeId: payload.id });
+      this.setState({ locationId: payload.id });
     } else {
       // create new instance of attribute with the ID
       const token = localStorage.getItem("token");
@@ -102,14 +102,14 @@ class EventForm extends Component {
       };
       axios({
         method: "post",
-        url: `${backendUrlFull}/places`,
+        url: `${backendUrlFull}/locations`,
         data,
         headers: {
           Authorization: AuthStr
         }
       })
         .then(response => {
-          this.setState({ placeId: response.data.id });
+          this.setState({ locationId: response.data.id });
         })
         .catch(error => console.error(error));
     }

@@ -1,14 +1,14 @@
 const express = require("express");
 const passport = require("passport");
-const Place = require("../models/Place");
+const Location = require("../models/Location");
 const APIError = require("../utils/APIError.js");
 
 const router = express.Router();
 
 // List
 router.get("/", (req, res) => {
-  const place = new Place(req.query);
-  place
+  const location = new Location(req.query);
+  location
     .readAll()
     .then(data => res.json(data))
     .catch(err => {
@@ -18,8 +18,8 @@ router.get("/", (req, res) => {
 
 // Create
 router.post("/", passport.authenticate("userRequired"), (req, res) => {
-  const place = new Place(req.body);
-  place
+  const location = new Location(req.body);
+  location
     .create()
     .then(([data]) => {
       res.status(201).json(data);
@@ -31,12 +31,12 @@ router.post("/", passport.authenticate("userRequired"), (req, res) => {
 
 // Get one
 router.get("/:id", (req, res) => {
-  const place = new Place({ id: req.params.id });
-  place
+  const location = new Location({ id: req.params.id });
+  location
     .read()
     .then(([data]) => {
       if (data === undefined) {
-        throw new APIError(`place #${req.params.id} not found`, 404);
+        throw new APIError(`location #${req.params.id} not found`, 404);
       }
       res.json(data);
     })
@@ -47,8 +47,8 @@ router.get("/:id", (req, res) => {
 
 // delete one
 router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
-  const place = new Place({ id: req.params.id });
-  place
+  const location = new Location({ id: req.params.id });
+  location
     .delete()
     .then(() => {
       res.status(204).json();
@@ -61,8 +61,8 @@ router.delete("/:id", passport.authenticate("userRequired"), (req, res) => {
 // update one
 router.put("/:id", passport.authenticate("userRequired"), (req, res) => {
   const { id, ...newData } = req.body;
-  const place = new Place({ id: req.params.id, ...newData });
-  place
+  const location = new Location({ id: req.params.id, ...newData });
+  location
     .update()
     .then(() => {
       res.json();

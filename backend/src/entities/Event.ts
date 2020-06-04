@@ -30,7 +30,7 @@ export class Event extends BaseEntity {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  placeId: string;
+  locationId: string;
 
   @Field(() => String, { nullable: true })
   @Column("timestamp", { nullable: true })
