@@ -3,30 +3,18 @@ import { ObjectType, Field, ID } from "type-graphql";
 
 @Entity()
 @ObjectType()
-export class User extends BaseEntity {
+export class Event extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Field(() => String)
   @Column({ unique: true })
-  email: string;
+  name: string;
 
   @Field(() => String)
   @Column()
-  firstName: string;
-
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
-  lastName: string;
-
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
-  password: string;
-
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
-  bio: string;
+  authorId: string;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
@@ -34,9 +22,29 @@ export class User extends BaseEntity {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  googleAccessToken: string;
+  description: string;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  googleRefreshToken: string;
+  activityId: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  placeId: string;
+
+  @Field(() => String, { nullable: true })
+  @Column("timestamp", { nullable: true })
+  dateFrom: string;
+
+  @Field(() => String, { nullable: true })
+  @Column("timestamp", { nullable: true })
+  dateTo: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  minPeople: number;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  maxPeople: number;
 }
