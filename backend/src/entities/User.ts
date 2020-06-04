@@ -1,9 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany
+} from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
+import Ad from "./Ad";
 
 @Entity()
 @ObjectType()
-export class User extends BaseEntity {
+export default class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -39,4 +46,18 @@ export class User extends BaseEntity {
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   googleRefreshToken: string;
+
+  @Field(() => ID)
+  @OneToMany(
+    type => Ad,
+    ad => ad.user
+  )
+  ads: Ad[];
+
+  @Field(() => ID)
+  @OneToMany(
+    type => Ad,
+    ad => ad.user
+  )
+  adResponses: Ad[];
 }

@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
-import { User } from "../entities/User";
+import User from "../entities/User";
 import { CreateUserInput, UpdateUserInput } from "../inputs/UserInputs";
 
 @Resolver()
