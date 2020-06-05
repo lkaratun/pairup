@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  BaseEntity,
-  ManyToOne
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Ad from "./Ad";
 import User from "./User";

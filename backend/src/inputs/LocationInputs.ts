@@ -1,7 +1,7 @@
 import { InputType, Field } from "type-graphql";
 
 @InputType()
-export class CreateLocationInput {
+export class CreateLocation {
   @Field()
   country: string;
 
@@ -10,7 +10,7 @@ export class CreateLocationInput {
 }
 
 @InputType()
-export class UpdateLocationInput {
+export class UpdateLocation {
   @Field()
   country: string;
 

@@ -1,13 +1,13 @@
 import { InputType, Field } from "type-graphql";
 
 @InputType()
-export class CreateActivityInput {
+export class CreateActivity {
   @Field()
   name: string;
 }
 
 @InputType()
-export class UpdateActivityInput {
+export class UpdateActivity {
   @Field()
   name: string;
 }
