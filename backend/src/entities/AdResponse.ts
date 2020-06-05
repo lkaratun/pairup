@@ -1,9 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  ManyToOne,
+  Unique
+} from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Ad from "./Ad";
 import User from "./User";
 
 @Entity()
+@Unique(["respondent", "ad"])
 @ObjectType()
 export default class AdResponse extends BaseEntity {
   @Field(() => ID)
@@ -17,7 +24,7 @@ export default class AdResponse extends BaseEntity {
   )
   respondent: User;
 
-  @Field(() => ID)
+  @Field(() => String)
   @ManyToOne(
     type => Ad,
     ad => ad.responses

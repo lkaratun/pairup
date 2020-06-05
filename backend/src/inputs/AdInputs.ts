@@ -3,19 +3,22 @@ import { InputType, Field } from "type-graphql";
 @InputType()
 export class CreateAd {
   @Field()
-  user: string;
-
-  @Field()
-  activity: string;
+  userId: string;
 
   @Field({ nullable: true })
-  location: string;
+  description: string;
+
+  @Field()
+  activityId: string;
+
+  @Field({ nullable: true })
+  locationId: string;
 }
 
 @InputType()
 export class UpdateAd {
   @Field({ nullable: true })
-  name: string;
+  description: string;
 
   @Field({ nullable: true })
   activity: string;

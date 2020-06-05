@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
 import User from "../entities/User";
-import { CreateUserInput, UpdateUserInput } from "../inputs/UserInputs";
+import { CreateUser, UpdateUser } from "../inputs/UserInputs";
 
 @Resolver()
 export class UserResolver {
@@ -15,13 +15,13 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async createUser(@Arg("data") data: CreateUserInput) {
+  async createUser(@Arg("data") data: CreateUser) {
     const user = User.create(data);
     return user.save();
   }
 
   @Mutation(() => User)
-  async updateUser(@Arg("id") id: string, @Arg("data") data: UpdateUserInput) {
+  async updateUser(@Arg("id") id: string, @Arg("data") data: UpdateUser) {
     const user = await User.findOne({ where: { id } });
     if (!user) throw new Error("User not found!");
     Object.assign(user, data);

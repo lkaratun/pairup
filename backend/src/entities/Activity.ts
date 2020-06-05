@@ -16,7 +16,7 @@ export default class Activity extends BaseEntity {
   id: string;
 
   @Field(() => String)
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Field(() => ID)

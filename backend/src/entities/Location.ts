@@ -3,12 +3,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToMany
+  OneToMany,
+  Unique
 } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Ad from "./Ad";
 
 @Entity()
+@Unique(["country", "city"])
 @ObjectType()
 export default class Location extends BaseEntity {
   @Field(() => ID)
@@ -26,7 +28,7 @@ export default class Location extends BaseEntity {
   @Field(() => ID)
   @OneToMany(
     type => Ad,
-    ad => ad.user
+    ad => ad.location
   )
   ads: Ad[];
 }
