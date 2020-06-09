@@ -35,6 +35,11 @@ input CreateAd {
   userId: String!
 }
 
+input createAdResponse {
+  adId: ID!
+  userId: ID!
+}
+
 input CreateLocation {
   city: String!
   country: String!
@@ -61,13 +66,14 @@ type Location {
 type Mutation {
   createActivity(data: CreateActivity!): Activity!
   createAd(data: CreateAd!): Ad!
+  createAdResponse(data: createAdResponse!): AdResponse!
   createLocation(data: CreateLocation!): Location!
   createUser(data: CreateUser!): User!
   deleteActivity(id: String!): Boolean!
   deleteAd(id: String!): Boolean!
   deleteLocation(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
-  respondToAd(data: RespondToAd!): AdResponse!
+  removeAdResponse(id: String!): Boolean!
   updateActivity(data: UpdateActivity!, id: String!): Activity!
   updateAd(data: UpdateAd!, id: String!): Ad!
   updateLocation(data: UpdateLocation!, id: String!): Location!
@@ -83,11 +89,6 @@ type Query {
   locations: [Location!]!
   user(id: String!): User!
   users: [User!]!
-}
-
-input RespondToAd {
-  adId: ID!
-  userId: ID!
 }
 
 input UpdateActivity {

@@ -28,7 +28,16 @@ export class UpdateAd {
 }
 
 @InputType()
-export class RespondToAd {
+export class createAdResponse {
+  @Field(() => ID)
+  userId: string;
+
+  @Field(() => ID)
+  adId: string;
+}
+
+@InputType()
+export class removeAdResponse {
   @Field(() => ID)
   userId: string;
 
