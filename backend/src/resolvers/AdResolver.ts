@@ -1,14 +1,17 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
 import Ad from "../entities/Ad";
-import { CreateAd, UpdateAd } from "../inputs/AdInputs";
+import { CreateAd, UpdateAd, RespondToAd } from "../inputs/AdInputs";
 import User from "../entities/User";
+import AdResponse from "../entities/AdResponse";
 import Activity from "../entities/Activity";
 
 @Resolver()
 export class AdResolver {
   @Query(() => [Ad])
   ads() {
-    return Ad.find({ relations: ["user"] });
+    return Ad.find({
+      relations: ["user", "activity", "responses", "responses.user"]
+    });
   }
 
   @Query(() => Ad)
@@ -39,5 +42,13 @@ export class AdResolver {
     if (!ad) throw new Error("Ad not found!");
     await ad.remove();
     return true;
+  }
+
+  @Mutation(() => AdResponse)
+  async respondToAd(@Arg("data") data: RespondToAd) {
+    const ad = Ad.create({ id: data.adId });
+    const user = User.create({ id: data.userId });
+    const adResponse = AdResponse.create({ ad, user });
+    return adResponse.save();
   }
 }

@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Ad from "./Ad";
+import AdResponse from "./AdResponse";
 
 @Entity()
 @ObjectType()
@@ -39,25 +40,25 @@ export default class User extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Field(() => String, { nullable: true })
+  // @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   googleAccessToken: string;
 
-  @Field(() => String, { nullable: true })
+  // @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   googleRefreshToken: string;
 
-  @Field(() => ID)
+  @Field(() => [Ad], { nullable: true })
   @OneToMany(
     type => Ad,
     ad => ad.user
   )
   ads: Ad[];
 
-  @Field(() => ID)
+  @Field(() => [AdResponse], { nullable: true })
   @OneToMany(
-    type => Ad,
-    ad => ad.user
+    type => AdResponse,
+    adResponse => adResponse.user
   )
-  adResponses: Ad[];
+  adResponses: AdResponse[];
 }

@@ -21,7 +21,7 @@ export default class Ad extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   description: string;
 
@@ -39,17 +39,18 @@ export default class Ad extends BaseEntity {
   )
   activity: Activity;
 
-  @Field(() => Location)
+  @Field(() => Location, { nullable: true })
   @ManyToOne(
     type => Location,
     location => location.ads
   )
   location: Location;
 
-  @Field(() => [AdResponse])
+  @Field(() => [AdResponse], { nullable: true })
   @OneToMany(
     type => AdResponse,
     response => response.ad
+    // { cascade: true }
   )
   responses: AdResponse[];
 }

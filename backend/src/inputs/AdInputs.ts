@@ -1,4 +1,4 @@
-import { InputType, Field } from "type-graphql";
+import { InputType, Field, ID } from "type-graphql";
 
 @InputType()
 export class CreateAd {
@@ -25,4 +25,13 @@ export class UpdateAd {
 
   @Field({ nullable: true })
   location: string;
+}
+
+@InputType()
+export class RespondToAd {
+  @Field(() => ID)
+  userId: string;
+
+  @Field(() => ID)
+  adId: string;
 }

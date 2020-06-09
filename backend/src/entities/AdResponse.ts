@@ -10,21 +10,21 @@ import Ad from "./Ad";
 import User from "./User";
 
 @Entity()
-@Unique(["respondent", "ad"])
+@Unique(["user", "ad"])
 @ObjectType()
 export default class AdResponse extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => String)
+  @Field(() => User)
   @ManyToOne(
     type => User,
     user => user.adResponses
   )
-  respondent: User;
+  user: User;
 
-  @Field(() => String)
+  @Field(() => Ad)
   @ManyToOne(
     type => Ad,
     ad => ad.responses

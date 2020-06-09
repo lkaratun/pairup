@@ -10,7 +10,8 @@ import { AdResolver } from "./resolvers/AdResolver";
 (async function main() {
   await createConnection();
   const schema = await buildSchema({
-    resolvers: [UserResolver, LocationResolver, ActivityResolver, AdResolver]
+    resolvers: [UserResolver, LocationResolver, ActivityResolver, AdResolver],
+    emitSchemaFile: true
   });
   const server = new ApolloServer({ schema });
   console.log("Server is starting!");
