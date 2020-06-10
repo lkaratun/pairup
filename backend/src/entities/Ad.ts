@@ -25,7 +25,7 @@ export default class Ad extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Field(() => User)
+  // @Field(() => User)
   @ManyToOne(
     type => User,
     user => user.ads

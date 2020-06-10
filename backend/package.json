@@ -56,7 +56,9 @@
     "spdy": "^4.0.2",
     "ts-node": "^8.10.1",
     "type-graphql": "^1.0.0-rc.2",
+    "typedi": "^0.8.0",
     "typeorm": "^0.2.25",
+    "typeorm-typedi-extensions": "^0.2.3",
     "typescript": "^3.9.3"
   },
   "devDependencies": {

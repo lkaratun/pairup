@@ -1,9 +1,25 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  ResolverInterface,
+  FieldResolver,
+  Root
+} from "type-graphql";
 import User from "../entities/User";
 import { CreateUser, UpdateUser } from "../inputs/UserInputs";
 
-@Resolver()
+@Resolver(of => User)
+// export class UserResolver implements ResolverInterface<User> {
 export class UserResolver {
+  // @FieldResolver()
+  // id(@Root() user: User) {
+  //   console.log("UserResolver -> id -> id");
+
+  //   return user.id;
+  // }
+
   @Query(() => [User])
   users() {
     return User.find();
@@ -35,4 +51,16 @@ export class UserResolver {
     await user.remove();
     return true;
   }
+
+  // @FieldResolver()
+  // averageRating(@Root() recipe: User) {
+  //   const ratingsSum = recipe.ratings.reduce((a, b) => a + b, 0);
+  //   return recipe.ratings.length ? ratingsSum / recipe.ratings.length : null;
+  // }
 }
+
+// @Resolver(of => Recipe)
+// class RecipeResolver  {
+//   // queries and mutations
+
+// }

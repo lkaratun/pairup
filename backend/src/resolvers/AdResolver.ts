@@ -1,4 +1,13 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  FieldResolver,
+  Root
+} from "type-graphql";
+import { Repository } from "typeorm";
+import { InjectRepository } from "typeorm-typedi-extensions";
 import Ad from "../entities/Ad";
 import {
   CreateAd,
@@ -10,12 +19,25 @@ import User from "../entities/User";
 import AdResponse from "../entities/AdResponse";
 import Activity from "../entities/Activity";
 
-@Resolver()
+@Resolver(() => Ad)
 export class AdResolver {
+  constructor(
+    @InjectRepository(AdResponse)
+    private readonly adResponseRepository: Repository<AdResponse>
+  ) {}
+
+  @FieldResolver(() => AdResponse)
+  adResponse(@Root() ad: Ad) {
+    console.log("AdResolver -> user field resolver");
+    return this.adResponseRepository.findOne({ where: { ad: ad.id } });
+    // return this.adResponseRepository.findOne();
+  }
+
   @Query(() => [Ad])
   ads() {
+    console.log("AdResolver -> ads -> ads");
     return Ad.find({
-      relations: ["user", "activity", "responses", "responses.user"]
+      relations: ["activity"]
     });
   }
 

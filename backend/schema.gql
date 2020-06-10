@@ -11,17 +11,17 @@ type Activity {
 
 type Ad {
   activity: Activity!
+  adResponse: AdResponse!
   description: String
   id: ID!
   location: Location
   responses: [AdResponse!]
-  user: User!
 }
 
 type AdResponse {
-  ad: Ad!
-  id: ID!
-  user: User!
+  ad: Ad
+  id: ID
+  user: User
 }
 
 input CreateActivity {

@@ -3,7 +3,8 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   ManyToOne,
-  Unique
+  Unique,
+  Column
 } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import Ad from "./Ad";
@@ -13,21 +14,24 @@ import User from "./User";
 @Unique(["user", "ad"])
 @ObjectType()
 export default class AdResponse extends BaseEntity {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   @ManyToOne(
     type => User,
     user => user.adResponses
   )
   user: User;
 
-  @Field(() => Ad)
+  @Field(() => Ad, { nullable: true })
   @ManyToOne(
     type => Ad,
     ad => ad.responses
   )
   ad: Ad;
+
+  // @Column({ nullable: true })
+  // adId: string;
 }
