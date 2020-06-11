@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model activity {
+  id   String @default(dbgenerated()) @id
+  name String @unique
+  ad   ad[]
+}
+
+model ad {
+  id          String        @default(dbgenerated()) @id
+  description String?
+  activity    activity?     @relation(fields: [activityId], references: [id])
+  activityId  String?
+  location    location?     @relation(fields: [locationId], references: [id])
+  locationId  String?
+  user        user?         @relation(fields: [userId], references: [id])
+  userId      String?
+  responses   ad_response[]
+
+  @@unique([userId, activityId, locationId], name: "UQ_9474149adbfb9452c233d72fa0d")
+}
+
+model ad_response {
+  id     String  @default(dbgenerated()) @id
+  ad     ad?     @relation(fields: [adId], references: [id])
+  adId   String?
+  user   user?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@unique([userId, adId], name: "UQ_5c24bb96ab60a6e6d502f98a9b9")
+}
+
+model location {
+  id      String @default(dbgenerated()) @id
+  city    String
+  country String
+  ad      ad[]
+
+  @@unique([country, city], name: "UQ_92b8dedd383ea612bf0ffb77be4")
+}
+
+model user {
+  id                 String        @default(dbgenerated()) @id
+  email              String        @unique
+  bio                String?
+  firstName          String
+  googleAccessToken  String?
+  googleRefreshToken String?
+  image              String?
+  lastName           String?
+  password           String?
+  ad                 ad[]
+  ad_response        ad_response[]
+}
