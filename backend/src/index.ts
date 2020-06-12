@@ -1,25 +1,41 @@
 import "reflect-metadata";
-import { Container } from "typedi";
-import { createConnection } from "typeorm";
-import { ApolloServer } from "apollo-server";
-import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/UserResolver";
-import { LocationResolver } from "./resolvers/LocationResolver";
-import { ActivityResolver } from "./resolvers/ActivityResolver";
-import { AdResolver } from "./resolvers/AdResolver";
-import * as TypeORM from "typeorm";
+// import { UserResolver } from "./resolvers/UserResolver";
+// import { LocationResolver } from "./resolvers/LocationResolver";
+// import { ActivityResolver } from "./resolvers/ActivityResolver";
+// import { AdResolver } from "./resolvers/AdResolver";
+import typeDefs from "./typeDefs";
 
-(async function main() {
-  TypeORM.useContainer(Container);
-  await createConnection();
+import { PrismaClient } from "@prisma/client";
 
-  const schema = await buildSchema({
-    resolvers: [UserResolver, LocationResolver, ActivityResolver, AdResolver],
-    container: Container,
-    emitSchemaFile: true
-  });
-  const server = new ApolloServer({ schema });
-  console.log("Server is starting!");
-  await server.listen(4000);
-  console.log("Server has started!");
-})();
+const express = require("express");
+const { ApolloServer, gql } = require("apollo-server-express");
+
+const prisma = new PrismaClient();
+
+// Provide resolver functions for your schema fields
+const resolvers = {
+  Query: {
+    hello: () => "Hello world!",
+    users: async () => {
+      const allUsers = await prisma.user.findMany();
+      return allUsers;
+    }
+  }
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
+
+const app = express();
+server.applyMiddleware({ app });
+
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);
+
+// main()
+//   .catch(e => {
+//     throw e;
+//   })
+//   .finally(async () => {
+//     await prisma.disconnect();
+//   });
