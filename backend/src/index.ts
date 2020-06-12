@@ -1,8 +1,4 @@
 import "reflect-metadata";
-// import { UserResolver } from "./resolvers/UserResolver";
-// import { LocationResolver } from "./resolvers/LocationResolver";
-// import { ActivityResolver } from "./resolvers/ActivityResolver";
-// import { AdResolver } from "./resolvers/AdResolver";
 import typeDefs from "./typeDefs";
 
 import { PrismaClient } from "@prisma/client";
@@ -12,14 +8,37 @@ const { ApolloServer, gql } = require("apollo-server-express");
 
 const prisma = new PrismaClient();
 
-// Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
     hello: () => "Hello world!",
-    users: async () => {
-      const allUsers = await prisma.user.findMany();
-      return allUsers;
-    }
+    user: (parent, args, context, info) =>
+      prisma.user.findOne({
+        where: {
+          id: args.id
+        }
+      }),
+    users: () => prisma.user.findMany(),
+    activity: (parent, args, context, info) =>
+      prisma.activity.findOne({
+        where: {
+          id: args.id
+        }
+      }),
+    activities: () => prisma.activity.findMany(),
+    location: (parent, args, context, info) =>
+      prisma.location.findOne({
+        where: {
+          id: args.id
+        }
+      }),
+    locations: () => prisma.location.findMany(),
+    ad: (parent, args, context, info) =>
+      prisma.ad.findOne({
+        where: {
+          id: args.id
+        }
+      }),
+    ads: () => prisma.ad.findMany()
   }
 };
 

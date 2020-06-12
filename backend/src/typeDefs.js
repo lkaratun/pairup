@@ -3,13 +3,13 @@ const { gql } = require("apollo-server-express");
 export default gql`
   type Query {
     hello: String
-    user: User
+    user(id: ID!): User
     users: [User]
-    activity: Activity
+    activity(id: ID!): Activity
     activities: [Activity]
-    location: Location
+    location(id: ID!): Location
     locations: [Location]
-    ad: Ad
+    ad(id: ID!): Ad
     ads: [Ad]
   }
 
