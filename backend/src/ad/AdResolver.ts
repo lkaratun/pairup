@@ -20,6 +20,13 @@ export default {
           id: parent.locationId
         }
       });
+    },
+    responses: (parent, args, context, info) => {
+      return context.prisma.adResponse.findMany({
+        where: {
+          id: parent.responseId
+        }
+      });
     }
   }
 };

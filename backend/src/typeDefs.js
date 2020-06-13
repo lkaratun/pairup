@@ -11,6 +11,8 @@ export default gql`
     locations: [Location]
     ad(id: ID!): Ad
     ads: [Ad]
+    adResponse(id: ID!): AdResponse
+    adResponses: [AdResponse]
   }
 
   type User {

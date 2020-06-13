@@ -4,6 +4,7 @@ import typeDefs from "./typeDefs";
 import { PrismaClient } from "@prisma/client";
 import { merge } from "lodash";
 import AdResolver from "./ad/AdResolver";
+import AdResponseResolver from "./adResponse/AdResponseResolver";
 
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
@@ -40,13 +41,20 @@ const resolvers = {
           id: args.id
         }
       }),
-    ads: () => prisma.ad.findMany()
+    ads: () => prisma.ad.findMany(),
+    adResponses: () => prisma.adResponse.findMany(),
+    adResponse: (parent, args, context, info) =>
+      prisma.adResponse.findOne({
+        where: {
+          id: args.id
+        }
+      })
   }
 };
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers: merge(resolvers, AdResolver),
+  resolvers: merge(resolvers, AdResolver, AdResponseResolver),
   context: { prisma }
 });
 
