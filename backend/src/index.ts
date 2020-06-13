@@ -3,19 +3,31 @@ import typeDefs from "./typeDefs";
 
 import { PrismaClient } from "@prisma/client";
 import { merge } from "lodash";
+import AdType from "./ad/AdType";
 import AdResolver from "./ad/AdResolver";
+import AdResponseType from "./adResponse/AdResponseType";
 import AdResponseResolver from "./adResponse/AdResponseResolver";
+import UserType from "./user/UserType";
 import UserResolver from "./user/UserResolver";
+import ActivityType from "./activity/ActivityType";
 import ActivityResolver from "./activity/ActivityResolver";
+import LocationType from "./location/LocationType";
 import LocationResolver from "./location/LocationResolver";
 
 const express = require("express");
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 
 const prisma = new PrismaClient();
 
 const server = new ApolloServer({
-  typeDefs,
+  typeDefs: [
+    typeDefs,
+    UserType,
+    ActivityType,
+    LocationType,
+    AdType,
+    AdResponseType
+  ],
   resolvers: merge(
     AdResolver,
     AdResponseResolver,
