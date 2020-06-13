@@ -5,56 +5,24 @@ import { PrismaClient } from "@prisma/client";
 import { merge } from "lodash";
 import AdResolver from "./ad/AdResolver";
 import AdResponseResolver from "./adResponse/AdResponseResolver";
+import UserResolver from "./user/UserResolver";
+import ActivityResolver from "./activity/ActivityResolver";
+import LocationResolver from "./location/LocationResolver";
 
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
 
 const prisma = new PrismaClient();
 
-const resolvers = {
-  Query: {
-    hello: () => "Hello world!",
-    user: (parent, args, context, info) =>
-      prisma.user.findOne({
-        where: {
-          id: args.id
-        }
-      }),
-    users: () => prisma.user.findMany(),
-    activity: (parent, args, context, info) =>
-      prisma.activity.findOne({
-        where: {
-          id: args.id
-        }
-      }),
-    activities: () => prisma.activity.findMany(),
-    location: (parent, args, context, info) =>
-      prisma.location.findOne({
-        where: {
-          id: args.id
-        }
-      }),
-    locations: () => prisma.location.findMany(),
-    ad: (parent, args, context, info) =>
-      prisma.ad.findOne({
-        where: {
-          id: args.id
-        }
-      }),
-    ads: () => prisma.ad.findMany(),
-    adResponses: () => prisma.adResponse.findMany(),
-    adResponse: (parent, args, context, info) =>
-      prisma.adResponse.findOne({
-        where: {
-          id: args.id
-        }
-      })
-  }
-};
-
 const server = new ApolloServer({
   typeDefs,
-  resolvers: merge(resolvers, AdResolver, AdResponseResolver),
+  resolvers: merge(
+    AdResolver,
+    AdResponseResolver,
+    UserResolver,
+    ActivityResolver,
+    LocationResolver
+  ),
   context: { prisma }
 });
 
