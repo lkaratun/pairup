@@ -6,6 +6,14 @@ export default {
       }),
     ads: (parent, args, context) => context.prisma.ad.findMany()
   },
+  Mutation: {
+    ad: async (parent, args, context) => {
+      return context.prisma.ad.update({
+        where: { id: args.id },
+        data: args.data
+      });
+    }
+  },
   Ad: {
     user: (parent, args, context, info) => {
       return (

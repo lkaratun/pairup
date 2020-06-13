@@ -7,7 +7,7 @@ export default gql`
   }
 
   extend type Mutation {
-    location(id: ID!): Location
+    location(id: ID!, data: LocationInput): Location
   }
 
   type Location {
@@ -17,7 +17,7 @@ export default gql`
     ads: [Ad]
   }
 
-  type LocationInput {
+  input LocationInput {
     city: String
     country: String
   }

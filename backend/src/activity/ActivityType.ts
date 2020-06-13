@@ -6,7 +6,7 @@ export default gql`
     activities: [Activity]
   }
   extend type Mutation {
-    activity(id: ID!): Activity
+    activity(id: ID!, data: ActivityInput): Activity
   }
 
   type Activity {
@@ -15,7 +15,7 @@ export default gql`
     ads: [Ad]
   }
 
-  type ActivityInput {
+  input ActivityInput {
     name: String
   }
 `;

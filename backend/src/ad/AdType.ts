@@ -7,7 +7,7 @@ export default gql`
   }
 
   extend type Mutation {
-    ad(id: ID!): Ad
+    ad(id: ID!, data: AdInput): Ad
   }
 
   type Ad {
@@ -19,7 +19,7 @@ export default gql`
     responses: [AdResponse]
   }
 
-  type AdInput {
+  input AdInput {
     description: String
     activity: ID
     location: ID

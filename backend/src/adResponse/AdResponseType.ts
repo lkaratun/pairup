@@ -6,10 +6,6 @@ export default gql`
     adResponses: [AdResponse]
   }
 
-  extend type Mutation {
-    adResponse(id: ID!): AdResponse
-  }
-
   type AdResponse {
     id: String
     ad: Ad

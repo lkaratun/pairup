@@ -7,5 +7,13 @@ export default {
       });
     },
     locations: (parent, args, context) => context.prisma.location.findMany()
+  },
+  Mutation: {
+    location: async (parent, args, context) => {
+      return context.prisma.location.update({
+        where: { id: args.id },
+        data: args.data
+      });
+    }
   }
 };
