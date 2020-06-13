@@ -18,4 +18,10 @@ export default gql`
     user: User
     responses: [AdResponse]
   }
+
+  type AdInput {
+    description: String
+    activity: ID
+    location: ID
+  }
 `;

@@ -14,6 +14,11 @@ export default gql`
     id: String
     city: String
     country: String
-    ad: [Ad]
+    ads: [Ad]
+  }
+
+  type LocationInput {
+    city: String
+    country: String
   }
 `;

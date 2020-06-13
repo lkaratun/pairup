@@ -12,6 +12,10 @@ export default gql`
   type Activity {
     id: String
     name: String
-    ad: Ad
+    ads: [Ad]
+  }
+
+  type ActivityInput {
+    name: String
   }
 `;

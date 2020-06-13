@@ -13,8 +13,6 @@ export default gql`
   type AdResponse {
     id: String
     ad: Ad
-    adId: String
     user: User
-    userId: String
   }
 `;
