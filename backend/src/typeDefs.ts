@@ -2,7 +2,6 @@ const { gql } = require("apollo-server-express");
 
 export default gql`
   type Query {
-    hello: String
     user(id: ID!): User
     users: [User]
     activity(id: ID!): Activity
@@ -13,6 +12,14 @@ export default gql`
     ads: [Ad]
     adResponse(id: ID!): AdResponse
     adResponses: [AdResponse]
+  }
+
+  type Mutation {
+    user(id: ID!, data: UserInput): User
+    activity(id: ID!): Activity
+    location(id: ID!): Location
+    ad(id: ID!): Ad
+    adResponse(id: ID!): AdResponse
   }
 
   type User {
@@ -27,6 +34,14 @@ export default gql`
     password: String
     ads: [Ad]
     adResponses: [AdResponse]
+  }
+
+  input UserInput {
+    email: String
+    bio: String
+    firstName: String
+    image: String
+    lastName: String
   }
 
   type Activity {

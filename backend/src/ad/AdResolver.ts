@@ -2,9 +2,7 @@ export default {
   Query: {
     ad: (parent, args, context, info) =>
       context.prisma.ad.findOne({
-        where: {
-          id: args.id
-        }
+        where: { id: args.id }
       }),
     ads: (parent, args, context) => context.prisma.ad.findMany()
   },

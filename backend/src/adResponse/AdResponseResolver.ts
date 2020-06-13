@@ -4,9 +4,7 @@ export default {
       context.prisma.adResponse.findMany(),
     adResponse: (parent, args, context, info) =>
       context.prisma.adResponse.findOne({
-        where: {
-          id: args.id
-        }
+        where: { id: args.id }
       })
   },
   AdResponse: {
