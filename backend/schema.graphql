@@ -21,13 +21,6 @@ type Ad {
   responses: [AdResponse]
 }
 
-input AdInput {
-  description: String
-  activityId: ID!
-  locationId: ID
-  userId: ID!
-}
-
 type AdResponse {
   id: String
   ad: Ad
@@ -51,13 +44,33 @@ input LocationInput {
   country: String
 }
 
+input ModifyAdInput {
+  description: String
+  userId: ID
+  activityId: ID
+  locationId: ID
+}
+
 type Mutation {
   _empty: String
   user(id: ID!, data: UserInput): User
   activity(id: ID!, data: ActivityInput): Activity
   location(id: ID!, data: LocationInput): Location
-  ad(id: ID!, data: AdInput): Ad
-  createAd(data: AdInput): Ad
+  ad(id: ID!, data: ModifyAdInput): Ad
+  createAd(data: NewAdInput): Ad
+  createAdResponse(data: NewAdResponseInput): Ad
+}
+
+input NewAdInput {
+  description: String
+  userId: ID!
+  activityId: ID!
+  locationId: ID
+}
+
+input NewAdResponseInput {
+  adId: ID
+  userId: ID
 }
 
 type Query {
@@ -74,8 +87,6 @@ type Query {
   adResponses: [AdResponse]
 }
 
-# The `Upload` scalar type
- represents a file upload.
 scalar Upload
 
 type User {
@@ -99,4 +110,3 @@ input UserInput {
   image: String
   lastName: String
 }
-

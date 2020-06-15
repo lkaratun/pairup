@@ -7,8 +7,8 @@ export default gql`
   }
 
   extend type Mutation {
-    ad(id: ID!, data: AdInput): Ad
-    createAd(data: AdInput): Ad
+    ad(id: ID!, data: ModifyAdInput): Ad
+    createAd(data: NewAdInput): Ad
   }
 
   type Ad {
@@ -20,7 +20,14 @@ export default gql`
     responses: [AdResponse]
   }
 
-  input AdInput {
+  input ModifyAdInput {
+    description: String
+    userId: ID
+    activityId: ID
+    locationId: ID
+  }
+
+  input NewAdInput {
     description: String
     userId: ID!
     activityId: ID!

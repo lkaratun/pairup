@@ -15,7 +15,7 @@ export default {
         data: args.data
       });
     },
-    createAd: async (parent, args, context, info) => {
+    createAd: (parent, args, context, info) => {
       const user = args.data.userId && { connect: { id: args.data.userId } };
       const activity = args.data.activityId && {
         connect: { id: args.data.activityId }
@@ -24,20 +24,17 @@ export default {
         connect: { id: args.data.locationId }
       };
 
-      const res = await context.prisma.ad
-        .create(
-          pickBy({
-            data: {
-              description: args.data.description,
-              user,
-              activity,
-              location
-            }
-          }),
-          x => x !== undefined && x !== null
-        )
-        .catch(e => console.error(e));
-      return res;
+      return context.prisma.ad.create(
+        pickBy({
+          data: {
+            description: args.data.description,
+            user,
+            activity,
+            location
+          }
+        }),
+        x => x !== undefined && x !== null
+      );
     }
   },
   Ad: {

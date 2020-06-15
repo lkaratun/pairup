@@ -7,6 +7,16 @@ export default {
         where: { id: args.id }
       })
   },
+  Mutation: {
+    createAdResponse: (parent, args, context, info) => {
+      return context.prisma.adResponse.create({
+        data: {
+          ad: { connect: { id: args.data.adId } },
+          user: { connect: { id: args.data.userId } }
+        }
+      });
+    }
+  },
   AdResponse: {
     ad: (parent, args, context, info) => {
       return context.prisma.ad.findOne({
