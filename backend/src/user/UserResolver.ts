@@ -13,5 +13,17 @@ export default {
         data: args.data
       });
     }
+  },
+  User: {
+    ads: async (parent, args, context) => {
+      return context.prisma.ad.findMany({
+        where: { userId: parent.id }
+      });
+    },
+    adResponses: async (parent, args, context) => {
+      return context.prisma.adResponse.findMany({
+        where: { userId: parent.id }
+      });
+    }
   }
 };
