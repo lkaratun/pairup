@@ -8,6 +8,7 @@ export default gql`
 
   extend type Mutation {
     createAdResponse(data: NewAdResponseInput): AdResponse
+    deleteAdResponse(id: ID!): AdResponse
   }
 
   type AdResponse {

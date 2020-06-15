@@ -15,6 +15,12 @@ export default {
           user: { connect: { id: args.data.userId } }
         }
       });
+    },
+    deleteAdResponse: (parent, args, context, info) => {
+      console.log("args", args);
+      return context.prisma.adResponse.delete({
+        where: { id: args.id }
+      });
     }
   },
   AdResponse: {
