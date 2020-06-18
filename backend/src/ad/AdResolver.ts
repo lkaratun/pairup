@@ -2,25 +2,27 @@ import { pickBy } from "lodash";
 
 export default {
   Query: {
-    ad: (parent, args, context, info) =>
+    ad: (parent, args, context, info): Promise<object> =>
       context.prisma.ad.findOne({
         where: { id: args.id }
       }),
     ads: (parent, args, context) => context.prisma.ad.findMany()
   },
   Mutation: {
-    ad: async (parent, args, context) => {
+    ad: async (parent, args, context): Promise<object> => {
       return context.prisma.ad.update({
         where: { id: args.id },
         data: args.data
       });
     },
-    createAd: (parent, args, context, info) => {
-      const user = args.data.userId && { connect: { id: args.data.userId } };
-      const activity = args.data.activityId && {
+    createAd: (parent, args, context, info): Promise<object> => {
+      const user: Object = args.data.userId && {
+        connect: { id: args.data.userId }
+      };
+      const activity: Object = args.data.activityId && {
         connect: { id: args.data.activityId }
       };
-      const location = args.data.locationId && {
+      const location: Object = args.data.locationId && {
         connect: { id: args.data.locationId }
       };
 
@@ -38,7 +40,7 @@ export default {
     }
   },
   Ad: {
-    user: (parent, args, context, info) => {
+    user: (parent, args, context, info): Promise<object> => {
       return (
         parent.userId &&
         context.prisma.user.findOne({
@@ -48,7 +50,7 @@ export default {
         })
       );
     },
-    activity: (parent, args, context, info) => {
+    activity: (parent, args, context, info): Promise<object> => {
       return (
         parent.activityId &&
         context.prisma.activity.findOne({
@@ -58,7 +60,7 @@ export default {
         })
       );
     },
-    location: (parent, args, context, info) => {
+    location: (parent, args, context, info): Promise<object> => {
       return (
         parent.locationId &&
         context.prisma.location.findOne({
@@ -68,7 +70,7 @@ export default {
         })
       );
     },
-    responses: (parent, args, context, info) => {
+    responses: (parent, args, context, info): Promise<object> => {
       return (
         parent.locationId &&
         context.prisma.adResponse.findMany({

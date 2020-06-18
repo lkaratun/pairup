@@ -13,6 +13,8 @@ import ActivityType from "./activity/ActivityType";
 import ActivityResolver from "./activity/ActivityResolver";
 import LocationType from "./location/LocationType";
 import LocationResolver from "./location/LocationResolver";
+import AuthType from "./auth/AuthType";
+import AuthResolver from "./auth/AuthResolver";
 
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
@@ -26,16 +28,18 @@ const server = new ApolloServer({
     ActivityType,
     LocationType,
     AdType,
-    AdResponseType
+    AdResponseType,
+    AuthType
   ],
   resolvers: merge(
     AdResolver,
     AdResponseResolver,
     UserResolver,
     ActivityResolver,
-    LocationResolver
+    LocationResolver,
+    AuthResolver
   ),
-  context: { prisma }
+  context: ctx => ({ ...ctx, prisma })
 });
 
 const app = express();
