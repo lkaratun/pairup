@@ -31,9 +31,6 @@ function Navbar() {
               <Link href="/profile">
                 <NavLink>{`Logged in as: ${firstName}`}</NavLink>
               </Link>
-              <Link href="/profile">
-                <NavLink>Profile</NavLink>
-              </Link>
               <NavLink onClick={() => logOut().then(router.push("/"))}>
                 Log out
               </NavLink>
