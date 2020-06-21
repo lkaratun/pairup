@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Event from "./Event";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
+import { ColoredButton } from "./shared/Buttons";
 
 function filterEvents(events, filters) {
   function compareEventAndFilter(event, filtersObject) {
@@ -53,7 +54,14 @@ const EventList = props => {
   const eventsToShow = makeEventsDomElements(filterEvents(events, filters));
   if (eventsToShow.length === 0)
     return <StyledErrorMsg>No events found</StyledErrorMsg>;
-  return <StyledList>{eventsToShow}</StyledList>;
+  return (
+    <>
+      <StyledList>{eventsToShow}</StyledList>
+      <ColoredButton color="neutral" onClick={props.loadMoreEvents}>
+        Load More
+      </ColoredButton>
+    </>
+  );
 };
 
 export default EventList;
@@ -64,7 +72,8 @@ EventList.propTypes = {
     dateFrom: PropTypes.string,
     city: PropTypes.string,
     activity: PropTypes.string
-  }).isRequired
+  }).isRequired,
+  loadMoreEvents: PropTypes.func.isRequired
 };
 
 const StyledList = styled.div`

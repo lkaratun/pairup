@@ -42,7 +42,7 @@ export async function getServerSideProps({ req }) {
 
 class Dashboard extends Component {
   state = {
-    eventFilters: { dateFrom: null, city: null, activity: null },
+    filters: { dateFrom: null, city: null, activity: null },
     events: this.props.events || [],
     offset: 0,
     cleared: null,
@@ -58,29 +58,29 @@ class Dashboard extends Component {
   updateDate = date => {
     console.log("Dashboard -> date", date);
     const oldState = { ...this.state };
-    const oldFilters = oldState.eventFilters;
+    const oldFilters = oldState.filters;
     oldFilters["dateFrom"] = date;
-    this.setState({ eventFilters: oldFilters, cleared: false });
+    this.setState({ filters: oldFilters, cleared: false });
   };
 
   updateActivity = data => {
     const oldState = { ...this.state };
-    const oldFilters = oldState.eventFilters;
+    const oldFilters = oldState.filters;
     oldFilters["activity"] = data.name;
     // updated the cleared state and filters
-    this.setState({ eventFilters: oldFilters, cleared: false });
+    this.setState({ filters: oldFilters, cleared: false });
   };
 
   updateLocation = data => {
     const oldState = { ...this.state };
-    const oldFilters = oldState.eventFilters;
+    const oldFilters = oldState.filters;
     oldFilters["city"] = data.city;
-    this.setState({ eventFilters: oldFilters, cleared: false });
+    this.setState({ filters: oldFilters, cleared: false });
   };
 
   clearFilters = () => {
     this.setState({
-      eventFilters: { dateFrom: null, city: null, activity: null },
+      filters: { dateFrom: null, city: null, activity: null },
       cleared: true
     });
   };
@@ -89,13 +89,15 @@ class Dashboard extends Component {
     const { offset } = this.state;
     const newOffset = offset + 5;
     const newEvents = await axios({
-      url: `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
+      url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5&offset=${newOffset}`
     });
     console.log(
       "More events URL = ",
       `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
     );
 
+    console.log("Dashboard -> loadMoreEvents -> events", this.state.events);
+    console.log("Dashboard -> loadMoreEvents -> newEvents.data", newEvents);
     this.setState(prevState => ({
       events: [...prevState.events, ...newEvents.data],
       offset: newOffset
@@ -103,7 +105,7 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { events, eventFilters, cleared, screenWidth } = this.state;
+    const { events, filters, cleared, screenWidth } = this.state;
     const mobile = screenWidth && screenWidth < 415;
     return (
       <MainLayout>
@@ -117,10 +119,6 @@ class Dashboard extends Component {
               <br />
               or check out existing events below
             </h4>
-            <DownArrow
-              src=".././static/down-arrow.svg"
-              alt="arrow-pointing-down"
-            />
           </div>
         </TopPanel>
         <Divider>
@@ -153,12 +151,13 @@ class Dashboard extends Component {
             Clear
           </ColoredButton>
         </FilterControlPanel>
-        {events && events.length !== 0 && (
+        {events?.length && (
           <EventContainer>
-            <EventList events={events} filters={eventFilters} />
-            <ColoredButton color="neutral" onClick={this.loadMoreEvents}>
-              Load More
-            </ColoredButton>
+            <EventList
+              events={events}
+              filters={filters}
+              loadMoreEvents={this.loadMoreEvents}
+            />
           </EventContainer>
         )}
       </MainLayout>

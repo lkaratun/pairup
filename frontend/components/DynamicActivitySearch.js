@@ -193,8 +193,6 @@ class DynamicActivitySearch extends React.Component {
   };
 
   handleInputClick = () => {
-    console.log("Clicked Input");
-
     this.setState({ showSuggestions: true });
   };
 

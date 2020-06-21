@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Router from "next/router";
 import styled from "styled-components";
 import axios, { serverSideRequest } from "utils/request";
+import Link from "next/link";
 import MainLayout from "../components/MainLayout";
 import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
 import config from "../config.json";
+import { UserContext } from "../components/UserProvider";
 
 const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
@@ -26,43 +28,53 @@ export async function getServerSideProps({ req }) {
   };
 }
 
-class NewEvent extends React.Component {
-  state = {
-    serverPostFail: false
-  };
+function NewEvent(props) {
+  const [serverPostFail, setServerPostFail] = useState(false);
 
-  createEvent = event => {
+  function createEvent(event) {
     axios({
       method: "post",
       url: `${backendUrlFull}/events`,
       data: event
     })
       .then(() => {
-        this.setState({ serverPostFail: false });
+        setServerPostFail(false);
         Router.push("/events");
       })
       .catch(error => {
         console.error(error.response);
-        this.setState({ serverPostFail: true });
+        setServerPostFail(true);
       });
-  };
+  }
 
-  render() {
-    const { serverPostFail } = this.state;
+  const userContext = useContext(UserContext) || {};
+
+  if (!userContext.firstName) {
     return (
       <MainLayout>
         <EventWrapper>
           <InputSection>
-            <Title>Create New Event</Title>
-            <NewEventForm createEvent={this.createEvent} {...this.props} />
-            {serverPostFail && (
-              <p style={{ color: "red" }}>Event creation failed, try again</p>
-            )}
+            Please <Link href="/login">log in</Link> or{" "}
+            <Link href="/register">register</Link> before creating an event
           </InputSection>
         </EventWrapper>
       </MainLayout>
     );
   }
+
+  return (
+    <MainLayout>
+      <EventWrapper>
+        <InputSection>
+          <Title>Create New Event</Title>
+          <NewEventForm createEvent={createEvent} {...props} />
+          {serverPostFail && (
+            <p style={{ color: "red" }}>Event creation failed, try again</p>
+          )}
+        </InputSection>
+      </EventWrapper>
+    </MainLayout>
+  );
 }
 
 export default NewEvent;
