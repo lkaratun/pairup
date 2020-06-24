@@ -17,12 +17,12 @@ import LocationResolver from "./location/LocationResolver";
 import AuthType from "./auth/AuthType";
 import AuthResolver from "./auth/AuthResolver";
 import AuthRequired from "./directives/AuthRequired";
-const secret = process.env.JWT_SECRET;
-if (!secret) throw new Error("JWT_SECRET env.var missing!");
-
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
-const cookieParser = require("cookie-parser");
+import cookieParser from "cookie-parser";
+
+const secret = process.env.JWT_SECRET;
+if (!secret) throw new Error("JWT_SECRET env.var missing!");
 
 const prisma = new PrismaClient();
 
@@ -50,7 +50,6 @@ const server = new ApolloServer({
     }
   },
   schemaDirectives: { AuthRequired },
-  // schemaDirectives: { upper: UpperCaseDirective },
   context: async ctx => {
     console.log("ctx.req.cookies", ctx.req.cookies);
     return { ...ctx, prisma, cookies: ctx.req.cookies };
