@@ -1,6 +1,7 @@
 const { gql } = require("apollo-server-express");
 
 export default gql`
+  directive @authRequired on FIELD_DEFINITION
   extend type Query {
     user(id: ID!): User
     users: [User]
@@ -11,7 +12,7 @@ export default gql`
 
   type User {
     id: String
-    email: String
+    email: String @authRequired
     bio: String
     firstName: String
     googleAccessToken: String
