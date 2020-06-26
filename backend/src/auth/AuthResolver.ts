@@ -50,7 +50,7 @@ export default {
         });
       const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
       setAuthCookies(context.res, { token, userId: user.id, firstName: user.firstName });
-
+      context.userId = user.id;
       return user;
     },
     logIn: async (parent, args, context, info) => {
@@ -62,7 +62,7 @@ export default {
       else {
         const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
         setAuthCookies(context.res, { token, userId: user.id, firstName: user.firstName });
-
+        context.userId = user.id;
         return user;
       }
     }
