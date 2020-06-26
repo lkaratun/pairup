@@ -14,6 +14,7 @@ export default {
   Query: {
     currentUser: async (parent, args, context, info) => {
       const { token } = context.req.cookies;
+      if (!token) return {};
       const { userId } = jwt.verify(token, SECRET);
       const user = await context.prisma.user.findOne({ where: { id: userId } });
       if (!user) throw new AuthenticationError("User with the given userId was not found");
@@ -49,8 +50,8 @@ export default {
         const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
         context.res.cookie("token", token, {
           expires: addMonths(new Date(), 1),
-          httpOnly: true,
-          domain: FRONTEND_DOMAIN
+          httpOnly: true
+          // domain: FRONTEND_DOMAIN
         });
 
         return user;

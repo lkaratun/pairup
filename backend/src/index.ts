@@ -27,23 +27,8 @@ if (!secret) throw new Error("JWT_SECRET env.var missing!");
 const prisma = new PrismaClient();
 
 const server = new ApolloServer({
-  typeDefs: [
-    typeDefs,
-    UserType,
-    ActivityType,
-    LocationType,
-    AdType,
-    AdResponseType,
-    AuthType
-  ],
-  resolvers: merge(
-    AdResolver,
-    AdResponseResolver,
-    UserResolver,
-    ActivityResolver,
-    LocationResolver,
-    AuthResolver
-  ),
+  typeDefs: [typeDefs, UserType, ActivityType, LocationType, AdType, AdResponseType, AuthType],
+  resolvers: merge(AdResolver, AdResponseResolver, UserResolver, ActivityResolver, LocationResolver, AuthResolver),
   playground: {
     settings: {
       "request.credentials": "same-origin"
@@ -51,8 +36,7 @@ const server = new ApolloServer({
   },
   schemaDirectives: { AuthRequired },
   context: async ctx => {
-    console.log("ctx.req.cookies", ctx.req.cookies);
-    return { ...ctx, prisma, cookies: ctx.req.cookies };
+    return { ...ctx, prisma };
   }
 });
 
@@ -60,6 +44,4 @@ const app = express();
 app.use(cookieParser());
 server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-);
+app.listen({ port: 4000 }, () => console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
