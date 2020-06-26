@@ -9,10 +9,9 @@ export default class AuthRequired extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
     const { resolve = defaultFieldResolver } = field;
     field.resolve = async function(parent, args, context, info) {
-      if (context.userId) return resolve.apply(this, parent, args, context, info);
+      if (context.userId) return resolve.call(this, parent, args, context, info);
 
-      const { cookies } = context;
-      const token = cookies?.token;
+      const { token } = context.req.cookies;
       if (!token) throw new AuthenticationError("Auth token not found");
       const { userId } = jwt.verify(token, secret);
       if (!userId)
@@ -21,7 +20,7 @@ export default class AuthRequired extends SchemaDirectiveVisitor {
         );
 
       context.userId = userId;
-      return resolve.apply(this, parent, args, context, info);
+      return resolve.call(this, parent, args, context, info);
     };
   }
 }
