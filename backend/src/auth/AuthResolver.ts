@@ -11,6 +11,15 @@ if (!SECRET) throw new Error("JWT_SECRET env.var missing!");
 const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
 
 export default {
+  Query: {
+    currentUser: async (parent, args, context, info) => {
+      const { token } = context.req.cookies;
+      const { userId } = jwt.verify(token, SECRET);
+      const user = await context.prisma.user.findOne({ where: { id: userId } });
+      if (!user) throw new AuthenticationError("User with the given userId was not found");
+      return user;
+    }
+  },
   Mutation: {
     register: async (parent, args, context, info) => {
       const { email, password, firstName } = args.data;
