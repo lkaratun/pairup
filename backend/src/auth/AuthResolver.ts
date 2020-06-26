@@ -10,6 +10,23 @@ if (!SECRET) throw new Error("JWT_SECRET env.var missing!");
 
 const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
 
+function setAuthCookies(res, { token, userId, firstName }) {
+  res
+    .cookie("token", token, {
+      expires: addMonths(new Date(), 1),
+      httpOnly: true,
+      domain: FRONTEND_DOMAIN
+    })
+    .cookie("firstName", firstName, {
+      expires: addMonths(new Date(), 1),
+      domain: FRONTEND_DOMAIN
+    })
+    .cookie("userId", userId, {
+      expires: addMonths(new Date(), 1),
+      domain: FRONTEND_DOMAIN
+    });
+}
+
 export default {
   Query: {
     currentUser: async (parent, args, context, info) => {
@@ -32,20 +49,7 @@ export default {
           else throw err;
         });
       const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
-      context.res
-        .cookie("token", token, {
-          expires: addMonths(new Date(), 1),
-          httpOnly: true,
-          domain: FRONTEND_DOMAIN
-        })
-        .cookie("firstName", user.firstName, {
-          expires: addMonths(new Date(), 1),
-          domain: FRONTEND_DOMAIN
-        })
-        .cookie("userId", user.id, {
-          expires: addMonths(new Date(), 1),
-          domain: FRONTEND_DOMAIN
-        });
+      setAuthCookies(context.res, { token, userId: user.id, firstName: user.firstName });
 
       return user;
     },
@@ -57,20 +61,7 @@ export default {
       if (!passwordIsCorrect) throw new AuthenticationError("Password is incorrect");
       else {
         const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
-        context.res
-          .cookie("token", token, {
-            expires: addMonths(new Date(), 1),
-            httpOnly: true,
-            domain: FRONTEND_DOMAIN
-          })
-          .cookie("firstName", user.firstName, {
-            expires: addMonths(new Date(), 1),
-            domain: FRONTEND_DOMAIN
-          })
-          .cookie("userId", user.id, {
-            expires: addMonths(new Date(), 1),
-            domain: FRONTEND_DOMAIN
-          });
+        setAuthCookies(context.res, { token, userId: user.id, firstName: user.firstName });
 
         return user;
       }
