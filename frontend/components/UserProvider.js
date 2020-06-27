@@ -54,11 +54,7 @@ class UserProvider extends React.Component {
     const { children, cookies: existingCookies } = this.props;
     console.log("this.props.cookies = ", existingCookies);
 
-    return (
-      <UserContext.Provider value={{ ...this.state }}>
-        {children}
-      </UserContext.Provider>
-    );
+    return <UserContext.Provider value={{ ...this.state }}>{children}</UserContext.Provider>;
   }
 }
 
@@ -68,5 +64,4 @@ UserProvider.propTypes = {
 
 /* then make a consumer which will surface it */
 const UserConsumer = UserContext.Consumer;
-export default UserProvider;
 export { UserConsumer, UserContext, UserProvider };
