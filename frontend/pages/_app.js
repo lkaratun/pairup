@@ -3,20 +3,18 @@ import Cookie from "cookie";
 import withApollo from "next-with-apollo";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import "react-datepicker/dist/react-datepicker.css";
-import App from "next/app";
-import { merge } from "lodash";
 import { UserProvider } from "../components/UserProvider";
+import { useApollo } from "../lib/apolloClient";
 
-MyApp.getInitialProps = async function(appContext) {
+App.getInitialProps = async function(appContext) {
   const cookies = Cookie.parse(appContext?.ctx?.req?.headers?.cookie);
-  const appProps = await App.getInitialProps(appContext);
-  console.log("merge(appProps, { props: { cookies } })", merge(appProps, { props: { cookies } }));
-  return merge(appProps, { props: { cookies } });
+  return { props: { cookies } };
 };
 
-function MyApp({ Component, props, pageProps, apollo }) {
+function App({ Component, props, pageProps }) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <ApolloProvider client={apollo}>
+    <ApolloProvider client={apolloClient}>
       <UserProvider cookies={props.cookies}>
         <Component {...pageProps} />
       </UserProvider>
@@ -29,4 +27,4 @@ export default withApollo(({ initialState }) => {
     uri: "http://api.local.pair-up.net:4000/graphql",
     cache: new InMemoryCache().restore(initialState || {})
   });
-})(MyApp);
+})(App);
