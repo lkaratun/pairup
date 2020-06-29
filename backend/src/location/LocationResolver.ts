@@ -14,6 +14,9 @@ export default {
         where: { id: args.id },
         data: args.data
       });
+    },
+    createLocation: (parent, args, context, info) => {
+      return context.prisma.location.create(args);
     }
   }
 };

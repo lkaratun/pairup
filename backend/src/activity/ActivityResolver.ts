@@ -12,6 +12,13 @@ export default {
         where: { id: args.id },
         data: args.data
       });
+    },
+    createActivity: (parent, args, context, info) => {
+      return context.prisma.activity.create({
+        data: {
+          name: args.data.name
+        }
+      });
     }
   }
 };

@@ -7,6 +7,7 @@ export default gql`
   }
   extend type Mutation {
     activity(id: ID!, data: ActivityInput): Activity
+    createActivity(data: ActivityInput): Activity
   }
 
   type Activity {
