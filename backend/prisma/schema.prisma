@@ -18,15 +18,15 @@ model Activity {
 model Ad {
   id          String        @default(dbgenerated()) @id
   description String?
-  activity    Activity?     @relation(fields: [activityId], references: [id])
-  activityId  String?
+  activity    Activity      @relation(fields: [activityId], references: [id])
+  activityId  String
   location    Location?     @relation(fields: [locationId], references: [id])
   locationId  String?
-  user        User?         @relation(fields: [userId], references: [id])
-  userId      String?
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
   responses   AdResponse[]
 
-  @@unique([userId, activityId, locationId], name: "UQ_9474149adbfb9452c233d72fa0d")
+  @@unique([userId, activityId], name:"one_activity_per_user")
   @@map(name: "ad")
 }
 
