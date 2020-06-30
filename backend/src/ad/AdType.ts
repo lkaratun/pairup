@@ -22,6 +22,7 @@ export default gql`
 
   input ModifyAdInput {
     description: String
+    imageUrl: String
     userId: ID
     activityId: ID
     locationId: ID
@@ -29,6 +30,7 @@ export default gql`
 
   input NewAdInput {
     description: String
+    imageUrl: String
     userId: ID!
     activityId: ID!
     locationId: ID

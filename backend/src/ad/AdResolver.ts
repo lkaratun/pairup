@@ -30,6 +30,7 @@ export default {
         pickBy({
           data: {
             description: args.data.description,
+            imageUrl: args.data.imageUrl,
             user,
             activity,
             location

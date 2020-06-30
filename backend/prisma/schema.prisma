@@ -18,6 +18,7 @@ model Activity {
 model Ad {
   id          String        @default(dbgenerated()) @id
   description String?
+  imageUrl    String?
   activity    Activity      @relation(fields: [activityId], references: [id])
   activityId  String
   location    Location?     @relation(fields: [locationId], references: [id])
