@@ -13,7 +13,7 @@ App.getInitialProps = async function(appContext) {
 };
 
 function App({ Component, props, pageProps }) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
+  const apolloClient = useApollo(pageProps?.initialApolloState);
   return (
     <ApolloProvider client={apolloClient}>
       <UserProvider cookies={props?.cookies}>
