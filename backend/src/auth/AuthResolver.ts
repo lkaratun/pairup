@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import addMonths from "date-fns/addMonths";
 import config from "../../config.json";
 import jwt from "jsonwebtoken";
+import { resolve } from "path";
 
 const SECRET = process.env.JWT_SECRET;
 const JWT_EXP_THRESHOLD = process.env.JWT_EXP_THRESHOLD || "60d";
@@ -65,6 +66,12 @@ export default {
         context.userId = user.id;
         return user;
       }
+    },
+    logOut: async (parent, args, context, info) => {
+      context.res
+        .clearCookie("token", { domain: FRONTEND_DOMAIN })
+        .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
+        .clearCookie("userId", { domain: FRONTEND_DOMAIN });
     }
   }
 };
