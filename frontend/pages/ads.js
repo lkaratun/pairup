@@ -1,40 +1,42 @@
 import React from "react";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { initializeApollo } from "../lib/apolloClient";
 import Ad from "../components/Ad";
 
-export async function getServerSideProps(ctx) {
-  const apolloClient = initializeApollo();
-
-  const ads = await apolloClient.query({
-    query: gql`
-      query GetAds {
-        ads {
-          id
-          description
-          activity {
-            id
-            name
-          }
-          responses {
-            id
-            user {
-              firstName
-            }
-          }
+const GetAdsQuery = gql`
+  query GetAds {
+    ads {
+      id
+      description
+      activity {
+        id
+        name
+      }
+      responses {
+        id
+        user {
+          firstName
         }
       }
-    `
-  });
-  return { props: { ads: ads.data.ads } };
+    }
+  }
+`;
+
+export async function getServerSideProps(ctx) {
+  const apolloClient = initializeApollo();
+  await apolloClient.query({ query: GetAdsQuery });
+  return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
 function Ads({ ads }) {
+  const { error, data } = useQuery(GetAdsQuery);
+  if (error) return `Error fetching ads data: ${error}`;
+
   return (
     <Container>
       <Header>Ads</Header>
-      {ads.map(ad => (
+      {data.ads.map(ad => (
         <Ad key={ad.id} ad={ad} />
       ))}
     </Container>
