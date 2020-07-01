@@ -33,7 +33,7 @@ export async function getServerSideProps(ctx) {
 function Ads({ ads }) {
   return (
     <Container>
-      <h1>Ads</h1>
+      <Header>Ads</Header>
       {ads.map(ad => (
         <Ad key={ad.id} ad={ad} />
       ))}
@@ -43,15 +43,16 @@ function Ads({ ads }) {
 
 export default Ads;
 
-const h1 = styled.h1`
-  margin: auto;
+const Header = styled.h1`
+  margin: 1rem auto;
+  flex-basis: 100%;
 `;
 
 const Container = styled.div`
   max-width: 80vw;
   margin: 50px auto;
   display: flex;
-  flex-direction: column;
+  flex-flow: row wrap;
   align-items: center;
   text-align: center;
 `;

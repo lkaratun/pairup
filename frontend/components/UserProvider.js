@@ -9,8 +9,8 @@ const UserContext = React.createContext();
 
 class UserProvider extends React.Component {
   state = {
-    firstName: this.props.cookies.firstName,
-    id: parseInt(this.props.cookies.userId, 10),
+    firstName: this.props?.cookies?.firstName,
+    id: parseInt(this.props?.cookies?.userId, 10),
 
     logIn: async ({ email, password }) => {
       const { firstName, id } = await axios
@@ -52,8 +52,6 @@ class UserProvider extends React.Component {
 
   render() {
     const { children, cookies: existingCookies } = this.props;
-    console.log("this.props.cookies = ", existingCookies);
-
     return <UserContext.Provider value={{ ...this.state }}>{children}</UserContext.Provider>;
   }
 }
