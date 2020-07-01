@@ -4,19 +4,6 @@ import device from "../styles/device";
 
 const Footer = () => (
   <StyledFooter>
-    <p>
-      Project developed as part of Chingu Voyage 7 cohort, by&nbsp;
-      <a href="https://github.com/lkaratun" rel="noreferrer noopener" target="_blank">
-        @lkaratun&nbsp;
-      </a>
-      <a href="https://github.com/trolleksii" rel="noreferrer noopener" target="_blank">
-        @trolleksii&nbsp;
-      </a>
-      and&nbsp;
-      <a href="https://github.com/vaidotasp" rel="noreferrer noopener" target="_blank">
-        @vaidotasp&nbsp;
-      </a>
-    </p>
     <div>
       <a rel="noreferrer noopener" target="_blank" href="https://github.com/chingu-voyage7/Bears-Team-09">
         <img src="./static/gh-logo-32.png" alt="github-logo" className="icon" /> Source code
@@ -29,7 +16,7 @@ export default Footer;
 
 const StyledFooter = styled.footer`
   box-sizing: border-box;
-  height: 5rem;
+  height: 2rem;
   color: white;
   background: black;
   padding: 20px;

@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { UserContext } from "components/UserProvider";
 import { WideButton } from "./shared/Buttons";
 
 function Ad({ ad }) {
   const { activity = {}, description } = ad;
+  const user = useContext(UserContext);
   return (
     <AdCard>
       <AdTitle>{activity?.name} </AdTitle>
       <p>{description}</p>
-      <WideButton>Respond</WideButton>
+      {user.id ? (
+        <WideButton>Respond</WideButton>
+      ) : (
+        <NotLoggedInMessage>Please log in to respond to ads</NotLoggedInMessage>
+      )}
     </AdCard>
   );
 }
@@ -33,8 +39,8 @@ const AdTitle = styled.h2`
   }
 `;
 
-const JoinButton = styled.button`
-  margin: auto;
+const NotLoggedInMessage = styled.div`
+  color: hsla(0, 0%, 0%, 0.5);
 `;
 
 export default Ad;
