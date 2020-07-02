@@ -9,8 +9,8 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: "http://api.local.pair-up.net:4000/graphql", // Server URL (must be absolute)
-      credentials: "same-origin" // Additional fetch() options like `credentials` or `headers`
+      uri: "http://api.local.pair-up.net/graphql", // Server URL (must be absolute)
+      credentials: "include" // Additional fetch() options like `credentials` or `headers`
     }),
     cache: new InMemoryCache()
   });
