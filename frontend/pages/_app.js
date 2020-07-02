@@ -1,7 +1,7 @@
 import React from "react";
 import Cookie from "cookie";
 import withApollo from "next-with-apollo";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserProvider } from "../components/UserProvider";
 import { useApollo } from "../lib/apolloClient";
@@ -12,7 +12,7 @@ App.getInitialProps = async function(appContext) {
   return { props: { cookies } };
 };
 
-function App({ Component, props, pageProps }) {
+export default function App({ Component, props, pageProps }) {
   const apolloClient = useApollo(pageProps?.initialApolloState);
   return (
     <ApolloProvider client={apolloClient}>
@@ -24,10 +24,3 @@ function App({ Component, props, pageProps }) {
     </ApolloProvider>
   );
 }
-
-export default withApollo(({ initialState }) => {
-  return new ApolloClient({
-    uri: "http://api.local.pair-up.net:4000/graphql",
-    cache: new InMemoryCache().restore(initialState || {})
-  });
-})(App);
