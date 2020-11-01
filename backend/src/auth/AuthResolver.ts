@@ -33,7 +33,12 @@ export default {
     currentUser: async (parent, args, context, info) => {
       const { token } = context.req.cookies;
       if (!token) return {};
-      const { userId } = jwt.verify(token, SECRET);
+      let userId;
+      try {
+        userId = jwt.verify(token, SECRET).userId;
+      } catch (err) {
+        throw new AuthenticationError("Authentication token has expired, please log in again");
+      }
       const user = await context.prisma.user.findOne({ where: { id: userId } });
       if (!user) throw new AuthenticationError("User with the given userId was not found");
       return user;

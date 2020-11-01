@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import MainLayout from "../components/MainLayout";
-
 export default function Index() {
   return (
     <LandingPage>

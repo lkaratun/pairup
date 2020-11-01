@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
+import { gql, useMutation } from "@apollo/client";
+import { initializeApollo } from "../lib/apolloClient";
 import axios from "../utils/request.js";
 import config from "../config.json";
 
@@ -7,53 +9,58 @@ const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
 const UserContext = React.createContext();
 
-class UserProvider extends React.Component {
-  state = {
-    firstName: this.props?.cookies?.firstName,
-    id: parseInt(this.props?.cookies?.userId, 10),
-
-    logIn: async ({ email, password }) => {
-      const { firstName, id } = await axios
-        .post(`${backendUrlFull}/auth/login`, {
-          email,
-          password
-        })
-        .then(res => res.data)
-        .catch(err => {
-          console.error(err.response);
-        });
-
-      this.setState({ firstName, id });
-      console.log(`Logged in as ${firstName}`);
-    },
-
-    logOut: async () => {
-      await axios({
-        url: `${backendUrlFull}/auth/logout`
+function UserProvider({ cookies, children }) {
+  const [firstName, setFirstName] = useState(cookies?.firstName);
+  const [userId, setUserId] = useState(parseInt(cookies?.userId, 10));
+  const logIn = useCallback(async function({ email, password }) {
+    const { firstName, id } = await axios
+      .post(`${backendUrlFull}/auth/login`, {
+        email,
+        password
+      })
+      .then(res => res.data)
+      .catch(err => {
+        console.error(err.response);
       });
-      this.setState({ firstName: undefined, id: undefined });
-    },
 
-    setUser: ({ firstName, id }) => {
-      this.setState({ firstName, id });
-      console.log(`Logged in as ${firstName}`);
-    },
+    setFirstName(firstName);
+    setUserId(id);
+    console.log(`Logged in as ${firstName}`);
+  }, []);
 
-    updateUser: async newData => {
-      if (Object.keys(newData).length === 0) return null;
-      const response = await axios
-        .put(`${backendUrlFull}/users`, newData)
-        .then(res => res.data)
-        .catch(err => console.error(err.response));
-      this.setState(response);
-      return response;
-    }
-  };
+  const logOut = useCallback(async function() {
+    const logOutMutation = gql`
+      mutation {
+        logOut
+      }
+    `;
+    const apolloClient = initializeApollo();
+    await apolloClient.mutate({ mutation: logOutMutation });
+    setFirstName(undefined);
+    setUserId(undefined);
+  }, []);
 
-  render() {
-    const { children, cookies: existingCookies } = this.props;
-    return <UserContext.Provider value={{ ...this.state }}>{children}</UserContext.Provider>;
-  }
+  const setUser = useCallback(async function({ newFirstName, newId }) {
+    setFirstName(newFirstName);
+    setUserId(newId);
+    console.log(`Logged in as ${newFirstName}`);
+  }, []);
+
+  const updateUser = useCallback(async function(newData) {
+    if (Object.keys(newData).length === 0) return null;
+    const response = await axios
+      .put(`${backendUrlFull}/users`, newData)
+      .then(res => res.data)
+      .catch(err => console.error(err.response));
+    this.setState(response);
+    return response;
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ firstName, userId, logIn, logOut, setUser, updateUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 UserProvider.propTypes = {

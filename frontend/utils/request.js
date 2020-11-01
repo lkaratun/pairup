@@ -1,4 +1,5 @@
 import config from "../config.json";
+import { initializeApollo } from "../lib/apolloClient";
 
 const axios = require("axios");
 
@@ -13,3 +14,14 @@ export const serverSideRequest = req =>
     baseURL: `${backendUrlFull}`,
     headers: { cookie: req?.headers?.cookie || "" }
   });
+
+// export const serverSideGqlRequest = (body, { type = "query" }) => {
+//   const apolloClient = initializeApollo();
+//   const isQuery = Object.keys(body).includes("query");
+//   const isMutation = Object.keys(body).includes("mutation");
+//   if (isQuery && isMutation) throw new Error("You can't perform a query and a mutation at the same time");
+
+//   if (isQuery) return apolloClient.query(body);
+//   if (isMutation) return apolloClient.mutate(body);
+//   return null;
+// };

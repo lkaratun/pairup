@@ -1,29 +1,42 @@
 import React from "react";
-import { serverSideRequest } from "utils/request";
 import cookie from "cookie";
+import { gql, useQuery } from "@apollo/client";
+import { initializeApollo } from "../lib/apolloClient";
 import Profile from "../components/Profile";
-import MainLayout from "../components/MainLayout";
+
+const GetCurrentUserQuery = gql`
+  query GetCurrentUser {
+    currentUser {
+      id
+      firstName
+      bio
+    }
+  }
+`;
 
 export async function getServerSideProps({ req }) {
   const userId = cookie.parse(req?.headers?.cookie).userId;
+  console.log("getServerSideProps -> userId", userId);
   if (!userId) return { props: { userData: {}, events: [] } };
 
-  const [userData, events] = await Promise.all([
-    serverSideRequest(req)({ url: "users" }),
-    serverSideRequest(req)({ url: `users/${userId}/events` })
-  ])
-    .then(arr => arr.map(i => i.data))
-    .catch(console.log);
-
-  return { props: { userData, events } };
+  const apolloClient = initializeApollo();
+  await apolloClient.query({ query: GetCurrentUserQuery }).catch(console.error);
+  return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
+// export async function getServerSideProps2({ req }) {
+//   const [userData, events] = await Promise.all([
+//     serverSideRequest(req)({ url: "users" }),
+//     serverSideRequest(req)({ url: `users/${userId}/events` })
+//   ]).then(arr => arr.map(i => i.data));
+
+//   return { props: { userData, events } };
+// }
+
 function ProfilePage(props) {
-  return (
-    <MainLayout>
-      <Profile {...props} />
-    </MainLayout>
-  );
+  const { error, data } = useQuery(GetCurrentUserQuery);
+  console.log("ProfilePage -> { error, data }", { error, data });
+  return <Profile {...props} />;
 }
 
 export default ProfilePage;

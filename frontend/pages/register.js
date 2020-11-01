@@ -2,27 +2,25 @@ import React, { Component } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import RegisterForm from "../components/RegisterForm";
-import MainLayout from "../components/MainLayout";
+
 import { UserConsumer } from "../components/UserProvider";
 import device from "../styles/device";
 
 class Register extends Component {
   render() {
     return (
-      <MainLayout>
-        <RegisterWrapper>
-          <InputSection>
-            <Title>Register</Title>
-            <LinkWrapper>
-              <p>If you have an account:&nbsp; </p>
-              <Link href="/register">
-                <StyledLink>log in!</StyledLink>
-              </Link>
-            </LinkWrapper>
-            <UserConsumer>{context => <RegisterForm context={context} />}</UserConsumer>
-          </InputSection>
-        </RegisterWrapper>
-      </MainLayout>
+      <RegisterWrapper>
+        <InputSection>
+          <Title>Register</Title>
+          <LinkWrapper>
+            <p>If you have an account:&nbsp; </p>
+            <Link href="/register">
+              <StyledLink>log in!</StyledLink>
+            </Link>
+          </LinkWrapper>
+          <UserConsumer>{context => <RegisterForm context={context} />}</UserConsumer>
+        </InputSection>
+      </RegisterWrapper>
     );
   }
 }

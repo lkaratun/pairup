@@ -34,8 +34,6 @@ MainLayout.propTypes = {
 };
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,600,600i,700,700i');
-  
   html,
   body {
     height:100%;

@@ -20,40 +20,24 @@ function isUserAttending(userId, attendees) {
 }
 
 function EventPage(props) {
-  const {
-    name,
-    description,
-    country,
-    city,
-    authorId,
-    dateFrom,
-    dateTo,
-    maxPeople,
-    activity
-  } = props;
+  const { name, description, country, city, authorId, dateFrom, dateTo, maxPeople, activity } = props;
 
   const [attendees, setAttendees] = useState(props.attendees);
   const [modalIsVisible, setModalVisible] = useState(false);
-  const [imageUrl, setImageUrl] = useState(
-    props.image || "../static/stock-event.jpg"
-  );
+  const [imageUrl, setImageUrl] = useState(props.image || "../static/stock-event.jpg");
   const user = useContext(UserContext);
   console.log("EventPage -> user", user);
   const userId = user.id;
   console.log("EventPage -> userId", userId);
-  const [userIsAttending, setUserIsAttending] = useState(
-    isUserAttending(userId, attendees)
-  );
+  const [userIsAttending, setUserIsAttending] = useState(isUserAttending(userId, attendees));
 
   if (!name)
     return (
-      <MainLayout>
-        <Container>
-          <EventCard>
-            <Name>Event not found</Name>
-          </EventCard>
-        </Container>
-      </MainLayout>
+      <Container>
+        <EventCard>
+          <Name>Event not found</Name>
+        </EventCard>
+      </Container>
     );
   const deleteEvent = () => {
     const { router } = props;
@@ -102,75 +86,61 @@ function EventPage(props) {
   const spotsLeft = maxPeople - attendees.length;
 
   return (
-    <MainLayout>
-      <Container>
-        <EventCard>
-          <Name>{name}</Name>
-          <InfoWrapper>
-            <InfoPanel>
-              <Title>Activity</Title>
-              <SubTitle>{activity}</SubTitle>
-              <Title>Description</Title>
-              <SubTitle>{description}</SubTitle>
-              <div>
-                <Title>Location: </Title>
-                {city ? (
-                  <SubTitle>
-                    {city}, {country}
-                  </SubTitle>
-                ) : (
-                  <SubTitle>TBD</SubTitle>
-                )}
-              </div>
-              <div>
-                <Title>Starts: </Title>
-                <SubTitle>{format(dateFrom, "MMMM DD, YYYY")}</SubTitle>
-              </div>
-              <div>
-                <Title>Ends: </Title>
-                <SubTitle>{format(dateTo, "MMMM DD, YYYY")}</SubTitle>
-              </div>
-            </InfoPanel>
+    <Container>
+      <EventCard>
+        <Name>{name}</Name>
+        <InfoWrapper>
+          <InfoPanel>
+            <Title>Activity</Title>
+            <SubTitle>{activity}</SubTitle>
+            <Title>Description</Title>
+            <SubTitle>{description}</SubTitle>
             <div>
-              <EventImage src={imageUrl} alt="people in a group" />
-              {userId === authorId && (
-                <ImageUploader
-                  url={`/events/${props.router.query.id}/images`}
-                  onCompletion={setImageUrl}
-                />
+              <Title>Location: </Title>
+              {city ? (
+                <SubTitle>
+                  {city}, {country}
+                </SubTitle>
+              ) : (
+                <SubTitle>TBD</SubTitle>
               )}
             </div>
-          </InfoWrapper>
-          <Attendees attendees={attendees} />
-          <JoinPanel>
-            <AvailableSpotsLeftNotice
-              spotsLeft={spotsLeft}
-              maxPeople={maxPeople}
-            />
-            <ControlledAttendanceButtons
-              userId={userId}
-              authorId={authorId}
-              userIsAttending={userIsAttending}
-              leaveEvent={leaveEvent}
-              joinEvent={joinEvent}
-              eventIsFull={spotsLeft === 0}
-            />
-          </JoinPanel>
-          <ControlButtons>
-            {Number(userId) === Number(authorId) && (
-              <DeleteButton onClick={() => setModalVisible(true)}>
-                Delete
-              </DeleteButton>
+            <div>
+              <Title>Starts: </Title>
+              <SubTitle>{format(dateFrom, "MMMM DD, YYYY")}</SubTitle>
+            </div>
+            <div>
+              <Title>Ends: </Title>
+              <SubTitle>{format(dateTo, "MMMM DD, YYYY")}</SubTitle>
+            </div>
+          </InfoPanel>
+          <div>
+            <EventImage src={imageUrl} alt="people in a group" />
+            {userId === authorId && (
+              <ImageUploader url={`/events/${props.router.query.id}/images`} onCompletion={setImageUrl} />
             )}
-          </ControlButtons>
-          <Modal
-            showModal={modalIsVisible}
-            hide={() => setModalVisible(false)}
-            confirm={deleteEvent}
+          </div>
+        </InfoWrapper>
+        <Attendees attendees={attendees} />
+        <JoinPanel>
+          <AvailableSpotsLeftNotice spotsLeft={spotsLeft} maxPeople={maxPeople} />
+          <ControlledAttendanceButtons
+            userId={userId}
+            authorId={authorId}
+            userIsAttending={userIsAttending}
+            leaveEvent={leaveEvent}
+            joinEvent={joinEvent}
+            eventIsFull={spotsLeft === 0}
           />
-        </EventCard>
-      </Container>
-    </MainLayout>
+        </JoinPanel>
+        <ControlButtons>
+          {Number(userId) === Number(authorId) && (
+            <DeleteButton onClick={() => setModalVisible(true)}>Delete</DeleteButton>
+          )}
+        </ControlButtons>
+        <Modal showModal={modalIsVisible} hide={() => setModalVisible(false)} confirm={deleteEvent} />
+      </EventCard>
+    </Container>
   );
 }
 
@@ -184,14 +154,7 @@ function AvailableSpotsLeftNotice({ spotsLeft, maxPeople }) {
   return <h4>{spotsLeft} spot(s) left</h4>;
 }
 
-function ControlledAttendanceButtons({
-  userId,
-  authorId,
-  userIsAttending,
-  leaveEvent,
-  joinEvent,
-  eventIsFull
-}) {
+function ControlledAttendanceButtons({ userId, authorId, userIsAttending, leaveEvent, joinEvent, eventIsFull }) {
   const userIsOwner = userId === authorId;
   if (userIsOwner) {
     return null;

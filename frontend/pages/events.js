@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import axios, { serverSideRequest } from "utils/request";
-import MainLayout from "../components/MainLayout";
+
 import EventList from "../components/EventList";
 import device from "../styles/device";
 import config from "../config.json";
@@ -14,23 +14,22 @@ import DynamicActivitySearch from "../components/DynamicActivitySearch";
 
 const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
-const DateSelectorDynamic = dynamic(
-  () => import("../components/DateSelector"),
-  {
-    ssr: false
-  }
-);
+const DateSelectorDynamic = dynamic(() => import("../components/DateSelector"), {
+  ssr: false
+});
 
 export async function getServerSideProps({ req }) {
   // By default, fetch 5 future events
-  const [events, activities, locations] = await Promise.all([
+  const temp = await Promise.all([
     serverSideRequest(req)({
       url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5`
     }),
     serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
     serverSideRequest(req)({ url: `${backendUrlFull}/locations` })
   ]).catch(err => console.error(err.response));
+  console.log("getServerSideProps -> temp", temp);
 
+  const [events, activities, locations] = temp;
   return {
     props: {
       events: events.data,
@@ -91,10 +90,7 @@ class Dashboard extends Component {
     const newEvents = await axios({
       url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5&offset=${newOffset}`
     });
-    console.log(
-      "More events URL = ",
-      `${backendUrlFull}/events?&limit=5&offset=${newOffset}`
-    );
+    console.log("More events URL = ", `${backendUrlFull}/events?&limit=5&offset=${newOffset}`);
 
     console.log("Dashboard -> loadMoreEvents -> events", this.state.events);
     console.log("Dashboard -> loadMoreEvents -> newEvents.data", newEvents);
@@ -108,7 +104,7 @@ class Dashboard extends Component {
     const { events, filters, cleared, screenWidth } = this.state;
     const mobile = screenWidth && screenWidth < 415;
     return (
-      <MainLayout>
+      
         <TopPanel>
           <div>
             <h4>
@@ -141,26 +137,17 @@ class Dashboard extends Component {
             cleared={cleared}
             locations={this.props.locations}
           />
-          <DateSelectorDynamic
-            placeholder="date"
-            updateSelection={this.updateDate}
-            cleared={cleared}
-            mobile={mobile}
-          />
+          <DateSelectorDynamic placeholder="date" updateSelection={this.updateDate} cleared={cleared} mobile={mobile} />
           <ColoredButton type="button" onClick={this.clearFilters} color="gray">
             Clear
           </ColoredButton>
         </FilterControlPanel>
         {events?.length && (
           <EventContainer>
-            <EventList
-              events={events}
-              filters={filters}
-              loadMoreEvents={this.loadMoreEvents}
-            />
+            <EventList events={events} filters={filters} loadMoreEvents={this.loadMoreEvents} />
           </EventContainer>
         )}
-      </MainLayout>
+      
     );
   }
 }
@@ -173,11 +160,7 @@ const TopPanel = styled.div`
   padding-top: 50px;
   padding-bottom: 50px;
   background: rgb(22, 67, 75);
-  background: linear-gradient(
-    90deg,
-    rgba(22, 67, 75, 1) 0%,
-    rgba(28, 12, 91, 1) 100%
-  );
+  background: linear-gradient(90deg, rgba(22, 67, 75, 1) 0%, rgba(28, 12, 91, 1) 100%);
   color: white;
   display: grid;
   grid-template-columns: 1fr;

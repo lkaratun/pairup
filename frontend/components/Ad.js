@@ -10,7 +10,7 @@ function Ad({ ad }) {
     <AdCard>
       <AdTitle>{activity?.name} </AdTitle>
       <p>{description}</p>
-      {user.id ? (
+      {user.userId ? (
         <WideButton>Respond</WideButton>
       ) : (
         <NotLoggedInMessage>Please log in to respond to ads</NotLoggedInMessage>

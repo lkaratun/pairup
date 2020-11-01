@@ -3,7 +3,7 @@ import Router from "next/router";
 import styled from "styled-components";
 import axios, { serverSideRequest } from "utils/request";
 import Link from "next/link";
-import MainLayout from "../components/MainLayout";
+
 import NewEventForm from "../components/NewEventForm";
 import device from "../styles/device";
 import config from "../config.json";
@@ -51,29 +51,22 @@ function NewEvent(props) {
 
   if (!userContext.firstName) {
     return (
-      <MainLayout>
-        <EventWrapper>
-          <InputSection>
-            Please <Link href="/login">log in</Link> or{" "}
-            <Link href="/register">register</Link> before creating an event
-          </InputSection>
-        </EventWrapper>
-      </MainLayout>
+      <EventWrapper>
+        <InputSection>
+          Please <Link href="/login">log in</Link> or <Link href="/register">register</Link> before creating an event
+        </InputSection>
+      </EventWrapper>
     );
   }
 
   return (
-    <MainLayout>
-      <EventWrapper>
-        <InputSection>
-          <Title>Create New Event</Title>
-          <NewEventForm createEvent={createEvent} {...props} />
-          {serverPostFail && (
-            <p style={{ color: "red" }}>Event creation failed, try again</p>
-          )}
-        </InputSection>
-      </EventWrapper>
-    </MainLayout>
+    <EventWrapper>
+      <InputSection>
+        <Title>Create New Event</Title>
+        <NewEventForm createEvent={createEvent} {...props} />
+        {serverPostFail && <p style={{ color: "red" }}>Event creation failed, try again</p>}
+      </InputSection>
+    </EventWrapper>
   );
 }
 

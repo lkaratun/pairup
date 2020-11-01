@@ -7,6 +7,7 @@ import BioModal from "./BioModal";
 import NameModal from "./NameModal";
 
 function Profile(props) {
+  return null;
   const [userData, setUserData] = useState({
     lastName: props.userData.lastName,
     email: props.userData.email,
@@ -20,8 +21,7 @@ function Profile(props) {
 
   const { lastName, email, image, bio } = userData;
 
-  const renderEvents = eventsArray =>
-    eventsArray.map(event => <Event {...event} key={event.id} />);
+  const renderEvents = eventsArray => eventsArray.map(event => <Event {...event} key={event.id} />);
 
   const showNameEditor = () => setNameEditorOpened(true);
 
@@ -33,9 +33,7 @@ function Profile(props) {
             <ProfileImage src={image} />
             <ImageUploader
               url="/users/images"
-              onCompletion={newImage =>
-                setUserData({ ...userData, image: newImage })
-              }
+              onCompletion={newImage => setUserData({ ...userData, image: newImage })}
               style={{ gridColumn: "1 / span 1", gridRow: "2 / span 1" }}
             />
             <PersonalInfo>
@@ -50,28 +48,20 @@ function Profile(props) {
               {bio !== null && bio !== "null" && bio !== "" ? (
                 <p>
                   <strong>Bio</strong>
-                  <EditButton onClick={() => setBioEditorOpened(true)}>
-                    (edit)
-                  </EditButton>
+                  <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton>
                   <br /> {bio}
                 </p>
               ) : (
                 <p>
                   No bio
-                  <EditButton onClick={() => setBioEditorOpened(true)}>
-                    (add)
-                  </EditButton>
+                  <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton>
                 </p>
               )}
               <BioModal
                 showModal={bioEditorOpened}
                 hide={() => setBioEditorOpened(false)}
                 initialBio={userData.bio}
-                confirm={newBio =>
-                  updateUser({ bio: newBio }).then(res =>
-                    setUserData({ ...userData, bio: res.bio })
-                  )
-                }
+                confirm={newBio => updateUser({ bio: newBio }).then(res => setUserData({ ...userData, bio: res.bio }))}
               />
               <NameModal
                 showModal={nameEditorOpened}
