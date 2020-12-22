@@ -1,10 +1,10 @@
 {
   "development": {
-    "BACKEND_URL": "//api.local.pair-up.net",
-    "BACKEND_URL_FULL": "http://api.local.pair-up.net"
+    "BACKEND_URL": "//api.local.pair-up.net/graphql",
+    "BACKEND_URL_FULL": "http://api.local.pair-up.net/graphql"
   },
   "production": {
-    "BACKEND_URL": "//api.pair-up.net",
-    "BACKEND_URL_FULL": "https://api.pair-up.net"
+    "BACKEND_URL": "//api.pair-up.net/graphql",
+    "BACKEND_URL_FULL": "https://api.pair-up.net/graphql"
   }
 }

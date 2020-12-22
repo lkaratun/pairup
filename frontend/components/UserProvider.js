@@ -12,21 +12,27 @@ const UserContext = React.createContext();
 function UserProvider({ cookies, children }) {
   const [firstName, setFirstName] = useState(cookies?.firstName);
   const [userId, setUserId] = useState(parseInt(cookies?.userId, 10));
-  const logIn = useCallback(async function({ email, password }) {
-    const { firstName, id } = await axios
-      .post(`${backendUrlFull}/auth/login`, {
-        email,
-        password
-      })
-      .then(res => res.data)
-      .catch(err => {
-        console.error(err.response);
-      });
+  const logIn = useCallback(
+    async function({ email, password }) {
+      const logInMutation = gql`
+        mutation logIn($email: String!, $password: String!) {
+          logIn(email: $email, password: $password) {
+            firstName
+            email
+            id
+            password
+          }
+        }
+      `;
 
-    setFirstName(firstName);
-    setUserId(id);
-    console.log(`Logged in as ${firstName}`);
-  }, []);
+      const apolloClient = initializeApollo();
+      const { data } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+      setFirstName(data.firstName);
+      setUserId(data.id);
+      console.log(`Logged in as ${firstName}`);
+    },
+    [firstName]
+  );
 
   const logOut = useCallback(async function() {
     const logOutMutation = gql`

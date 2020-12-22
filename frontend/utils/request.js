@@ -12,7 +12,8 @@ export default axios.create({
 export const serverSideRequest = req =>
   axios.create({
     baseURL: `${backendUrlFull}`,
-    headers: { cookie: req?.headers?.cookie || "" }
+    headers: { cookie: req?.headers?.cookie || "" },
+    method: "post"
   });
 
 // export const serverSideGqlRequest = (body, { type = "query" }) => {

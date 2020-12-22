@@ -50,10 +50,7 @@ export default () => {
         />
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
         <HalfWidthButton>Log in</HalfWidthButton>
-        <HalfWidthButton
-          type="button"
-          onClick={() => router.push(`${backendUrl}/auth/google`)}
-        >
+        <HalfWidthButton type="button" onClick={() => router.push(`${backendUrl}`)}>
           Log in with Google
         </HalfWidthButton>
       </form>
