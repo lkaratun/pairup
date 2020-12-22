@@ -19,22 +19,25 @@ const DateSelectorDynamic = dynamic(() => import("../components/DateSelector"), 
 });
 
 export async function getServerSideProps({ req }) {
-  // By default, fetch 5 future events
-  const temp = await Promise.all([
-    serverSideRequest(req)({
-      url: `${backendUrlFull}/events?timestamp=${Date.now()}&limit=5`
-    }),
-    serverSideRequest(req)({ url: `${backendUrlFull}/activities` }),
-    serverSideRequest(req)({ url: `${backendUrlFull}/locations` })
-  ]).catch(err => console.error(err.response));
+  const temp = await serverSideRequest(req)({
+    data: {
+      query: `query activities {
+        activities {
+          id
+          name
+        }
+      }`
+    }
+  })
+    .then(res => res.data.data)
+    .catch(err => console.error(err.response.data));
   console.log("getServerSideProps -> temp", temp);
 
-  const [events, activities, locations] = temp;
+  const { activities } = temp;
+
   return {
     props: {
-      events: events.data,
-      activities: activities.data,
-      locations: locations.data
+      activities
     }
   };
 }
@@ -104,7 +107,7 @@ class Dashboard extends Component {
     const { events, filters, cleared, screenWidth } = this.state;
     const mobile = screenWidth && screenWidth < 415;
     return (
-      
+      <>
         <TopPanel>
           <div>
             <h4>
@@ -123,7 +126,7 @@ class Dashboard extends Component {
           </h4>
         </Divider>
         <FilterControlPanel>
-          <DynamicActivitySearch
+          {/* <DynamicActivitySearch
             // placeholder="Activity"
             allowNew={false}
             updateActivity={this.updateActivity}
@@ -136,7 +139,7 @@ class Dashboard extends Component {
             allowNew={false}
             cleared={cleared}
             locations={this.props.locations}
-          />
+          /> */}
           <DateSelectorDynamic placeholder="date" updateSelection={this.updateDate} cleared={cleared} mobile={mobile} />
           <ColoredButton type="button" onClick={this.clearFilters} color="gray">
             Clear
@@ -147,7 +150,7 @@ class Dashboard extends Component {
             <EventList events={events} filters={filters} loadMoreEvents={this.loadMoreEvents} />
           </EventContainer>
         )}
-      
+      </>
     );
   }
 }
