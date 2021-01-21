@@ -49,7 +49,7 @@ export default () => {
           required
         />
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
-        <HalfWidthButton>Log in</HalfWidthButton>
+        <HalfWidthButton type="submit">Log in</HalfWidthButton>
         <HalfWidthButton type="button" onClick={() => router.push(`${backendUrl}`)}>
           Log in with Google
         </HalfWidthButton>

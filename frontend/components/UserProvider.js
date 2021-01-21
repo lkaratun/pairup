@@ -40,9 +40,11 @@ function UserProvider({ cookies, children }) {
       `;
 
       const apolloClient = initializeApollo();
-      const { data } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
-      updateFirstName(data.firstName);
-      updateUserId(data.id);
+      const {
+        data: { logIn: logInData }
+      } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+      setFirstName(logInData.firstName);
+      setUserId(logInData.id);
       console.log(`Logged in as ${firstName}`);
     },
     [firstName]
