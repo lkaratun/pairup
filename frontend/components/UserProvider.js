@@ -12,7 +12,7 @@ const UserContext = React.createContext();
 
 function UserProvider({ cookies, children }) {
   const [firstName, setFirstName] = useState(cookies?.firstName);
-  const [userId, setUserId] = useState(parseInt(cookies?.userId, 10));
+  const [userId, setUserId] = useState(cookies?.userId);
 
   const updateFirstName = name => {
     if (!name) document.cookie = cookie.serialize("firstName", "", { maxAge: 0 });
@@ -26,29 +26,25 @@ function UserProvider({ cookies, children }) {
     setUserId(id);
   };
 
-  const logIn = useCallback(
-    async function({ email, password }) {
-      const logInMutation = gql`
-        mutation logIn($email: String!, $password: String!) {
-          logIn(email: $email, password: $password) {
-            firstName
-            email
-            id
-            password
-          }
+  const logIn = useCallback(async function({ email, password }) {
+    const logInMutation = gql`
+      mutation logIn($email: String!, $password: String!) {
+        logIn(email: $email, password: $password) {
+          firstName
+          email
+          id
+          password
         }
-      `;
+      }
+    `;
 
-      const apolloClient = initializeApollo();
-      const {
-        data: { logIn: logInData }
-      } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
-      setFirstName(logInData.firstName);
-      setUserId(logInData.id);
-      console.log(`Logged in as ${firstName}`);
-    },
-    [firstName]
-  );
+    const apolloClient = initializeApollo();
+    const {
+      data: { logIn: logInData }
+    } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+    setFirstName(logInData.firstName);
+    setUserId(logInData.id);
+  }, []);
 
   const logOut = useCallback(async function() {
     const logOutMutation = gql`

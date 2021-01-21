@@ -6,6 +6,7 @@ import { WideButton } from "./shared/Buttons";
 function Ad({ ad }) {
   const { activity = {}, description } = ad;
   const user = useContext(UserContext);
+  console.log("🚀 ~ file: Ad.js ~ line 9 ~ Ad ~ user", user);
   return (
     <AdCard>
       <AdTitle>{activity?.name} </AdTitle>
