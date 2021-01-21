@@ -1,5 +1,5 @@
 import React from "react";
-import Cookie from "cookie";
+import cookie from "cookie";
 import withApollo from "next-with-apollo";
 import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,7 +8,7 @@ import { useApollo } from "../lib/apolloClient";
 import MainLayout from "../components/MainLayout";
 
 App.getInitialProps = async function(appContext) {
-  const cookies = Cookie.parse(appContext?.ctx?.req?.headers?.cookie || "");
+  const cookies = cookie.parse(appContext?.ctx?.req?.headers?.cookie || "");
   return { props: { cookies } };
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { gql, useMutation } from "@apollo/client";
+import cookie from "cookie";
 import { initializeApollo } from "../lib/apolloClient";
 import axios from "../utils/request.js";
 import config from "../config.json";
@@ -12,6 +13,19 @@ const UserContext = React.createContext();
 function UserProvider({ cookies, children }) {
   const [firstName, setFirstName] = useState(cookies?.firstName);
   const [userId, setUserId] = useState(parseInt(cookies?.userId, 10));
+
+  const updateFirstName = name => {
+    if (!name) document.cookie = cookie.serialize("firstName", "", { maxAge: 0 });
+    else document.cookie = cookie.serialize("firstName", name);
+    setFirstName(name);
+  };
+
+  const updateUserId = id => {
+    if (!id) document.cookie = cookie.serialize("firstName", "", { maxAge: 0 });
+    document.cookie = cookie.serialize("userId", id ?? null);
+    setUserId(id);
+  };
+
   const logIn = useCallback(
     async function({ email, password }) {
       const logInMutation = gql`
@@ -27,8 +41,8 @@ function UserProvider({ cookies, children }) {
 
       const apolloClient = initializeApollo();
       const { data } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
-      setFirstName(data.firstName);
-      setUserId(data.id);
+      updateFirstName(data.firstName);
+      updateUserId(data.id);
       console.log(`Logged in as ${firstName}`);
     },
     [firstName]
@@ -42,13 +56,13 @@ function UserProvider({ cookies, children }) {
     `;
     const apolloClient = initializeApollo();
     await apolloClient.mutate({ mutation: logOutMutation });
-    setFirstName(undefined);
-    setUserId(undefined);
+    updateFirstName(undefined);
+    updateUserId(undefined);
   }, []);
 
   const setUser = useCallback(async function({ newFirstName, newId }) {
-    setFirstName(newFirstName);
-    setUserId(newId);
+    updateFirstName(newFirstName);
+    updateUserId(newId);
     console.log(`Logged in as ${newFirstName}`);
   }, []);
 
