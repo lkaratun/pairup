@@ -21,7 +21,7 @@ function UserProvider({ cookies, children }) {
   };
 
   const updateUserId = id => {
-    if (!id) document.cookie = cookie.serialize("firstName", "", { maxAge: 0 });
+    if (!id) document.cookie = cookie.serialize("userId", "", { maxAge: 0 });
     document.cookie = cookie.serialize("userId", id ?? null);
     setUserId(id);
   };
