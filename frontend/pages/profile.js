@@ -35,8 +35,12 @@ export async function getServerSideProps({ req }) {
 
 function ProfilePage(props) {
   const { error, data } = useQuery(GetCurrentUserQuery);
+
   console.log("ProfilePage -> { error, data }", { error, data });
-  return <Profile {...props} />;
+  if (error) {
+    return <>{`An error has occurred:  ${error}`}</>;
+  }
+  return <Profile {...props} {...data} />;
 }
 
 export default ProfilePage;

@@ -7,19 +7,20 @@ import BioModal from "./BioModal";
 import NameModal from "./NameModal";
 
 function Profile(props) {
-  return null;
-  const [userData, setUserData] = useState({
-    lastName: props.userData.lastName,
-    email: props.userData.email,
-    image: props.userData.image || "../static/no_photo.jpg",
-    bio: props.userData.bio
+  // return null;
+  const [currentUser, setCurrentUser] = useState({
+    firstName: props.currentUser?.firstName,
+    lastName: props.currentUser?.lastName,
+    email: props.currentUser?.email,
+    image: props.currentUser?.image ?? "../static/no_photo.jpg",
+    bio: props.currentUser?.bio
   });
   const [bioEditorOpened, setBioEditorOpened] = useState(false);
   const [nameEditorOpened, setNameEditorOpened] = useState(false);
   const userContext = useContext(UserContext) || {};
   const { firstName, updateUser } = userContext;
 
-  const { lastName, email, image, bio } = userData;
+  const { lastName, email, image, bio } = currentUser;
 
   const renderEvents = eventsArray => eventsArray.map(event => <Event {...event} key={event.id} />);
 
@@ -33,7 +34,7 @@ function Profile(props) {
             <ProfileImage src={image} />
             <ImageUploader
               url="/users/images"
-              onCompletion={newImage => setUserData({ ...userData, image: newImage })}
+              onCompletion={newImage => setCurrentUser({ ...currentUser, image: newImage })}
               style={{ gridColumn: "1 / span 1", gridRow: "2 / span 1" }}
             />
             <PersonalInfo>
@@ -60,20 +61,22 @@ function Profile(props) {
               <BioModal
                 showModal={bioEditorOpened}
                 hide={() => setBioEditorOpened(false)}
-                initialBio={userData.bio}
-                confirm={newBio => updateUser({ bio: newBio }).then(res => setUserData({ ...userData, bio: res.bio }))}
+                initialBio={currentUser.bio}
+                confirm={newBio =>
+                  updateUser({ bio: newBio }).then(res => setCurrentUser({ ...currentUser, bio: res.bio }))
+                }
               />
               <NameModal
                 showModal={nameEditorOpened}
                 hide={() => setNameEditorOpened(false)}
-                initialLastName={userData.lastName}
+                initialLastName={currentUser.lastName}
                 confirm={(newFirstName, newLastName) =>
                   updateUser({
                     firstName: newFirstName,
                     lastName: newLastName
                   }).then(res =>
-                    setUserData({
-                      ...userData,
+                    setCurrentUser({
+                      ...currentUser,
                       firstName: res.firstName,
                       lastName: res.lastName
                     })
@@ -83,10 +86,10 @@ function Profile(props) {
             </PersonalInfo>
           </SideBar>
 
-          <MainContent>
+          {/* <MainContent>
             <h2 style={{ marginTop: "0", marginBottom: "0" }}>My events</h2>
             {renderEvents(props.events)}
-          </MainContent>
+          </MainContent> */}
         </GridWrapper>
       ) : (
         "Please log in to view this page"

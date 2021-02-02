@@ -24,7 +24,9 @@ import cookieParser from "cookie-parser";
 const secret = process.env.JWT_SECRET;
 if (!secret) throw new Error("JWT_SECRET env.var missing!");
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  // log: ["query", "info", "warn"]
+});
 
 const server = new ApolloServer({
   typeDefs: [typeDefs, UserType, ActivityType, LocationType, AdType, AdResponseType, AuthType],

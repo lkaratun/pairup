@@ -66,11 +66,20 @@ function UserProvider({ cookies, children }) {
 
   const updateUser = useCallback(async function(newData) {
     if (Object.keys(newData).length === 0) return null;
-    const response = await axios
-      .put(`${backendUrlFull}/users`, newData)
-      .then(res => res.data)
-      .catch(err => console.error(err.response));
-    this.setState(response);
+    const updateUserMutation = gql`
+      mutation updateUser($data: UserInput!, $id: ID!) {
+        user(data: $data, id: $id) {
+          firstName
+          id
+        }
+      }
+    `;
+
+    const apolloClient = initializeApollo();
+    const response = await apolloClient.mutate({ mutation: updateUserMutation });
+    console.log("🚀 ~ file: UserProvider.js ~ line 77 ~ updateUser ~ response", response);
+
+    updateFirstName(response);
     return response;
   }, []);
 
