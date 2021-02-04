@@ -21,8 +21,8 @@ function Navbar() {
           </Link>
         </li>
         <li>
-          <Link href="/events">
-            <NavLink>Events</NavLink>
+          <Link href="/ads">
+            <NavLink>Ads</NavLink>
           </Link>
         </li>
         {firstName ? (

@@ -7,7 +7,6 @@ import BioModal from "./BioModal";
 import NameModal from "./NameModal";
 
 function Profile(props) {
-  // return null;
   const [currentUser, setCurrentUser] = useState({
     firstName: props.currentUser?.firstName,
     lastName: props.currentUser?.lastName,
@@ -25,6 +24,24 @@ function Profile(props) {
   const renderEvents = eventsArray => eventsArray.map(event => <Event {...event} key={event.id} />);
 
   const showNameEditor = () => setNameEditorOpened(true);
+
+  const renderNameEditModal = () => <NameModal
+  showModal={nameEditorOpened}
+  hide={() => setNameEditorOpened(false)}
+  initialLastName={currentUser.lastName}
+  confirm={(newFirstName, newLastName) =>
+    updateUser({
+      firstName: newFirstName,
+      lastName: newLastName
+    }).then(res =>
+      setCurrentUser({
+        ...currentUser,
+        firstName: res.firstName,
+        lastName: res.lastName
+      })
+    )
+  }
+/>;
 
   return (
     <Container>
@@ -46,7 +63,7 @@ function Profile(props) {
               <strong>Email</strong> <br />
               {email}
               <br />
-              {bio !== null && bio !== "null" && bio !== "" ? (
+              {bio ? (
                 <p>
                   <strong>Bio</strong>
                   <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton>
@@ -64,23 +81,6 @@ function Profile(props) {
                 initialBio={currentUser.bio}
                 confirm={newBio =>
                   updateUser({ bio: newBio }).then(res => setCurrentUser({ ...currentUser, bio: res.bio }))
-                }
-              />
-              <NameModal
-                showModal={nameEditorOpened}
-                hide={() => setNameEditorOpened(false)}
-                initialLastName={currentUser.lastName}
-                confirm={(newFirstName, newLastName) =>
-                  updateUser({
-                    firstName: newFirstName,
-                    lastName: newLastName
-                  }).then(res =>
-                    setCurrentUser({
-                      ...currentUser,
-                      firstName: res.firstName,
-                      lastName: res.lastName
-                    })
-                  )
                 }
               />
             </PersonalInfo>

@@ -24,15 +24,6 @@ export async function getServerSideProps({ req }) {
   return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
-// export async function getServerSideProps2({ req }) {
-//   const [userData, events] = await Promise.all([
-//     serverSideRequest(req)({ url: "users" }),
-//     serverSideRequest(req)({ url: `users/${userId}/events` })
-//   ]).then(arr => arr.map(i => i.data));
-
-//   return { props: { userData, events } };
-// }
-
 function ProfilePage(props) {
   const { error, data } = useQuery(GetCurrentUserQuery);
 

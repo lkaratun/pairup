@@ -66,6 +66,8 @@ function UserProvider({ cookies, children }) {
 
   const updateUser = useCallback(async function(newData) {
     if (Object.keys(newData).length === 0) return null;
+    const { firstName } = newData;
+
     const updateUserMutation = gql`
       mutation updateUser($data: UserInput!, $id: ID!) {
         user(data: $data, id: $id) {
@@ -77,7 +79,6 @@ function UserProvider({ cookies, children }) {
 
     const apolloClient = initializeApollo();
     const response = await apolloClient.mutate({ mutation: updateUserMutation });
-    console.log("🚀 ~ file: UserProvider.js ~ line 77 ~ updateUser ~ response", response);
 
     updateFirstName(response);
     return response;
