@@ -15,7 +15,7 @@ const GetCurrentUserQuery = gql`
 `;
 
 export async function getServerSideProps({ req }) {
-  const cookies = req?.headers?.cookie ?? {};
+  const cookies = req?.headers?.cookie ?? "";
   const { userId } = cookie.parse(cookies);
   if (!userId) return { props: { userData: {}, events: [] } };
 

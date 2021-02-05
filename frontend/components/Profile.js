@@ -8,8 +8,6 @@ import NameModal from "./NameModal";
 
 function Profile(props) {
   const [currentUser, setCurrentUser] = useState({
-    firstName: props.currentUser?.firstName,
-    lastName: props.currentUser?.lastName,
     email: props.currentUser?.email,
     image: props.currentUser?.image ?? "../static/no_photo.jpg",
     bio: props.currentUser?.bio
@@ -48,7 +46,17 @@ function Profile(props) {
     );
   }
 
-  console.log("🚀 ~ file: Profile.js ~ line 51 ~ Profile ~ firstName", firstName);
+  function renderBioEditModal() {
+    return (
+      <BioModal
+        showModal={bioEditorOpened}
+        hide={() => setBioEditorOpened(false)}
+        initialBio={currentUser.bio}
+        confirm={newBio => updateUser({ bio: newBio }).then(res => setCurrentUser({ ...currentUser, bio: res.bio }))}
+      />
+    );
+  }
+
   return (
     <Container>
       {firstName ? (
@@ -81,14 +89,7 @@ function Profile(props) {
                   <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton>
                 </p>
               )}
-              <BioModal
-                showModal={bioEditorOpened}
-                hide={() => setBioEditorOpened(false)}
-                initialBio={currentUser.bio}
-                confirm={newBio =>
-                  updateUser({ bio: newBio }).then(res => setCurrentUser({ ...currentUser, bio: res.bio }))
-                }
-              />
+              {renderBioEditModal()}
               {renderNameEditModal()}
             </PersonalInfo>
           </SideBar>

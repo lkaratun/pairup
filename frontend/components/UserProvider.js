@@ -16,7 +16,9 @@ function UserProvider({ cookies, children }) {
 
   const updateFirstName = name => {
     if (!name) document.cookie = cookie.serialize("firstName", "", { maxAge: 0 });
-    else document.cookie = cookie.serialize("firstName", name);
+    else {
+      document.cookie = cookie.serialize("firstName", name, { domain: `.${window.location.hostname}` });
+    }
     setFirstName(name);
   };
 
@@ -77,8 +79,11 @@ function UserProvider({ cookies, children }) {
     `;
 
     const apolloClient = initializeApollo();
-    const response = await apolloClient.mutate({ mutation: updateUserMutation, variables: { id: userId, data: newData } });
-    console.log("🚀 ~ file: UserProvider.js ~ line 81 ~ updateUser ~ response", response);
+    console.log("🚀 ~ file: UserProvider.js ~ line 90 ~ updateUser ~ userId", userId);
+    const response = await apolloClient.mutate({
+      mutation: updateUserMutation,
+      variables: { id: userId, data: newData }
+    });
 
     updateFirstName(response.data.user.firstName);
     return response.data.user;
