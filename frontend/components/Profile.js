@@ -28,22 +28,23 @@ function Profile(props) {
   function renderNameEditModal() {
     return (
       <NameModal
-              showModal={nameEditorOpened}
-              hide={() => setNameEditorOpened(false)}
-              initialLastName={currentUser.lastName}
-              confirm={(newFirstName, newLastName) =>
-                updateUser({
-                  firstName: newFirstName,
-                  lastName: newLastName
-                }).then(res =>
-                  setCurrentUser({
-                    ...currentUser,
-                    firstName: res.firstName,
-                    lastName: res.lastName
-                  })
-                )
-              }
-        />
+        showModal={nameEditorOpened}
+        hide={() => setNameEditorOpened(false)}
+        initialLastName={currentUser.lastName}
+        confirm={(newFirstName, newLastName) =>
+          updateUser({
+            firstName: newFirstName,
+            lastName: newLastName
+          }).then(res => {
+            const { firstName, lastName } = res?.data?.user ?? {};
+            setCurrentUser({
+              ...currentUser,
+              firstName,
+              lastName
+            });
+          })
+        }
+      />
     );
   }
 

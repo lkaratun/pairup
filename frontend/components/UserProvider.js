@@ -80,8 +80,8 @@ function UserProvider({ cookies, children }) {
     const response = await apolloClient.mutate({ mutation: updateUserMutation, variables: { id: userId, data: newData } });
     console.log("🚀 ~ file: UserProvider.js ~ line 81 ~ updateUser ~ response", response);
 
-    updateFirstName(response);
-    return response;
+    updateFirstName(response.data.user.firstName);
+    return response.data.user;
   }, []);
 
   return (
