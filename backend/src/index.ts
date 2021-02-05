@@ -25,7 +25,7 @@ const secret = process.env.JWT_SECRET;
 if (!secret) throw new Error("JWT_SECRET env.var missing!");
 
 const prisma = new PrismaClient({
-  // log: ["query", "info", "warn"]
+  log: ["query", "info", "warn"]
 });
 
 const server = new ApolloServer({
@@ -44,6 +44,7 @@ const server = new ApolloServer({
 
 const app = express();
 app.use(cookieParser());
+
 server.applyMiddleware({
   app,
   cors: {

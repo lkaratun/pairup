@@ -15,19 +15,27 @@ const GetCurrentUserQuery = gql`
 `;
 
 export async function getServerSideProps({ req }) {
-  const userId = cookie.parse(req?.headers?.cookie).userId;
-  console.log("getServerSideProps -> userId", userId);
+  const cookies = req?.headers?.cookie ?? {};
+  const { userId } = cookie.parse(cookies);
   if (!userId) return { props: { userData: {}, events: [] } };
 
   const apolloClient = initializeApollo();
-  await apolloClient.query({ query: GetCurrentUserQuery }).catch(console.error);
+  const res = await apolloClient
+    .query({
+      query: GetCurrentUserQuery,
+      context: {
+        headers: {
+          cookie: cookies
+        }
+      }
+    })
+    .catch(console.error);
   return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
 function ProfilePage(props) {
   const { error, data } = useQuery(GetCurrentUserQuery);
 
-  console.log("ProfilePage -> { error, data }", { error, data });
   if (error) {
     return <>{`An error has occurred:  ${error}`}</>;
   }

@@ -13,6 +13,8 @@ export default {
   },
   Mutation: {
     user: async (parent, args, context) => {
+    console.log("🚀 ~ file: UserResolver.ts ~ line 16 ~ user: ~ args", args);
+      
       return context.prisma.user.update({
         where: { id: args.id },
         data: args.data

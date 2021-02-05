@@ -25,24 +25,29 @@ function Profile(props) {
 
   const showNameEditor = () => setNameEditorOpened(true);
 
-  const renderNameEditModal = () => <NameModal
-  showModal={nameEditorOpened}
-  hide={() => setNameEditorOpened(false)}
-  initialLastName={currentUser.lastName}
-  confirm={(newFirstName, newLastName) =>
-    updateUser({
-      firstName: newFirstName,
-      lastName: newLastName
-    }).then(res =>
-      setCurrentUser({
-        ...currentUser,
-        firstName: res.firstName,
-        lastName: res.lastName
-      })
-    )
+  function renderNameEditModal() {
+    return (
+      <NameModal
+              showModal={nameEditorOpened}
+              hide={() => setNameEditorOpened(false)}
+              initialLastName={currentUser.lastName}
+              confirm={(newFirstName, newLastName) =>
+                updateUser({
+                  firstName: newFirstName,
+                  lastName: newLastName
+                }).then(res =>
+                  setCurrentUser({
+                    ...currentUser,
+                    firstName: res.firstName,
+                    lastName: res.lastName
+                  })
+                )
+              }
+        />
+    );
   }
-/>;
 
+  console.log("🚀 ~ file: Profile.js ~ line 51 ~ Profile ~ firstName", firstName);
   return (
     <Container>
       {firstName ? (
@@ -83,6 +88,7 @@ function Profile(props) {
                   updateUser({ bio: newBio }).then(res => setCurrentUser({ ...currentUser, bio: res.bio }))
                 }
               />
+              {renderNameEditModal()}
             </PersonalInfo>
           </SideBar>
 

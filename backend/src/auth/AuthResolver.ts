@@ -31,16 +31,24 @@ function setAuthCookies(res, { token, userId, firstName }) {
 export default {
   Query: {
     currentUser: async (parent, args, context, info) => {
+      console.log("🚀 ~ file: AuthResolver.ts ~ line 34 ~ currentUser: ~ currentUser");
+      console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ cookies", context.req.cookies);
       const { token } = context.req.cookies;
+      console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ token", token);
       if (!token) return {};
       let userId;
       let user;
       try {
         userId = jwt.verify(token, SECRET).userId;
         user = await context.prisma.user.findOne({ where: { id: userId } });
+        console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ userId", userId);
       } catch (err) {
+        console.log("there is no user");
         throw new AuthenticationError("Authentication token has expired, please log in again");
+      } finally {
+        console.log("Finally here");
       }
+      console.log("🚀 ~ file: AuthResolver.ts ~ line 58 ~ currentUser: ~ user");
       if (!user) throw new AuthenticationError("User with the given userId was not found");
       return user;
     }
