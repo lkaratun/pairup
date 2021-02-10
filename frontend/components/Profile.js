@@ -7,11 +7,6 @@ import BioModal from "./BioModal";
 import NameModal from "./NameModal";
 
 function Profile(props) {
-  const [currentUser, setCurrentUser] = useState({
-    email: props.currentUser?.email,
-    image: props.currentUser?.image ?? "../static/no_photo.jpg",
-    bio: props.currentUser?.bio
-  });
   const [bioEditorOpened, setBioEditorOpened] = useState(false);
   const [nameEditorOpened, setNameEditorOpened] = useState(false);
   const userContext = useContext(UserContext) || {};

@@ -1,8 +1,7 @@
 {
   "extends": [
     "airbnb",
-    "react-app",
-    "prettier"
+    "react-app"
   ],
   "globals": {
     "window": false,
@@ -63,7 +62,6 @@
     "import/prefer-default-export": 0
   },
   "plugins": [
-    "prettier",
     "json",
     "markdown",
     "html"
