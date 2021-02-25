@@ -3,7 +3,7 @@ import { pickBy } from "lodash";
 export default {
   Query: {
     ad: (parent, args, context, info): Promise<object> =>
-      context.prisma.ad.findOne({
+      context.prisma.ad.findUnique({
         where: { id: args.id }
       }),
     ads: (parent, args, context) => context.prisma.ad.findMany()
@@ -44,7 +44,7 @@ export default {
     user: (parent, args, context, info): Promise<object> => {
       return (
         parent.userId &&
-        context.prisma.user.findOne({
+        context.prisma.user.findUnique({
           where: {
             id: parent.userId
           }
@@ -54,7 +54,7 @@ export default {
     activity: (parent, args, context, info): Promise<object> => {
       return (
         parent.activityId &&
-        context.prisma.activity.findOne({
+        context.prisma.activity.findUnique({
           where: {
             id: parent.activityId
           }
@@ -64,7 +64,7 @@ export default {
     location: (parent, args, context, info): Promise<object> => {
       return (
         parent.locationId &&
-        context.prisma.location.findOne({
+        context.prisma.location.findUnique({
           where: {
             id: parent.locationId
           }

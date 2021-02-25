@@ -1,9 +1,8 @@
 export default {
   Query: {
-    adResponses: (parent, args, context) =>
-      context.prisma.adResponse.findMany(),
+    adResponses: (parent, args, context) => context.prisma.adResponse.findMany(),
     adResponse: (parent, args, context, info) =>
-      context.prisma.adResponse.findOne({
+      context.prisma.adResponse.findUnique({
         where: { id: args.id }
       })
   },
@@ -25,14 +24,14 @@ export default {
   },
   AdResponse: {
     ad: (parent, args, context, info) => {
-      return context.prisma.ad.findOne({
+      return context.prisma.ad.findUnique({
         where: {
           id: parent.adId
         }
       });
     },
     user: (parent, args, context, info) => {
-      return context.prisma.user.findOne({
+      return context.prisma.user.findUnique({
         where: {
           id: parent.userId
         }

@@ -2,7 +2,7 @@ export default {
   Query: {
     location: (parent, args, context, info) => {
       console.log("location resolver");
-      return context.prisma.location.findOne({
+      return context.prisma.location.findUnique({
         where: { id: args.id }
       });
     },

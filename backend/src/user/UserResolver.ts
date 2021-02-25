@@ -1,9 +1,11 @@
 export default {
   Query: {
-    user: (parent, args, context, info) =>
-      context.prisma.user.findOne({
+    user: (parent, args, context, info) => {
+      console.log("🚀 ~ file: UserResolver.ts ~ line 19 ~ users: ~ context.prisma", context.prisma);
+      return context.prisma.user.findUnique({
         where: { id: args.id }
-      }),
+      });
+    },
     users: async (parent, args, context) => {
       console.log("In users resolver");
       const users = await context.prisma.user.findMany();
@@ -13,8 +15,8 @@ export default {
   },
   Mutation: {
     user: async (parent, args, context) => {
-    console.log("🚀 ~ file: UserResolver.ts ~ line 16 ~ user: ~ args", args);
-      
+      console.log("🚀 ~ file: UserResolver.ts ~ line 16 ~ user: ~ args", args);
+
       return context.prisma.user.update({
         where: { id: args.id },
         data: args.data

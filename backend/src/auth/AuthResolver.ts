@@ -40,7 +40,7 @@ export default {
       let user;
       try {
         userId = jwt.verify(token, SECRET).userId;
-        user = await context.prisma.user.findOne({ where: { id: userId } });
+        user = await context.prisma.user.findUnique({ where: { id: userId } });
         console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ userId", userId);
       } catch (err) {
         console.log("there is no user");
@@ -70,7 +70,9 @@ export default {
     },
     logIn: async (parent, args, context, info) => {
       const { email, password } = args;
-      const user = await context.prisma.user.findOne({ where: { email } });
+      
+      console.log("🚀 ~ file: AuthResolver.ts ~ line 79 ~ logIn: ~ context.prisma", context.prisma);
+      const user = await context.prisma.user.findUnique({ where: { email } });
       if (!user) throw new AuthenticationError("User with the given email was not found");
       const passwordIsCorrect = await bcrypt.compare(password, user.password);
       if (!passwordIsCorrect) throw new AuthenticationError("Password is incorrect");
