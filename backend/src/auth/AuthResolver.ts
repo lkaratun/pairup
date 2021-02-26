@@ -34,6 +34,9 @@ function clearAuthCookies(context) {
     .clearCookie("userId", { domain: FRONTEND_DOMAIN });
 }
 
+interface User {
+  userId: string;
+}
 
 export default {
   Query: {
@@ -44,9 +47,9 @@ export default {
       console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ token", token);
       if (!token) return {};
       let userId;
-      let user;
+      let user: User;
       try {
-        userId = jwt.verify(token, SECRET).userId;
+        userId = (jwt.verify(token, SECRET) as User).userId;
         user = await context.prisma.user.findUnique({ where: { id: userId } });
         console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ userId", userId);
       } catch (err) {

@@ -11,7 +11,7 @@ export default gql`
   }
 
   type User {
-    id: String
+    id: String!
     email: String @AuthRequired
     bio: String
     firstName: String
