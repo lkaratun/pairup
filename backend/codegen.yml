@@ -1,6 +1,6 @@
 overwrite: true
 schema: "http://api.local.pair-up.net/graphql"
-documents: null
+watch: true
 generates:
   src/generated/graphql.ts:
     plugins:
