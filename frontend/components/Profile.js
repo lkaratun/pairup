@@ -12,9 +12,15 @@ function Profile(props) {
   const userContext = useContext(UserContext) || {};
   const { firstName, updateUser } = userContext;
 
-  const { lastName, email, image, bio } = currentUser;
+  console.log("🚀 ~ file: Profile.js ~ line 10 ~ Profile ~ props", props);
+  console.log("🚀 ~ file: Profile.js ~ line 14 ~ Profile ~ userContext", userContext);
 
-  const renderEvents = eventsArray => eventsArray.map(event => <Event {...event} key={event.id} />);
+  return <div />;
+
+
+  // const { lastName, email, image, bio } = currentUser;
+
+  const renderEvents = (eventsArray) => eventsArray.map((event) => <Event {...event} key={event.id} />);
 
   const showNameEditor = () => setNameEditorOpened(true);
 
@@ -24,18 +30,14 @@ function Profile(props) {
         showModal={nameEditorOpened}
         hide={() => setNameEditorOpened(false)}
         initialLastName={currentUser.lastName}
-        confirm={(newFirstName, newLastName) =>
-          updateUser({
-            firstName: newFirstName,
-            lastName: newLastName
-          }).then(res => {
-            const { firstName, lastName } = res?.data?.user ?? {};
-            setCurrentUser({
-              ...currentUser,
-              firstName,
-              lastName
-            });
-          })
+        confirm={(newFirstName, newLastName) => updateUser({ firstName: newFirstName, lastName: newLastName }).then((res) => {
+          const { firstName, lastName } = res?.data?.user ?? {};
+          setCurrentUser({
+            ...currentUser,
+            firstName,
+            lastName
+          });
+        })
         }
       />
     );
@@ -47,7 +49,7 @@ function Profile(props) {
         showModal={bioEditorOpened}
         hide={() => setBioEditorOpened(false)}
         initialBio={currentUser.bio}
-        confirm={newBio => updateUser({ bio: newBio }).then(res => setCurrentUser({ ...currentUser, bio: res.bio }))}
+        confirm={(newBio) => updateUser({ bio: newBio }).then((res) => setCurrentUser({ ...currentUser, bio: res.bio }))}
       />
     );
   }
@@ -60,7 +62,7 @@ function Profile(props) {
             <ProfileImage src={image} />
             <ImageUploader
               url="/users/images"
-              onCompletion={newImage => setCurrentUser({ ...currentUser, image: newImage })}
+              onCompletion={(newImage) => setCurrentUser({ ...currentUser, image: newImage })}
               style={{ gridColumn: "1 / span 1", gridRow: "2 / span 1" }}
             />
             <PersonalInfo>

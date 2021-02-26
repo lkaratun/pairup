@@ -7,7 +7,7 @@ import Profile from "../components/Profile";
 const GetCurrentUserQuery = gql`
   query GetCurrentUser {
     currentUser {
-      id
+      userId: id
       firstName
       bio
     }
@@ -23,11 +23,7 @@ export async function getServerSideProps({ req }) {
   const res = await apolloClient
     .query({
       query: GetCurrentUserQuery,
-      context: {
-        headers: {
-          cookie: cookies
-        }
-      }
+      context: { headers: { cookie: cookies } }
     })
     .catch(console.error);
   return { props: { initialApolloState: apolloClient.cache.extract() } };
@@ -35,6 +31,7 @@ export async function getServerSideProps({ req }) {
 
 function ProfilePage(props) {
   const { error, data } = useQuery(GetCurrentUserQuery);
+  console.log("🚀 ~ file: profile.js ~ line 33 ~ ProfilePage ~ props", props);
 
   if (error) {
     return <>{`An error has occurred:  ${error}`}</>;

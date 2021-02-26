@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import addMonths from "date-fns/addMonths";
 import config from "../../config.json";
 import jwt from "jsonwebtoken";
-import { resolve } from "path";
 
 const SECRET = process.env.JWT_SECRET;
 const JWT_EXP_THRESHOLD = process.env.JWT_EXP_THRESHOLD || "60d";
@@ -27,6 +26,14 @@ function setAuthCookies(res, { token, userId, firstName }) {
       domain: FRONTEND_DOMAIN
     });
 }
+
+function clearAuthCookies(context) {
+  context.res
+    .clearCookie("token", { domain: FRONTEND_DOMAIN })
+    .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
+    .clearCookie("userId", { domain: FRONTEND_DOMAIN });
+}
+
 
 export default {
   Query: {
@@ -70,7 +77,7 @@ export default {
     },
     logIn: async (parent, args, context, info) => {
       const { email, password } = args;
-      
+
       console.log("🚀 ~ file: AuthResolver.ts ~ line 79 ~ logIn: ~ context.prisma", context.prisma);
       const user = await context.prisma.user.findUnique({ where: { email } });
       if (!user) throw new AuthenticationError("User with the given email was not found");
@@ -84,10 +91,7 @@ export default {
       }
     },
     logOut: async (parent, args, context, info) => {
-      context.res
-        .clearCookie("token", { domain: FRONTEND_DOMAIN })
-        .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
-        .clearCookie("userId", { domain: FRONTEND_DOMAIN });
+      clearAuthCookies(context.res);
     }
   }
 };

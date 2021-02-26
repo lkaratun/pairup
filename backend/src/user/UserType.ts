@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "apollo-server-express";
 
 export default gql`
   directive @AuthRequired on FIELD_DEFINITION
