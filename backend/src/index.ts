@@ -1,7 +1,5 @@
-require("dotenv").config();
 import "reflect-metadata";
 import typeDefs from "./typeDefs";
-
 import { PrismaClient } from "@prisma/client";
 import { merge } from "lodash";
 import AdType from "./ad/AdType";
@@ -20,6 +18,8 @@ import AuthRequired from "./directives/AuthRequired";
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import cookieParser from "cookie-parser";
+
+require("dotenv").config();
 
 const secret = process.env.JWT_SECRET;
 if (!secret) throw new Error("JWT_SECRET env.var missing!");
