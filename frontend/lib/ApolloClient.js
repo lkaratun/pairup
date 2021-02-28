@@ -2,6 +2,7 @@ import { useMemo } from "react";
 // import { ApolloClient } from "apollo-client";
 import { InMemoryCache, ApolloClient, HttpLink } from "@apollo/client";
 // import { HttpLink } from "apollo-link-http";
+import fetch from "cross-fetch";
 
 let apolloClient;
 
@@ -10,7 +11,8 @@ function createApolloClient() {
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
       uri: "http://api.local.pair-up.net/graphql", // Server URL (must be absolute)
-      credentials: "include" // Additional fetch() options like `credentials` or `headers`
+      credentials: "include", // Additional fetch() options like `credentials` or `headers`
+      fetch
     }),
     cache: new InMemoryCache()
   });
