@@ -5,7 +5,7 @@ import axios, { serverSideRequest } from "utils/request";
 import Link from "next/link";
 
 import NewEventForm from "../components/NewEventForm";
-import mediaWrapper from "../styles/device";
+import mediaWrapper from "../styles/mediaWrapper";
 import config from "../config.json";
 import { UserContext } from "../components/UserProvider";
 

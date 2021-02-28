@@ -5,7 +5,7 @@ import styled from "styled-components";
 import LoginForm from "../components/LoginForm";
 
 import { UserConsumer } from "../components/UserProvider";
-import mediaWrapper from "../styles/device";
+import mediaWrapper from "../styles/mediaWrapper";
 
 function LoginPage() {
   return (

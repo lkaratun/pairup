@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { darken } from "polished";
 import { UserContext } from "./UserProvider";
-import mediaWrapper from "../styles/device";
+import mediaWrapper from "../styles/mediaWrapper";
 
 function Navbar() {
   const userContext = useContext(UserContext) || {};

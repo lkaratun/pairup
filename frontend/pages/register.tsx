@@ -4,7 +4,7 @@ import styled from "styled-components";
 import RegisterForm from "../components/RegisterForm";
 
 import { UserConsumer } from "../components/UserProvider";
-import mediaWrapper from "../styles/device";
+import mediaWrapper from "../styles/mediaWrapper";
 
 class Register extends Component {
   render() {

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import mediaWrapper from "../../styles/device";
+import mediaWrapper from "../../styles/mediaWrapper";
 
 const backgrounds = {
   neutral: {

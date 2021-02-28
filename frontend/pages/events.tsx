@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import axios, { serverSideRequest } from "utils/request";
 
 import EventList from "../components/EventList";
-import mediaWrapper from "../styles/device";
+import mediaWrapper from "../styles/mediaWrapper";
 import config from "../config.json";
 
 import { ColoredButton } from "../components/shared/Buttons";
