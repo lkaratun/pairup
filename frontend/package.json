@@ -25,6 +25,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "next": "^9.3.0",
+    "next-universal-cookie": "^2.0.0",
     "next-with-apollo": "^5.0.1",
     "polished": "^3.6.3",
     "prop-types": "^15.7.2",

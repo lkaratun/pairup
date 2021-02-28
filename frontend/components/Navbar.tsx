@@ -3,13 +3,50 @@ import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { darken } from "polished";
-import { UserContext } from "./UserProvider";
 import mediaWrapper from "../styles/mediaWrapper";
+// import { useCookies } from "react-cookie";
+import {useCookie} from 'next-universal-cookie';
+
+
+// const logIn = useCallback(async function({ email, password }) {
+//   const logInMutation = gql`
+//     mutation logIn($email: String!, $password: String!) {
+//       logIn(email: $email, password: $password) {
+//         firstName
+//         email
+//         id
+//         password
+//       }
+//     }
+//   `;
+
+//   const apolloClient = initializeApollo();
+//   const {
+//     data: { logIn: logInData }
+//   } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+//   setFirstName(logInData.firstName);
+//   setUserId(logInData.id);
+// }, []);
+
+// const logOut = useCallback(async function() {
+//   const logOutMutation = gql`
+//     mutation {
+//       logOut
+//     }
+//   `;
+//   const apolloClient = initializeApollo();
+//   await apolloClient.mutate({ mutation: logOutMutation });
+//   updateFirstName(undefined);
+//   updateUserId(undefined);
+// }, []);
+
 
 function Navbar() {
-  const userContext = useContext(UserContext) || {};
+  // const [cookies, setCookie] = useCookies(["firstName"]);
+  const [cookies, setCookie, removeCookie] = useCookie(['firstName']);
 
-  const { firstName, logOut } = userContext;
+  
+  const { firstName } = cookies;
   const router = useRouter();
 
   return (
@@ -32,9 +69,9 @@ function Navbar() {
                 <NavLink>{`Logged in as: ${firstName}`}</NavLink>
               </Link>
               <NavLink
-                onClick={() => {
-                  logOut().then(() => router.push("/"));
-                }}
+              // onClick={() => {
+              //   logOut().then(() => router.push("/"));
+              // }}
               >
                 Log out
               </NavLink>
