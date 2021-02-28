@@ -9,6 +9,10 @@
     "fetch": false
   },
   "rules": {
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
     "object-curly-newline": [
       "error",
       {

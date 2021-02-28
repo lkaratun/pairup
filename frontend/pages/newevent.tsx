@@ -5,7 +5,7 @@ import axios, { serverSideRequest } from "utils/request";
 import Link from "next/link";
 
 import NewEventForm from "../components/NewEventForm";
-import device from "../styles/device";
+import mediaWrapper from "../styles/device";
 import config from "../config.json";
 import { UserContext } from "../components/UserProvider";
 
@@ -80,7 +80,7 @@ const EventWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     padding-top: 10px;
     padding-bottom: 10px;
   `}
@@ -95,7 +95,7 @@ const InputSection = styled.div`
   margin-right: auto;
   width: 100%;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     padding: 10px;
     width: 90vw;
     height: 80vh;

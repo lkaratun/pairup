@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import axios, { serverSideRequest } from "utils/request";
 
 import EventList from "../components/EventList";
-import device from "../styles/device";
+import mediaWrapper from "../styles/device";
 import config from "../config.json";
 
 import { ColoredButton } from "../components/shared/Buttons";
@@ -171,7 +171,7 @@ const TopPanel = styled.div`
   font-size: 1.3rem;
   height: 20vh;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 10px;
@@ -181,7 +181,7 @@ const TopPanel = styled.div`
   h4 {
     line-height: 2.3rem;
 
-    ${device.mobileL`
+    ${mediaWrapper.mobileL`
       line-height: 2.0rem;
       font-size: 1.0rem;
   `}
@@ -191,7 +191,7 @@ const TopPanel = styled.div`
 const DownArrow = styled.img`
   width: 70px;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
       width: 40px;
   `}
 `;
@@ -240,7 +240,7 @@ const FilterControlPanel = styled.div`
   border-radius: 4px;
   margin-bottom: 50px;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     grid-gap: 3px;
     grid-template-columns: 1fr 1fr 80px auto;
     margin-bottom: 5px;
@@ -252,7 +252,7 @@ const EventContainer = styled.div`
   margin: auto;
   text-align: center;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     width: 90%;
   `}
 `;

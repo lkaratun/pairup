@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import device from "../styles/device";
+import mediaWrapper from "../styles/device";
 
 const Footer = () => (
   <StyledFooter>
@@ -27,14 +27,14 @@ const StyledFooter = styled.footer`
   flex-shrink: 0;
   font-size: 0.7rem;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     padding: 5px;
   `}
 
   p {
     margin: 5px;
 
-    ${device.mobileL`
+    ${mediaWrapper.mobileL`
       font-size: 0.5rem;
     `}
   }
@@ -52,7 +52,7 @@ const StyledFooter = styled.footer`
     background-color: white;
     border: 1px solid white;
     border-radius: 20px;
-    ${device.mobileL`
+    ${mediaWrapper.mobileL`
       width: 15px;
     `};
   }

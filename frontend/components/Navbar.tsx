@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { darken } from "polished";
 import { UserContext } from "./UserProvider";
-import device from "../styles/device";
+import mediaWrapper from "../styles/device";
 
 function Navbar() {
   const userContext = useContext(UserContext) || {};
@@ -71,7 +71,7 @@ const StyledNav = styled.nav`
   color: white;
   padding: 8px;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     padding: 4px;
   `}
 
@@ -83,7 +83,7 @@ const StyledNav = styled.nav`
     align-items: center;
     font-size: 1.1rem;
 
-    ${device.mobileL`
+    ${mediaWrapper.mobileL`
       font-size: 1rem;
     `}
   }
@@ -100,7 +100,7 @@ const Logo = styled.img`
   margin-left: 15px;
   cursor: pointer;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     margin-right: 10px;
     margin-left: 3px;
   `}
@@ -109,7 +109,7 @@ const Logo = styled.img`
 const NavAuthButtons = styled.li`
   margin-left: auto;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     font-size: 0.8rem;
   `}
 `;
@@ -117,7 +117,7 @@ const NavAuthButtons = styled.li`
 const NavAuthButtonsLoggedIn = styled.li`
   margin-left: auto;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     font-size: 0.8rem;
   `}
 `;
@@ -130,7 +130,7 @@ const NavLink = styled.a`
     color: gold;
   }
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     margin-left: 10px;
     margin-right: 10px;
   `}
@@ -140,7 +140,7 @@ const UnAuthSection = styled.div`
   margin-right: 10px;
   font-size: 0.9rem;
 
-  ${device.mobileL`
+  ${mediaWrapper.mobileL`
     margin-left: 5px;
     margin-right: 3px;
   `}

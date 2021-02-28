@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import device from "../../styles/device";
+import mediaWrapper from "../../styles/device";
 
 const backgrounds = {
   neutral: {
@@ -23,29 +23,27 @@ const colors = {
 };
 
 export const ColoredButton = styled.button`
-  min-width: 5rem;
-  margin: 0.5rem auto;
-  display: block;
-  padding: 10px;
-  background: ${props =>
-    props.color ? backgrounds[props.color].normal : backgrounds.neutral.normal};
-  color: ${props => colors[props.color]};
-  border: none;
-  cursor: pointer;
-  border-radius: 0.2rem;
-  font-size: 1rem;
+         min-width: 5rem;
+         margin: 0.5rem auto;
+         display: block;
+         padding: 10px;
+         background: ${props => (props.color ? backgrounds[props.color].normal : backgrounds.neutral.normal)};
+         color: ${props => colors[props.color]};
+         border: none;
+         cursor: pointer;
+         border-radius: 0.2rem;
+         font-size: 1rem;
 
-  &:hover {
-    background: ${props =>
-      props.color ? backgrounds[props.color].hover : backgrounds.neutral.hover};
-  }
+         &:hover {
+           background: ${props => (props.color ? backgrounds[props.color].hover : backgrounds.neutral.hover)};
+         }
 
-  ${device.mobileL`
+         ${mediaWrapper.mobileL`
     padding: 1px;
     margin-top: 1px;
     margin-bottom: 5px;
   `}
-`;
+       `;
 
 export const PositiveButton = styled.button`
   margin-left: auto;
