@@ -44,7 +44,7 @@
     "babel-plugin-styled-components": "^1.10.7",
     "eslint": "^7.20.0",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-config-react-app": "^5.2.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-flowtype": "^4.6.0",

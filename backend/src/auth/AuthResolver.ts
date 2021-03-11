@@ -10,8 +10,8 @@ if (!SECRET) throw new Error("JWT_SECRET env.var missing!");
 
 const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
 
-function setAuthCookies(res, { token, userId, firstName }) {
-  res
+function setAuthCookies(context, { token, userId, firstName }) {
+  context.res
     .cookie("token", token, {
       expires: addMonths(new Date(), 1),
       httpOnly: true,
@@ -45,18 +45,17 @@ export default {
       console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ cookies", context.req.cookies);
       const { token } = context.req.cookies;
       console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ token", token);
-      if (!token) return {};
-      let userId;
+      if (!token) return null;
+      let userId: string;
       let user: User;
       try {
         userId = (jwt.verify(token, SECRET) as User).userId;
         user = await context.prisma.user.findUnique({ where: { id: userId } });
-        console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ userId", userId);
+        console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ user", user);
       } catch (err) {
         console.log("there is no user");
+        clearAuthCookies(context);
         throw new AuthenticationError("Authentication token has expired, please log in again");
-      } finally {
-        console.log("Finally here");
       }
       console.log("🚀 ~ file: AuthResolver.ts ~ line 58 ~ currentUser: ~ user");
       if (!user) throw new AuthenticationError("User with the given userId was not found");
@@ -74,7 +73,7 @@ export default {
           else throw err;
         });
       const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
-      setAuthCookies(context.res, { token, userId: user.id, firstName: user.firstName });
+      setAuthCookies(context, { token, userId: user.id, firstName: user.firstName });
       context.userId = user.id;
       return user;
     },
@@ -88,13 +87,13 @@ export default {
       if (!passwordIsCorrect) throw new AuthenticationError("Password is incorrect");
       else {
         const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: JWT_EXP_THRESHOLD });
-        setAuthCookies(context.res, { token, userId: user.id, firstName: user.firstName });
+        setAuthCookies(context, { token, userId: user.id, firstName: user.firstName });
         context.userId = user.id;
         return user;
       }
     },
     logOut: async (parent, args, context, info) => {
-      clearAuthCookies(context.res);
+      clearAuthCookies(context);
     }
   }
 };

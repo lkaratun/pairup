@@ -12,7 +12,13 @@ import { useApollo } from "../lib/apolloClient";
 import MainLayout from "../components/MainLayout";
 
 App.getInitialProps = async function(appContext) {
+  console.log("🚀 ~ file: _app.tsx ~ line 15 ~ App.getInitialProps=function ~ App.getInitialProps");
   // const cookies = cookie.parse(appContext?.ctx?.req?.headers?.cookie || "");
+  
+  if (!appContext.ctx.req || !appContext.ctx.res) {
+    console.log("req does not exist here");
+    return { props: { cookies: {} } };
+  }
   applyServerSidePropsCookie(appContext.ctx.req, appContext.ctx.res);
   const cookies = cookie.parse(appContext?.ctx?.req?.headers?.cookie || "");
   console.log("universalCookies = ", appContext?.ctx?.req.universalCookies);

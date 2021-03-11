@@ -19,7 +19,13 @@
     "noEmit": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "baseUrl": ".",
+    "paths": {
+      "types": [
+        "types/*"
+      ]
+    }
   },
   "include": [
     "./**/*"
@@ -27,4 +33,5 @@
   "exclude": [
     "./node_modules/**/*"
   ]
+
 }
