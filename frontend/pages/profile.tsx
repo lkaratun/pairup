@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useCallback } from "react";
 import cookie from "cookie";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apolloClient";
 import Profile from "../components/Profile";
 import { useRouter } from "next/router";
 import { FullUserInfo } from "types/User";
+import { useCookie } from "next-universal-cookie";
 
 const GetCurrentUserQuery = gql`
   query GetCurrentUser {
     currentUser {
-      userId: id
+      id
       firstName
       lastName
       bio
@@ -34,25 +35,57 @@ export async function getServerSideProps({ req }) {
   return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
-function ProfilePage(props) {
+const updateUserMutation = gql`
+  mutation updateUser($data: UserInput!, $id: ID!) {
+    user(data: $data, id: $id) {
+      firstName
+      id
+    }
+  }
+`;
+
+function ProfilePage(props: { currentUser: FullUserInfo }) {
   const { error, data } = useQuery(GetCurrentUserQuery);
   const router = useRouter();
+  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
+  const [mutate, mutationResponse] = useMutation(updateUserMutation);
   console.log("🚀 ~ file: profile.tsx ~ line 36 ~ ProfilePage ~ error", error);
   console.log("🚀 ~ file: profile.tsx ~ line 36 ~ ProfilePage ~ data", data);
   console.log("🚀 ~ file: profile.js ~ line 33 ~ ProfilePage ~ props", props);
 
+  const { lastName, email, image, bio, firstName, id: userId } = data.currentUser;
+
+  const updateUser = useCallback(
+    async function(newData) {
+      if (Object.keys(newData).length === 0) return null;
+
+      console.log("🚀 ~ file: UserProvider.js ~ line 90 ~ updateUser ~ userId", userId);
+      const response = await mutate({
+        variables: { id: userId, data: newData }
+      });
+      setTimeout(() => {
+        console.log("🚀 ~ file: profile.tsx ~ line 68 ~ updateUser ~ mutationResponse after timeout", mutationResponse);
+      }, 1000);
+
+      setCookie("firstName", response.data.user.firstName);
+      return response.data.user;
+    },
+
+    []
+  );
+
   if (error) {
-    console.log("Error, Returning empty page");
+    console.log("Error, returning empty page");
     return <>{error.message}</>;
   }
-  
+
   if (!data?.currentUser) {
-    console.log("No data, Returning empty page");
+    console.log("No data, returning empty page");
     return <>Please log in to view the page</>;
   }
 
-  console.log("User found, returning normal page");
-  return <Profile {...props} {...data} />;
+  console.log("User found, returning normal page. User = ", data.currentUser);
+  return <Profile {...props} {...data} updateUser={updateUser} />;
 }
 
 export default ProfilePage;

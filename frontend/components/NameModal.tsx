@@ -1,28 +1,29 @@
 import React from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { UserContext } from "./UserProvider";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    boxShadow: "0 5px 12px 0 rgba(0,0,0,0.25)",
-    padding: "30px"
-  }
-};
 
 Modal.setAppElement("#__next");
 
-class EditModal extends React.Component {
+interface NameModalProps {
+  showModal: boolean;
+  firstName: string;
+  lastName: string;
+  hide: () => void;
+  confirm: (firstName: string, lastName: string) => void;
+}
+
+interface NameModalState {
+  firstName: string;
+  lastName: string;
+}
+
+
+class NameModal extends React.Component<NameModalProps, NameModalState> {
+  private firstNameInput;
   state = {
-    firstName: this.context.firstName,
-    lastName: this.props.initialLastName
+    firstName: this.props.firstName,
+    lastName: this.props.lastName
   };
 
   handleKeyPress = e => {
@@ -41,14 +42,12 @@ class EditModal extends React.Component {
     this.setState({ lastName: e.target.value });
   };
 
-  afterOpenModal = () => this.firstNameInput.focus();
-
   render() {
     const { showModal, hide, confirm } = this.props;
     return (
       <Modal
         isOpen={showModal}
-        onAfterOpen={this.afterOpenModal}
+        onAfterOpen={() => this.firstNameInput.focus()}
         onRequestClose={hide}
         style={customStyles}
         contentLabel="Text edit Modal"
@@ -93,7 +92,20 @@ class EditModal extends React.Component {
   }
 }
 
-export default EditModal;
+export default NameModal;
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    boxShadow: "0 5px 12px 0 rgba(0,0,0,0.25)",
+    padding: "30px"
+  }
+};
 
 const NameInput = styled.input`
   margin: 1em;
@@ -138,10 +150,4 @@ const CancelButton = styled.button`
   margin: 0.5em;
 `;
 
-EditModal.propTypes = {
-  showModal: PropTypes.bool.isRequired,
-  hide: PropTypes.func.isRequired,
-  confirm: PropTypes.func.isRequired
-};
-
-EditModal.contextType = UserContext;
+NameModal.contextType = UserContext;

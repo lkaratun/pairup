@@ -1,17 +1,16 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { UserContext } from "components/UserProvider";
 import { WideButton } from "./shared/Buttons";
+import { useCookie } from "next-universal-cookie";
 
 function Ad({ ad }) {
   const { activity = {}, description } = ad;
-  const user = useContext(UserContext);
-  console.log("🚀 ~ file: Ad.js ~ line 9 ~ Ad ~ user", user);
+  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
   return (
     <AdCard>
       <AdTitle>{activity?.name} </AdTitle>
       <p>{description}</p>
-      {user.userId ? (
+      {cookies.userId ? (
         <WideButton>Respond</WideButton>
       ) : (
         <NotLoggedInMessage>Please log in to respond to ads</NotLoggedInMessage>

@@ -1,36 +1,42 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import styled from "styled-components";
 import {useCookie} from 'next-universal-cookie';
+import { gql, useMutation } from "@apollo/client";
+import { initializeApollo } from "../lib/apolloClient";
+
+
 
 import { BasicUserInfo, FullUserInfo  } from "types/User";
+import NameModal from "./NameModal";
 // import { Ad } from "../../backend/src/generated/graphql";
 type read = (name: string) => void;
+type updateUserHandler = (userInfo: {firstName?: string, lastName?:string}) => void;
 
-type UseCookieHook = (cookies: string[]) => [BasicUserInfo, (value: string, path: string, options?: object) => void , (value: string, path: string, options?: object) => void];
-
-
-function Profile(props: { currentUser: FullUserInfo }) {
+function Profile(props: { currentUser: FullUserInfo, updateUser: updateUserHandler}) {
   // const [bioEditorOpened, setBioEditorOpened] = useState(false);
-  // const [nameEditorOpened, setNameEditorOpened] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
+  const [nameEditorOpened, setNameEditorOpened] = useState(false);
+  // const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
-  const { firstName, userId } = cookies;
+  console.log("🚀 ~ file: Profile.js ~ line 10 ~ Profile ~ props.currentUser", props.currentUser);
+  // console.log("🚀 ~ file: Profile.js ~ line 14 ~ Profile ~ cookies", cookies);
 
-  console.log("🚀 ~ file: Profile.js ~ line 10 ~ Profile ~ props", props);
-  console.log("🚀 ~ file: Profile.js ~ line 14 ~ Profile ~ cookies", cookies);
+  const { lastName, email, image, bio, firstName, userId } = props.currentUser;
+  
+  const showNameEditor = () => setNameEditorOpened(true);
+  const hideNameEditor = () => setNameEditorOpened(false);
 
-  const { lastName, email, image, bio } = props.currentUser;
-  // const showNameEditor = () => setNameEditorOpened(true);
-        
+  
+
 
   function renderUserInfo() {
-    <SideBar>
+    return <SideBar>
       <ProfileImage src={image} />
       <PersonalInfo>
         <FirstLastName>
           {firstName} {lastName}
         </FirstLastName>
-        {/* <EditButton onClick={showNameEditor}>(edit)</EditButton> */}
+        <EditButton onClick={showNameEditor}>(edit)</EditButton>
+        <NameModal firstName={firstName} lastName={lastName} showModal={nameEditorOpened} hide={hideNameEditor} confirm={(firstName) => props.updateUser({firstName})} />
         <br />
         <strong>Email</strong> <br />
         {email}
@@ -42,10 +48,12 @@ function Profile(props: { currentUser: FullUserInfo }) {
             <br /> {bio}
           </p>
         ) : (
+          <>
           <p>
             No bio
-            {/* <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton> */}
           </p>
+          {/* <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton> */}
+          </>
         )}
       </PersonalInfo>
     </SideBar>;
