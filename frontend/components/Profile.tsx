@@ -12,7 +12,7 @@ type UseCookieHook = (cookies: string[]) => [BasicUserInfo, (value: string, path
 function Profile(props: { currentUser: FullUserInfo }) {
   // const [bioEditorOpened, setBioEditorOpened] = useState(false);
   // const [nameEditorOpened, setNameEditorOpened] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]) as [BasicUserInfo, (value: string, path: string, options?: object) => void , (value: string, path: string, options?: object) => void];
+  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
   const { firstName, userId } = cookies;
 

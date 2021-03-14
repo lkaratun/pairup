@@ -45,9 +45,8 @@ function ProfilePage(props) {
     console.log("Error, Returning empty page");
     return <>{error.message}</>;
   }
-
   
-  if (!data) {
+  if (!data?.currentUser) {
     console.log("No data, Returning empty page");
     return <>Please log in to view the page</>;
   }
