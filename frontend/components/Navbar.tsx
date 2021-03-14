@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { initializeApollo } from "../lib/apolloClient";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -28,26 +30,26 @@ import {useCookie} from 'next-universal-cookie';
 //   setUserId(logInData.id);
 // }, []);
 
-// const logOut = useCallback(async function() {
-//   const logOutMutation = gql`
-//     mutation {
-//       logOut
-//     }
-//   `;
-//   const apolloClient = initializeApollo();
-//   await apolloClient.mutate({ mutation: logOutMutation });
-//   updateFirstName(undefined);
-//   updateUserId(undefined);
-// }, []);
+
 
 
 function Navbar() {
   // const [cookies, setCookie] = useCookies(["firstName"]);
-  const [cookies, setCookie, removeCookie] = useCookie(['firstName']);
-
-  
+  const [cookies, setCookie, removeCookie] = useCookie(["firstName"]);
   const { firstName } = cookies;
   const router = useRouter();
+
+  const logOut = useCallback(async function() {
+    const logOutMutation = gql`
+      mutation {
+        logOut
+      }
+    `;
+    const apolloClient = initializeApollo();
+    await apolloClient.mutate({ mutation: logOutMutation });
+    removeCookie("firstName");
+    removeCookie("userId");
+  }, []);
 
   return (
     <StyledNav>
@@ -69,9 +71,9 @@ function Navbar() {
                 <NavLink>{`Logged in as: ${firstName}`}</NavLink>
               </Link>
               <NavLink
-              // onClick={() => {
-              //   logOut().then(() => router.push("/"));
-              // }}
+                onClick={() => {
+                  logOut().then(() => router.push("/"));
+                }}
               >
                 Log out
               </NavLink>

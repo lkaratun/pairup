@@ -16,9 +16,7 @@ function UserProvider({ cookies, children }) {
 
   const updateFirstName = name => {
     if (!name) document.cookie = cookie.serialize("firstName", "", { maxAge: 0 });
-    else {
-      document.cookie = cookie.serialize("firstName", name, { domain: `.${window.location.hostname}` });
-    }
+    else document.cookie = cookie.serialize("firstName", name);
     setFirstName(name);
   };
 

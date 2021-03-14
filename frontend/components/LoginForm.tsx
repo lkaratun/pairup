@@ -1,5 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { useRouter } from "next/router";
+import { gql, useMutation } from "@apollo/client";
+import { initializeApollo } from "../lib/apolloClient";
+import { useCookie } from "next-universal-cookie";
 import styled from "styled-components";
 import { UserContext } from "components/UserProvider";
 import Input from "./Input";
@@ -15,11 +18,31 @@ export default () => {
   const [loginFailed, setLoginFailed] = useState(false);
   const user = useContext(UserContext);
   const router = useRouter();
+  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
+
+  const logIn = useCallback(async function({ email, password }) {
+    const logInMutation = gql`
+      mutation logIn($email: String!, $password: String!) {
+        logIn(email: $email, password: $password) {
+          firstName
+          email
+          id
+          password
+        }
+      }
+    `;
+
+    const apolloClient = initializeApollo();
+    const {
+      data: { logIn: logInData }
+    } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+    setCookie("firstName", logInData.firstName);
+    setCookie("userId", logInData.id);
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
-    user
-      .logIn({ email, password })
+    logIn({ email, password })
       .then(() => router.push("/"))
       .catch(err => {
         console.error(err.response);

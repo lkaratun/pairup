@@ -11,27 +11,15 @@ if (!SECRET) throw new Error("JWT_SECRET env.var missing!");
 const { FRONTEND_DOMAIN, FRONTEND_URL } = config[process.env.NODE_ENV];
 
 function setAuthCookies(context, { token, userId, firstName }) {
-  context.res
-    .cookie("token", token, {
-      expires: addMonths(new Date(), 1),
-      httpOnly: true,
-      domain: FRONTEND_DOMAIN
-    })
-    .cookie("firstName", firstName, {
-      expires: addMonths(new Date(), 1),
-      domain: FRONTEND_DOMAIN
-    })
-    .cookie("userId", userId, {
-      expires: addMonths(new Date(), 1),
-      domain: FRONTEND_DOMAIN
-    });
+  context.res.cookie("token", token, {
+    expires: addMonths(new Date(), 1),
+    httpOnly: true,
+    domain: FRONTEND_DOMAIN
+  });
 }
 
 function clearAuthCookies(context) {
-  context.res
-    .clearCookie("token", { domain: FRONTEND_DOMAIN })
-    .clearCookie("firstName", { domain: FRONTEND_DOMAIN })
-    .clearCookie("userId", { domain: FRONTEND_DOMAIN });
+  context.res.clearCookie("token", { domain: FRONTEND_DOMAIN });
 }
 
 interface User {
