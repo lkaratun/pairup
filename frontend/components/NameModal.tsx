@@ -10,7 +10,7 @@ interface NameModalProps {
   firstName: string;
   lastName: string;
   hide: () => void;
-  confirm: (firstName: string, lastName: string) => void;
+  confirm: (newData: {firstName: string, lastName: string}) => void;
 }
 
 interface NameModalState {
@@ -22,14 +22,14 @@ interface NameModalState {
 class NameModal extends React.Component<NameModalProps, NameModalState> {
   private firstNameInput;
   state = {
-    firstName: this.props.firstName,
-    lastName: this.props.lastName
+    firstName: this.props.firstName || "",
+    lastName: this.props.lastName || ""
   };
 
   handleKeyPress = e => {
     const { hide, confirm } = this.props;
     if (e.key === "Enter") {
-      confirm(this.state.firstName, this.state.lastName);
+      confirm({firstName: this.state.firstName, lastName: this.state.lastName});
       hide();
     }
   };
@@ -81,7 +81,7 @@ class NameModal extends React.Component<NameModalProps, NameModalState> {
         <CancelButton onClick={hide}>Cancel</CancelButton>
         <ConfirmButton
           onClick={() => {
-            confirm(this.state.firstName, this.state.lastName);
+            confirm({  firstName: this.state.firstName, lastName: this.state.lastName  });
             hide();
           }}
         >

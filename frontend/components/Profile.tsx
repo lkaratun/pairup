@@ -29,34 +29,40 @@ function Profile(props: { currentUser: FullUserInfo, updateUser: updateUserHandl
 
 
   function renderUserInfo() {
-    return <SideBar>
-      <ProfileImage src={image} />
-      <PersonalInfo>
-        <FirstLastName>
-          {firstName} {lastName}
-        </FirstLastName>
-        <EditButton onClick={showNameEditor}>(edit)</EditButton>
-        <NameModal firstName={firstName} lastName={lastName} showModal={nameEditorOpened} hide={hideNameEditor} confirm={(firstName) => props.updateUser({firstName})} />
-        <br />
-        <strong>Email</strong> <br />
-        {email}
-        <br />
-        {bio ? (
-          <p>
-            <strong>Bio</strong>
-            {/* <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton> */}
-            <br /> {bio}
-          </p>
-        ) : (
-          <>
-          <p>
-            No bio
-          </p>
-          {/* <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton> */}
-          </>
-        )}
-      </PersonalInfo>
-    </SideBar>;
+    return (
+      <SideBar>
+        <ProfileImage src={image} />
+        <PersonalInfo>
+          <FirstLastName>
+            {firstName} {lastName}
+          </FirstLastName>
+          <EditButton onClick={showNameEditor}>(edit)</EditButton>
+          <NameModal
+            firstName={firstName}
+            lastName={lastName}
+            showModal={nameEditorOpened}
+            hide={hideNameEditor}
+            confirm={newData => props.updateUser(newData)}
+          />
+          <br />
+          <strong>Email</strong> <br />
+          {email}
+          <br />
+          {bio ? (
+            <p>
+              <strong>Bio</strong>
+              {/* <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton> */}
+              <br /> {bio}
+            </p>
+          ) : (
+            <>
+              <p>No bio</p>
+              {/* <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton> */}
+            </>
+          )}
+        </PersonalInfo>
+      </SideBar>
+    );
   }
 
   function renderMainContent() {

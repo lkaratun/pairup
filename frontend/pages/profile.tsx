@@ -39,6 +39,9 @@ const updateUserMutation = gql`
   mutation updateUser($data: UserInput!, $id: ID!) {
     user(data: $data, id: $id) {
       firstName
+      lastName
+      email
+      bio
       id
     }
   }
@@ -63,11 +66,9 @@ function ProfilePage(props: { currentUser: FullUserInfo }) {
       const response = await mutate({
         variables: { id: userId, data: newData }
       });
-      setTimeout(() => {
-        console.log("🚀 ~ file: profile.tsx ~ line 68 ~ updateUser ~ mutationResponse after timeout", mutationResponse);
-      }, 1000);
 
       setCookie("firstName", response.data.user.firstName);
+      console.log("🚀 ~ file: profile.tsx ~ line 71 ~ function ~ response.data.user", response.data.user);
       return response.data.user;
     },
 
