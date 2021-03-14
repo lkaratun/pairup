@@ -6,35 +6,9 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { darken } from "polished";
 import mediaWrapper from "../styles/mediaWrapper";
-// import { useCookies } from "react-cookie";
-import {useCookie} from 'next-universal-cookie';
-
-
-// const logIn = useCallback(async function({ email, password }) {
-//   const logInMutation = gql`
-//     mutation logIn($email: String!, $password: String!) {
-//       logIn(email: $email, password: $password) {
-//         firstName
-//         email
-//         id
-//         password
-//       }
-//     }
-//   `;
-
-//   const apolloClient = initializeApollo();
-//   const {
-//     data: { logIn: logInData }
-//   } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
-//   setFirstName(logInData.firstName);
-//   setUserId(logInData.id);
-// }, []);
-
-
-
+import { useCookie } from "next-universal-cookie";
 
 function Navbar() {
-  // const [cookies, setCookie] = useCookies(["firstName"]);
   const [cookies, setCookie, removeCookie] = useCookie(["firstName"]);
   const { firstName } = cookies;
   const router = useRouter();
@@ -51,9 +25,39 @@ function Navbar() {
     removeCookie("userId");
   }, []);
 
-  return (
-    <StyledNav>
-      <ul>
+  function renderUserButtons() {
+    return firstName ? (
+      <NavAuthButtons>
+        <AuthSection>
+          <Link href="/profile">
+            <NavLink>{`Logged in as: ${firstName}`}</NavLink>
+          </Link>
+          <NavLink
+            onClick={() => {
+              logOut().then(() => router.push("/"));
+            }}
+          >
+            Log out
+          </NavLink>
+        </AuthSection>
+      </NavAuthButtons>
+    ) : (
+      <NavAuthButtonsLoggedIn>
+        <UnAuthSection>
+          <Link href="/login">
+            <NavLink>Log in</NavLink>
+          </Link>
+          <Link href="/register">
+            <NavLink>Register</NavLink>
+          </Link>
+        </UnAuthSection>
+      </NavAuthButtonsLoggedIn>
+    );
+  }
+
+  function renderPageLinks() {
+    return (
+      <>
         <li>
           <Link href="/">
             <Logo src=".././static/logo.svg" alt="logo" />
@@ -64,33 +68,15 @@ function Navbar() {
             <NavLink>Ads</NavLink>
           </Link>
         </li>
-        {firstName ? (
-          <NavAuthButtons>
-            <AuthSection>
-              <Link href="/profile">
-                <NavLink>{`Logged in as: ${firstName}`}</NavLink>
-              </Link>
-              <NavLink
-                onClick={() => {
-                  logOut().then(() => router.push("/"));
-                }}
-              >
-                Log out
-              </NavLink>
-            </AuthSection>
-          </NavAuthButtons>
-        ) : (
-          <NavAuthButtonsLoggedIn>
-            <UnAuthSection>
-              <Link href="/login">
-                <NavLink>Log in</NavLink>
-              </Link>
-              <Link href="/register">
-                <NavLink>Register</NavLink>
-              </Link>
-            </UnAuthSection>
-          </NavAuthButtonsLoggedIn>
-        )}
+      </>
+    );
+  }
+
+  return (
+    <StyledNav>
+      <ul>
+        {renderPageLinks()}
+        {renderUserButtons()}
       </ul>
     </StyledNav>
   );
