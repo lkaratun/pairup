@@ -6,6 +6,7 @@ import Profile from "../components/Profile";
 import { useRouter } from "next/router";
 import { FullUserInfo } from "types/User";
 import { useCookie } from "next-universal-cookie";
+import { UserInput } from "../../backend/src/generated/graphql";
 
 const GetCurrentUserQuery = gql`
   query GetCurrentUser {
@@ -59,7 +60,7 @@ function ProfilePage(props: { currentUser: FullUserInfo }) {
   const { lastName, email, image, bio, firstName, id: userId } = data.currentUser;
 
   const updateUser = useCallback(
-    async function(newData) {
+    async function(newData: UserInput) {
       if (Object.keys(newData).length === 0) return null;
 
       console.log("🚀 ~ file: UserProvider.js ~ line 90 ~ updateUser ~ userId", userId);

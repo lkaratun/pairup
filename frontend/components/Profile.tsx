@@ -7,7 +7,7 @@ import { initializeApollo } from "../lib/apolloClient";
 import { BasicUserInfo, FullUserInfo } from "types/User";
 import NameModal from "./NameModal";
 import BioModal from "./BioModal";
-// import { Ad } from "../../backend/src/generated/graphql";
+import { UserInput } from "../../backend/src/generated/graphql";
 type read = (name: string) => void;
 type updateUserHandler = (userInfo: { firstName?: string; lastName?: string }) => void;
 
@@ -40,7 +40,7 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
             lastName={lastName}
             showModal={nameEditorOpened}
             hide={hideNameEditor}
-            confirm={newData => props.updateUser(newData)}
+            confirm={(newData: UserInput) => props.updateUser(newData)}
           />
           <br />
           <strong>Email</strong> <br />
@@ -62,7 +62,7 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
             initialBio={bio}
             showModal={bioEditorOpened}
             hide={hideBioEditor}
-            confirm={newData => props.updateUser(newData)}
+            confirm={(newData: UserInput) => props.updateUser(newData)}
           />
         </PersonalInfo>
       </SideBar>
