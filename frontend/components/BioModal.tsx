@@ -4,23 +4,20 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { UserContext } from "./UserProvider";
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    boxShadow: "0 5px 12px 0 rgba(0,0,0,0.25)",
-    padding: "30px"
-  }
-};
+interface BioModalProps {
+  showModal: boolean;
+  initialBio: string;
+  hide: () => void;
+  confirm: (newData: { bio: string }) => void;
+}
 
-Modal.setAppElement("#__next");
+interface BioModalState {
+  bio: string;
+}
 
-class EditModal extends React.Component {
-  state = { bio: this.props.initialBio };
+class EditModal extends React.Component<BioModalProps, BioModalState> {
+  state = { bio: this.props.initialBio ?? ''};
+  private textArea;
 
   handleInput = e => this.setState({ bio: e.target.value });
 
@@ -38,15 +35,11 @@ class EditModal extends React.Component {
       >
         <Close onClick={hide}>X</Close>
         <h3>Your bio</h3>
-        <TextArea
-          ref={el => (this.textArea = el)}
-          value={this.state.bio}
-          onChange={this.handleInput}
-        />
+        <TextArea ref={el => (this.textArea = el)} value={this.state.bio} onChange={this.handleInput} />
         <CancelButton onClick={hide}>Cancel</CancelButton>
         <ConfirmButton
           onClick={() => {
-            confirm(this.state.bio);
+            confirm({bio: this.state.bio});
             hide();
           }}
         >
@@ -58,6 +51,21 @@ class EditModal extends React.Component {
 }
 
 export default EditModal;
+
+Modal.setAppElement("#__next");
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    boxShadow: "0 5px 12px 0 rgba(0,0,0,0.25)",
+    padding: "30px"
+  }
+};
 
 const TextArea = styled.textarea`
   height: 20em;
@@ -104,9 +112,3 @@ const CancelButton = styled.button`
   height: 35px;
   margin: 0.5em;
 `;
-
-EditModal.propTypes = {
-  showModal: PropTypes.bool.isRequired,
-  hide: PropTypes.func.isRequired,
-  confirm: PropTypes.func.isRequired
-};

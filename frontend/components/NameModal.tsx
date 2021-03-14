@@ -22,8 +22,8 @@ interface NameModalState {
 class NameModal extends React.Component<NameModalProps, NameModalState> {
   private firstNameInput;
   state = {
-    firstName: this.props.firstName || "",
-    lastName: this.props.lastName || ""
+    firstName: this.props.firstName ?? "",
+    lastName: this.props.lastName ?? ""
   };
 
   handleKeyPress = e => {

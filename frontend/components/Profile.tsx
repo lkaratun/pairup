@@ -1,19 +1,18 @@
 import React, { useState, useContext, useCallback } from "react";
 import styled from "styled-components";
-import {useCookie} from 'next-universal-cookie';
+import { useCookie } from "next-universal-cookie";
 import { gql, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apolloClient";
 
-
-
-import { BasicUserInfo, FullUserInfo  } from "types/User";
+import { BasicUserInfo, FullUserInfo } from "types/User";
 import NameModal from "./NameModal";
+import BioModal from "./BioModal";
 // import { Ad } from "../../backend/src/generated/graphql";
 type read = (name: string) => void;
-type updateUserHandler = (userInfo: {firstName?: string, lastName?:string}) => void;
+type updateUserHandler = (userInfo: { firstName?: string; lastName?: string }) => void;
 
-function Profile(props: { currentUser: FullUserInfo, updateUser: updateUserHandler}) {
-  // const [bioEditorOpened, setBioEditorOpened] = useState(false);
+function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandler }) {
+  const [bioEditorOpened, setBioEditorOpened] = useState(false);
   const [nameEditorOpened, setNameEditorOpened] = useState(false);
   // const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
@@ -21,12 +20,11 @@ function Profile(props: { currentUser: FullUserInfo, updateUser: updateUserHandl
   // console.log("🚀 ~ file: Profile.js ~ line 14 ~ Profile ~ cookies", cookies);
 
   const { lastName, email, image, bio, firstName, userId } = props.currentUser;
-  
+
   const showNameEditor = () => setNameEditorOpened(true);
   const hideNameEditor = () => setNameEditorOpened(false);
-
-  
-
+  const showBioEditor = () => setBioEditorOpened(true);
+  const hideBioEditor = () => setBioEditorOpened(false);
 
   function renderUserInfo() {
     return (
@@ -51,15 +49,21 @@ function Profile(props: { currentUser: FullUserInfo, updateUser: updateUserHandl
           {bio ? (
             <p>
               <strong>Bio</strong>
-              {/* <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton> */}
+              <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton>
               <br /> {bio}
             </p>
           ) : (
             <>
               <p>No bio</p>
-              {/* <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton> */}
+              <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton>
             </>
           )}
+          <BioModal
+            initialBio={bio}
+            showModal={bioEditorOpened}
+            hide={hideBioEditor}
+            confirm={newData => props.updateUser(newData)}
+          />
         </PersonalInfo>
       </SideBar>
     );
