@@ -5,7 +5,7 @@ import { useCookie } from "next-universal-cookie";
 import { Ad as AdType, NewAdResponseInput } from "generated-types";
 import { gql, useMutation } from "@apollo/client";
 
-function Ad({ ad }: { ad: AdType }) {
+function Ad({ ad, loading, refetch }: { ad: AdType; loading: boolean; refetch: () => void }) {
   const { activity = {}, description } = ad;
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
@@ -26,10 +26,11 @@ function Ad({ ad }: { ad: AdType }) {
 
   async function handleRespond() {
     const response = await mutate({
-      variables: {data: { userId: cookies.userId, adId: ad.id }}
+      variables: { data: { userId: cookies.userId, adId: ad.id } }
     });
 
     console.log("🚀 ~ file: Ad.tsx ~ line 37 ~ function ~ response.data", response.data);
+    refetch();
     return response.data.user;
   }
 
@@ -38,14 +39,15 @@ function Ad({ ad }: { ad: AdType }) {
       <AdTitle>{activity?.name} </AdTitle>
       <p>{description}</p>
       {cookies.userId ? (
-        <WideButton
-          onClick={() => {
-            console.log("In onclick");
-            handleRespond();
-          }}
-        >
-          Respond
-        </WideButton>
+        ad.responses.length === 0 ? (
+          loading ? (
+            "Loading"
+          ) : (
+            <WideButton onClick={handleRespond}>Respond</WideButton>
+          )
+        ) : (
+          "You have already responded to this ad"
+        )
       ) : (
         <NotLoggedInMessage>Please log in to respond to ads</NotLoggedInMessage>
       )}

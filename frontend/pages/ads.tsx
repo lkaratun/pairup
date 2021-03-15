@@ -34,14 +34,14 @@ export async function getServerSideProps(ctx) {
 }
 
 function Ads() {
-  const { error, data } = useQuery(getAds);
+  const { error, data, loading, refetch } = useQuery(getAds);
   if (error) return `Error fetching ads data: ${error}`;
 
   return (
     <Container>
       <Header>Ads</Header>
       {data.ads.map(ad => (
-        <Ad key={ad.id} ad={ad} />
+        <Ad key={ad.id} ad={ad} refetch={refetch} loading={loading}/>
       ))}
     </Container>
   );
