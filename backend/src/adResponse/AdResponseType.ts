@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
@@ -12,13 +12,13 @@ export default gql`
   }
 
   type AdResponse {
-    id: String
-    ad: Ad
-    user: User
+    id: String!
+    ad: Ad!
+    user: User!
   }
 
   input NewAdResponseInput {
-    adId: ID
-    userId: ID
+    adId: ID!
+    userId: ID!
   }
 `;

@@ -24,6 +24,9 @@
     "paths": {
       "types": [
         "types/*"
+      ],
+      "generated-types": [
+        "../backend/src/generated/graphql.ts"
       ]
     }
   },

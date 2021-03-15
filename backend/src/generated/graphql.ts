@@ -210,14 +210,14 @@ export type NewAdInput = {
 
 export type AdResponse = {
   __typename?: 'AdResponse';
-  id?: Maybe<Scalars['String']>;
-  ad?: Maybe<Ad>;
-  user?: Maybe<User>;
+  id: Scalars['String'];
+  ad: Ad;
+  user: User;
 };
 
 export type NewAdResponseInput = {
-  adId?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
+  adId: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 export type RegisterInput = {
@@ -436,9 +436,9 @@ export type AdResolvers<ContextType = any, ParentType extends ResolversParentTyp
 };
 
 export type AdResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdResponse'] = ResolversParentTypes['AdResponse']> = {
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  ad?: Resolver<Maybe<ResolversTypes['Ad']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ad?: Resolver<ResolversTypes['Ad'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

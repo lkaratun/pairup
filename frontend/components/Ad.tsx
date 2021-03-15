@@ -1,17 +1,51 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import styled from "styled-components";
 import { WideButton } from "./shared/Buttons";
 import { useCookie } from "next-universal-cookie";
+import { Ad as AdType, NewAdResponseInput } from "generated-types";
+import { gql, useMutation } from "@apollo/client";
 
-function Ad({ ad }) {
+function Ad({ ad }: { ad: AdType }) {
   const { activity = {}, description } = ad;
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
+
+  const respondMutation = gql`
+    mutation createAdResponse($data: NewAdResponseInput!) {
+      createAdResponse(data: $data) {
+        id
+        user {
+          id
+        }
+        ad {
+          id
+        }
+      }
+    }
+  `;
+  const [mutate, mutationResponse] = useMutation(respondMutation);
+
+  async function handleRespond() {
+    const response = await mutate({
+      variables: {data: { userId: cookies.userId, adId: ad.id }}
+    });
+
+    console.log("🚀 ~ file: Ad.tsx ~ line 37 ~ function ~ response.data", response.data);
+    return response.data.user;
+  }
+
   return (
     <AdCard>
       <AdTitle>{activity?.name} </AdTitle>
       <p>{description}</p>
       {cookies.userId ? (
-        <WideButton>Respond</WideButton>
+        <WideButton
+          onClick={() => {
+            console.log("In onclick");
+            handleRespond();
+          }}
+        >
+          Respond
+        </WideButton>
       ) : (
         <NotLoggedInMessage>Please log in to respond to ads</NotLoggedInMessage>
       )}

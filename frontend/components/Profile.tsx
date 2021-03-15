@@ -1,14 +1,10 @@
 import React, { useState, useContext, useCallback } from "react";
 import styled from "styled-components";
-import { useCookie } from "next-universal-cookie";
-import { gql, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/apolloClient";
 
-import { BasicUserInfo, FullUserInfo } from "types/User";
+import { FullUserInfo } from "types/User";
 import NameModal from "./NameModal";
 import BioModal from "./BioModal";
-import { UserInput } from "../../backend/src/generated/graphql";
-type read = (name: string) => void;
+import { UserInput } from "generated-types";
 type updateUserHandler = (userInfo: { firstName?: string; lastName?: string }) => void;
 
 function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandler }) {
