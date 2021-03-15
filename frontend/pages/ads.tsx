@@ -3,16 +3,38 @@ import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { initializeApollo } from "../lib/apolloClient";
 import Ad from "../components/Ad";
-import { ads as adsQuery } from "../queries/ads/ads";
+import { Ad as AdType, NewAdResponseInput } from "generated-types";
+
+import { gql } from "@apollo/client";
+
+export const getAds = gql`
+  query GetAds {
+    ads {
+      id
+      description
+      activity {
+        id
+        name
+      }
+      responses {
+        id
+        user {
+          firstName
+        }
+      }
+    }
+  }
+`;
+
 
 export async function getServerSideProps(ctx) {
   const apolloClient = initializeApollo();
-  await apolloClient.query({ query: adsQuery });
+  await apolloClient.query({ query: getAds });
   return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
-function Ads({ ads }) {
-  const { error, data } = useQuery(adsQuery);
+function Ads() {
+  const { error, data } = useQuery(getAds);
   if (error) return `Error fetching ads data: ${error}`;
 
   return (

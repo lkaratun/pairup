@@ -2,27 +2,27 @@ import { pickBy } from "lodash";
 
 export default {
   Query: {
-    ad: (parent, args, context, info): Promise<object> =>
+    ad: (parent, args, context, info): Promise<Record<string, unknown>> =>
       context.prisma.ad.findUnique({
         where: { id: args.id }
       }),
-    ads: (parent, args, context) => context.prisma.ad.findMany()
+    ads: (parent, args, context) => context.prisma.ad.findMany({include: {responses: true}})
   },
   Mutation: {
-    ad: async (parent, args, context): Promise<object> => {
+    ad: async (parent, args, context): Promise<Record<string, unknown>> => {
       return context.prisma.ad.update({
         where: { id: args.id },
         data: args.data
       });
     },
-    createAd: (parent, args, context, info): Promise<object> => {
-      const user: Object = args.data.userId && {
+    createAd: (parent, args, context, info): Promise<Record<string, unknown>> => {
+      const user: Record<string, unknown> = args.data.userId && {
         connect: { id: args.data.userId }
       };
-      const activity: Object = args.data.activityId && {
+      const activity: Record<string, unknown> = args.data.activityId && {
         connect: { id: args.data.activityId }
       };
-      const location: Object = args.data.locationId && {
+      const location: Record<string, unknown> = args.data.locationId && {
         connect: { id: args.data.locationId }
       };
 
@@ -41,7 +41,7 @@ export default {
     }
   },
   Ad: {
-    user: (parent, args, context, info): Promise<object> => {
+    user: (parent, args, context, info): Promise<Record<string, unknown>> => {
       return (
         parent.userId &&
         context.prisma.user.findUnique({
@@ -51,7 +51,7 @@ export default {
         })
       );
     },
-    activity: (parent, args, context, info): Promise<object> => {
+    activity: (parent, args, context, info): Promise<Record<string, unknown>> => {
       return (
         parent.activityId &&
         context.prisma.activity.findUnique({
@@ -61,7 +61,7 @@ export default {
         })
       );
     },
-    location: (parent, args, context, info): Promise<object> => {
+    location: (parent, args, context, info): Promise<Record<string, unknown>> => {
       return (
         parent.locationId &&
         context.prisma.location.findUnique({
@@ -71,15 +71,18 @@ export default {
         })
       );
     },
-    responses: (parent, args, context, info): Promise<object> => {
-      return (
-        parent.locationId &&
+    responses: async (parent, args, context, info): Promise<Record<string, unknown>> => {
+      console.log("🚀 ~ file: AdResolver.ts ~ line 84 ~ parent", parent);
+      const result = await  (
+        parent.responses.length > 0 ?
         context.prisma.adResponse.findMany({
           where: {
-            id: parent.responseId
+            adId: parent.id
           }
-        })
+        }) : []
       );
+      console.log("🚀 ~ file: AdResolver.ts ~ line 84 ~ result", result);
+      return result;
     }
   }
 };

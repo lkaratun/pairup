@@ -25,7 +25,7 @@ model Ad {
   locationId  String?
   user        User          @relation(fields: [userId], references: [id])
   userId      String
-  responses   AdResponse[]
+  responses   AdResponse[]  
 
   @@unique([userId, activityId], name:"one_activity_per_user")
   @@map(name: "ad")
@@ -33,10 +33,10 @@ model Ad {
 
 model AdResponse {
   id     String  @default(dbgenerated()) @id
-  ad     Ad?     @relation(fields: [adId], references: [id])
-  adId   String?
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  ad     Ad      @relation(fields: [adId], references: [id])
+  adId   String
+  user   User    @relation(fields: [userId], references: [id])
+  userId String
 
   @@unique([userId, adId], name: "UQ_5c24bb96ab60a6e6d502f98a9b9")
   @@map(name: "ad_response")
