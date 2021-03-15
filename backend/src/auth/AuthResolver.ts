@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import addMonths from "date-fns/addMonths";
 import config from "../../config.json";
 import jwt from "jsonwebtoken";
+import UserResolver from "../user/UserResolver";
 
 const SECRET = process.env.JWT_SECRET;
 const JWT_EXP_THRESHOLD = process.env.JWT_EXP_THRESHOLD || "60d";
@@ -38,7 +39,10 @@ export default {
       let user: User;
       try {
         userId = (jwt.verify(token, SECRET) as User).userId;
-        user = await context.prisma.user.findUnique({ where: { id: userId } });
+        user = await context.prisma.user.findUnique(
+          { where: { id: userId } },
+          { include: { ads: true, adResponses: true } }
+        );
         console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ user", user);
       } catch (err) {
         console.log("there is no user");
@@ -83,5 +87,6 @@ export default {
     logOut: async (parent, args, context, info) => {
       clearAuthCookies(context);
     }
-  }
+  },
+  User: UserResolver.User
 };

@@ -16,6 +16,12 @@ const GetCurrentUserQuery = gql`
       lastName
       bio
       email
+      ads {
+        id
+      }
+      adResponses{
+        id
+      }
     }
   }
 `;

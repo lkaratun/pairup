@@ -3,12 +3,13 @@ export default {
     user: (parent, args, context, info) => {
       console.log("🚀 ~ file: UserResolver.ts ~ line 19 ~ users: ~ context.prisma", context.prisma);
       return context.prisma.user.findUnique({
-        where: { id: args.id }
+        where: { id: args.id },
+        include: { ads: true, adResponses: true } 
       });
     },
     users: async (parent, args, context) => {
       console.log("In users resolver");
-      const users = await context.prisma.user.findMany();
+      const users = await context.prisma.user.findMany({ include: { ads: true, adResponses: true } });
       console.log("🚀 ~ file: UserResolver.ts ~ line 10 ~ users", users);
       return users;
     }

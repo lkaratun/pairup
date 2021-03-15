@@ -10,10 +10,8 @@ type updateUserHandler = (userInfo: { firstName?: string; lastName?: string }) =
 function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandler }) {
   const [bioEditorOpened, setBioEditorOpened] = useState(false);
   const [nameEditorOpened, setNameEditorOpened] = useState(false);
-  // const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
   console.log("🚀 ~ file: Profile.js ~ line 10 ~ Profile ~ props.currentUser", props.currentUser);
-  // console.log("🚀 ~ file: Profile.js ~ line 14 ~ Profile ~ cookies", cookies);
 
   const { lastName, email, image, bio, firstName, userId } = props.currentUser;
 
@@ -21,6 +19,10 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
   const hideNameEditor = () => setNameEditorOpened(false);
   const showBioEditor = () => setBioEditorOpened(true);
   const hideBioEditor = () => setBioEditorOpened(false);
+
+  function  renderAdResponses() {
+    return props.currentUser.adResponses.map(response => response.id);
+  }
 
   function renderUserInfo() {
     return (
@@ -45,13 +47,13 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
           {bio ? (
             <p>
               <strong>Bio</strong>
-              <EditButton onClick={() => setBioEditorOpened(true)}>(edit)</EditButton>
+              <EditButton onClick={showBioEditor}>(edit)</EditButton>
               <br /> {bio}
             </p>
           ) : (
             <>
               <p>No bio</p>
-              <EditButton onClick={() => setBioEditorOpened(true)}>(add)</EditButton>
+              <EditButton onClick={showBioEditor}>(add)</EditButton>
             </>
           )}
           <BioModal
@@ -75,7 +77,15 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
 
   return (
     <Container>
-      {firstName ? <GridWrapper>{renderUserInfo()}</GridWrapper> : "Please log in to view this page"}
+      {firstName ? (
+        <GridWrapper>
+          {renderUserInfo()}
+          {renderMainContent()}
+          {renderAdResponses()}
+        </GridWrapper>
+      ) : (
+        "Please log in to view this page"
+      )}
     </Container>
   );
 }
