@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { initializeApollo } from "../lib/apolloClient";
+import { useRouter } from "next/router";
 import Ad from "../components/Ad";
 import { Ad as AdType, NewAdResponseInput } from "generated-types";
 
@@ -35,6 +36,7 @@ export async function getServerSideProps(ctx) {
 
 function Ads() {
   const { error, data, loading, refetch } = useQuery(getAds);
+  const router = useRouter();
   if (error) return `Error fetching ads data: ${error}`;
 
   return (
@@ -43,6 +45,7 @@ function Ads() {
       {data.ads.map(ad => (
         <Ad key={ad.id} ad={ad} refetch={refetch} loading={loading}/>
       ))}
+      <button onClick={() => router.push("/createActivity")}>Create a new activity</button>
     </Container>
   );
 }

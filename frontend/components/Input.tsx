@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const Input = props => {
+interface inputProps {
+  name: string;
+  type: string;
+  id: string;
+}
+
+const Input = (props: inputProps) => {
   const { name, type = "text" } = props;
   return (
     <div>
