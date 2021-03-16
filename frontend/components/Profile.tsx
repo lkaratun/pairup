@@ -20,9 +20,26 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
   const showBioEditor = () => setBioEditorOpened(true);
   const hideBioEditor = () => setBioEditorOpened(false);
 
-  function  renderAdResponses() {
-    return props.currentUser.adResponses.map(response => response.id);
+  function renderAds() {
+    if (props.currentUser.ads.length === 0) return null;
+    return (
+      <>
+        Your ads:
+        {props.currentUser.ads.map(response => response.id)}
+      </>
+    );
   }
+  
+  function renderAdResponses() {
+    if (props.currentUser.adResponses.length === 0) return null;
+    return (
+      <>
+        Your responses:<br/>
+        {props.currentUser.adResponses.map(response => response.id)}
+      </>
+    );
+  }
+
 
   function renderUserInfo() {
     return (
@@ -67,20 +84,11 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
     );
   }
 
-  function renderMainContent() {
-    return (
-      <MainContent>
-        <h2 style={{ marginTop: "0", marginBottom: "0" }}>My ads</h2>
-      </MainContent>
-    );
-  }
-
   return (
     <Container>
       {firstName ? (
         <GridWrapper>
           {renderUserInfo()}
-          {renderMainContent()}
           {renderAdResponses()}
         </GridWrapper>
       ) : (
