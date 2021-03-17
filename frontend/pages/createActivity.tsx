@@ -12,6 +12,7 @@ import config from "../config.json";
 import { Formik, Form, useField } from "formik";
 import { TextArea, TextInput, DataList } from "components/shared/FormElements";
 import * as Yup from "yup";
+import { map } from "lodash";
 
 const getActivitiesQuery = gql`
   query getActivities {
@@ -19,7 +20,17 @@ const getActivitiesQuery = gql`
       id
       name
     }
-  }`;
+  }
+`;
+
+const createActivityMutation = gql`
+  mutation createAd($data: NewAdInput!) {
+    createAd(data: $data) {
+      id
+      description
+    }
+  }
+`;
 
 interface Values {
   activityType: string;
@@ -27,13 +38,17 @@ interface Values {
   location: string;
 }
 
-export default function SignupForm() {
-  const { error, data, loading, refetch } = useQuery(getActivitiesQuery);
+export default function createActivityForm() {
+  const { error, data, loading, refetch } = useQuery(getActivitiesQuery, { fetchPolicy: "no-cache" });
+  console.log("🚀 ~ file: createActivity.tsx ~ line 43 ~ createActivityForm ~ data", data)
+  
+  const [mutate, mutationResponse] = useMutation(createActivityMutation);
 
-  function createActivityOptions(){
-    return data.activities.map(activity => (
-      <option key={activity.id} value={activity.name}/>
-    ))
+  function createActivityOptions() {
+    if (!data?.activities) return null;
+    console.log("🚀 ~ file: createActivity.tsx ~ line 54 ~ createActivityOptions ~ data?", data);
+    // return null;
+    return map(data?.activities, activity => <option key={activity.id} value={activity.name} />);
   }
 
   return (
@@ -65,7 +80,7 @@ export default function SignupForm() {
       >
         <Form>
           <DataList label="Category" name="activityType" placeholder="Select activity type">
-            {createActivityOptions()}
+            {/* {createActivityOptions()} */}
           </DataList>
 
           <TextInput label="Location" name="location" type="text" placeholder="Vancouver" />

@@ -43,14 +43,14 @@ const server = new ApolloServer({
   formatResponse: (response, requestContext) => {
     const { data, errors } = response;
     if (errors) return response;
-
+    
     function isPrimitive(val) {
       if (typeof val === 'object') {
         return val === null;
       }
       return typeof val !== 'function';
     }
-
+    
     function  isObject(value) {
       return typeof value === 'object' && value !== null;
     }
@@ -58,18 +58,22 @@ const server = new ApolloServer({
     function myKeyBy(value) {
       if (isPrimitive(value)) return value;
       if (Array.isArray(value)) return myKeyBy(keyBy(value, 'id'));
-      if (isObject(value)) return mapValues(value, d => myKeyBy(d));
+      if (isObject(value)) {
+        const result = mapValues(value, d => myKeyBy(d));
+        // Object.setPrototypeOf(result, null);
+        return result;
+      }
       return value;
     }
     
-    return {data: myKeyBy(cloneDeep(data)), errors: undefined};
+    const newData = myKeyBy(cloneDeep(data));
+    
+    return {data: newData};
   }
 });
 
 const app = express();
 app.use(cookieParser());
-
-// app.use(path, jwtCheck);
 
 server.applyMiddleware({
   app,
