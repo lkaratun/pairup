@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import typeDefs from "./typeDefs";
 import { PrismaClient } from "@prisma/client";
-import { merge } from "lodash";
+import { merge, keyBy, cloneDeepWith, cloneDeep, mapValues } from "lodash";
 import AdType from "./ad/AdType";
 import AdResolver from "./ad/AdResolver";
 import AdResponseType from "./adResponse/AdResponseType";
@@ -39,11 +39,37 @@ const server = new ApolloServer({
   schemaDirectives: { AuthRequired },
   context: async ctx => {
     return { ...ctx, prisma };
+  },
+  formatResponse: (response, requestContext) => {
+    const { data, errors } = response;
+    if (errors) return response;
+
+    function isPrimitive(val) {
+      if (typeof val === 'object') {
+        return val === null;
+      }
+      return typeof val !== 'function';
+    }
+
+    function  isObject(value) {
+      return typeof value === 'object' && value !== null;
+    }
+    
+    function myKeyBy(value) {
+      if (isPrimitive(value)) return value;
+      if (Array.isArray(value)) return myKeyBy(keyBy(value, 'id'));
+      if (isObject(value)) return mapValues(value, d => myKeyBy(d));
+      return value;
+    }
+    
+    return {data: myKeyBy(cloneDeep(data)), errors: undefined};
   }
 });
 
 const app = express();
 app.use(cookieParser());
+
+// app.use(path, jwtCheck);
 
 server.applyMiddleware({
   app,
