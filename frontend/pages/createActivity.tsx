@@ -1,6 +1,6 @@
-import React, { useState, useContext, useCallback, FunctionComponent } from "react";
+import React, { useState, useContext, useCallback, FunctionComponent, useEffect } from "react";
 import { useRouter } from "next/router";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { initializeApollo } from "../lib/apolloClient";
 import { useCookie } from "next-universal-cookie";
 import styled from "styled-components";
@@ -10,8 +10,16 @@ import LoginButton from "../components/LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
 import { Formik, Form, useField } from "formik";
-import { TextInput  } from 'components/shared/FormElements';
+import { TextArea, TextInput, DataList } from "components/shared/FormElements";
 import * as Yup from "yup";
+
+const getActivitiesQuery = gql`
+  query getActivities {
+    activities {
+      id
+      name
+    }
+  }`;
 
 interface Values {
   activityType: string;
@@ -20,26 +28,32 @@ interface Values {
 }
 
 export default function SignupForm() {
+  const { error, data, loading, refetch } = useQuery(getActivitiesQuery);
+
+  function createActivityOptions(){
+    return data.activities.map(activity => (
+      <option key={activity.id} value={activity.name}/>
+    ))
+  }
+
   return (
-    <>
-      <h1>Subscribe!</h1>
+    <Container>
+      <Header>Create your activity!</Header>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          email: "",
-          acceptedTerms: false, // added for our checkbox
-          jobType: "" // added for our select
+          activityType: "",
+          description: "New activity description",
+          location: "Vancouver"
         }}
         validationSchema={Yup.object({
           activityType: Yup.string()
-            .max(15, "Must be 15 characters or less")
+            .max(100, "Must be 100 characters or less")
             .required("Required"),
           description: Yup.string()
-            .max(20, "Must be 20 characters or less")
+            .max(1024, "Must be 1024 characters or less")
             .required("Required"),
           location: Yup.string()
-            .email("Invalid email address")
+            .max(100, "Must be 100 characters or less")
             .required("Required")
         })}
         onSubmit={(values, { setSubmitting }) => {
@@ -50,25 +64,36 @@ export default function SignupForm() {
         }}
       >
         <Form>
-          <TextInput
-            label="Activity type"
-            name="activityType"
-            type="text"
-            placeholder="Frisbee? Bike ride? anything you want"
-          />
+          <DataList label="Category" name="activityType" placeholder="Select activity type">
+            {createActivityOptions()}
+          </DataList>
 
-          <TextInput
+          <TextInput label="Location" name="location" type="text" placeholder="Vancouver" />
+
+          <TextArea
             label="Description"
             name="description"
             type="text"
             placeholder="The weather is great. Let's get out and toss a frisbee!"
           />
 
-          <TextInput label="Location" name="location" type="text" placeholder="Vancouver" />
-
           <button type="submit">Create</button>
         </Form>
       </Formik>
-    </>
+    </Container>
   );
 }
+
+const Header = styled.h1`
+  margin: 1rem auto;
+  flex-basis: 100%;
+`;
+
+const Container = styled.div`
+  max-width: 80vw;
+  margin: 50px auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+`;

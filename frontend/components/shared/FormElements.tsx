@@ -23,6 +23,17 @@ export const TextInput = ({ label, ...props }: InputProps) => {
   );
 };
 
+export const TextArea = ({ label, ...props }: InputProps) => {
+  const [field, meta] = useField(props);
+  return (
+    <div>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <textarea className="text-area" {...field} {...props} />
+      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
+    </div>
+  );
+};
+
 export const Checkbox = ({ children, ...props }: InputProps) => {
   // React treats radios and checkbox inputs differently other input types, select, and textarea.
   // Formik does this too! When you specify `type` to useField(), it will
@@ -50,3 +61,19 @@ export const Select = ({ label, ...props }: InputProps) => {
     </div>
   );
 }
+
+export const DataList = ({ label, children, ...props }: InputProps) => {
+  const [field, meta] = useField(props);
+  return (
+    <div>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <input {...field} {...props} list="data" id="datalist-input" name={props.name} />
+      <datalist id="data">
+        {children}
+      </datalist>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </div>
+  );
+};
