@@ -10,7 +10,7 @@ datasource db {
 model Activity {
   id   String @default(dbgenerated()) @id
   name String @unique
-  ad   Ad[]
+  ads   Ad[]
 
   @@map(name: "activity")
 }
