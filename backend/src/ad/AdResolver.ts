@@ -6,7 +6,7 @@ export default {
       context.prisma.ad.findUnique({
         where: { id: args.id }
       }),
-    ads: (parent, args, context) => context.prisma.ad.findMany({include: {responses: true}})
+    ads: (parent, args, context) => context.prisma.ad.findMany({include: {responses: {select: {id: true}}}})
   },
   Mutation: {
     ad: async (parent, args, context): Promise<Record<string, unknown>> => {
