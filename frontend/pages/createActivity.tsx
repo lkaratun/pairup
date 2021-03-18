@@ -39,16 +39,14 @@ interface Values {
 }
 
 export default function createActivityForm() {
-  const { error, data, loading, refetch } = useQuery(getActivitiesQuery, { fetchPolicy: "no-cache" });
+  const { error, data, loading, refetch } = useQuery(getActivitiesQuery);
   console.log("🚀 ~ file: createActivity.tsx ~ line 43 ~ createActivityForm ~ data", data)
   
   const [mutate, mutationResponse] = useMutation(createActivityMutation);
 
   function createActivityOptions() {
-    if (!data?.activities) return null;
     console.log("🚀 ~ file: createActivity.tsx ~ line 54 ~ createActivityOptions ~ data?", data);
-    // return null;
-    return map(data?.activities, activity => <option key={activity.id} value={activity.name} />);
+    return data?.activities?.map(activity => <option key={activity.id} value={activity.name} />);
   }
 
   return (
@@ -71,16 +69,17 @@ export default function createActivityForm() {
             .max(100, "Must be 100 characters or less")
             .required("Required")
         })}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values) => {
+          
+
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
           }, 400);
         }}
       >
         <Form>
           <DataList label="Category" name="activityType" placeholder="Select activity type">
-            {/* {createActivityOptions()} */}
+            {createActivityOptions()}
           </DataList>
 
           <TextInput label="Location" name="location" type="text" placeholder="Vancouver" />

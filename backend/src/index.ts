@@ -40,36 +40,36 @@ const server = new ApolloServer({
   context: async ctx => {
     return { ...ctx, prisma };
   },
-  formatResponse: (response, requestContext) => {
-    const { data, errors } = response;
-    if (errors) return response;
+  // formatResponse: (response, requestContext) => {
+  //   const { data, errors } = response;
+  //   if (errors) return response;
     
-    function isPrimitive(val) {
-      if (typeof val === 'object') {
-        return val === null;
-      }
-      return typeof val !== 'function';
-    }
+  //   function isPrimitive(val) {
+  //     if (typeof val === 'object') {
+  //       return val === null;
+  //     }
+  //     return typeof val !== 'function';
+  //   }
     
-    function  isObject(value) {
-      return typeof value === 'object' && value !== null;
-    }
+  //   function  isObject(value) {
+  //     return typeof value === 'object' && value !== null;
+  //   }
     
-    function myKeyBy(value) {
-      if (isPrimitive(value)) return value;
-      if (Array.isArray(value)) return myKeyBy(keyBy(value, 'id'));
-      if (isObject(value)) {
-        const result = mapValues(value, d => myKeyBy(d));
-        // Object.setPrototypeOf(result, null);
-        return result;
-      }
-      return value;
-    }
+  //   function myKeyBy(value) {
+  //     if (isPrimitive(value)) return value;
+  //     if (Array.isArray(value)) return myKeyBy(keyBy(value, 'id'));
+  //     if (isObject(value)) {
+  //       const result = mapValues(value, d => myKeyBy(d));
+  //       // Object.setPrototypeOf(result, null);
+  //       return result;
+  //     }
+  //     return value;
+  //   }
     
-    const newData = myKeyBy(cloneDeep(data));
+  //   const newData = myKeyBy(cloneDeep(data));
     
-    return {data: newData};
-  }
+  //   return {data: newData};
+  // }
 });
 
 const app = express();
