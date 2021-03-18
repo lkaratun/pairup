@@ -6,7 +6,7 @@ export default {
       context.prisma.ad.findUnique({
         where: { id: args.id }
       }),
-    ads: (parent, args, context) => context.prisma.ad.findMany({include: {responses: {select: {id: true}}}})
+    ads: (parent, args, context) => context.prisma.ad.findMany({include: {responses: true}})
   },
   Mutation: {
     ad: async (parent, args, context): Promise<Record<string, unknown>> => {
@@ -70,19 +70,6 @@ export default {
           }
         })
       );
-    },
-    responses: async (parent, args, context, info): Promise<Record<string, unknown>> => {
-      console.log("🚀 ~ file: AdResolver.ts ~ line 84 ~ parent", parent);
-      const result = await  (
-        parent.responses.length > 0 ?
-        context.prisma.adResponse.findMany({
-          where: {
-            adId: parent.id
-          }
-        }) : []
-      );
-      console.log("🚀 ~ file: AdResolver.ts ~ line 84 ~ result", result);
-      return result;
     }
   }
 };
