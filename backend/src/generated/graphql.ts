@@ -100,7 +100,7 @@ export type MutationLocationArgs = {
 
 
 export type MutationCreateLocationArgs = {
-  data?: Maybe<LocationInput>;
+  data: LocationInput;
 };
 
 
@@ -160,8 +160,8 @@ export type UserInput = {
 
 export type Activity = {
   __typename?: 'Activity';
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
   ads?: Maybe<Array<Maybe<Ad>>>;
 };
 
@@ -171,7 +171,7 @@ export type ActivityInput = {
 
 export type Location = {
   __typename?: 'Location';
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   ads?: Maybe<Array<Maybe<Ad>>>;
@@ -205,7 +205,7 @@ export type NewAdInput = {
   imageUrl?: Maybe<Scalars['String']>;
   userId: Scalars['ID'];
   activityId: Scalars['ID'];
-  locationId?: Maybe<Scalars['ID']>;
+  locationId: Scalars['ID'];
 };
 
 export type AdResponse = {
@@ -385,7 +385,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   activity?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationActivityArgs, 'id'>>;
   createActivity?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationCreateActivityArgs, never>>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationLocationArgs, 'id'>>;
-  createLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationCreateLocationArgs, never>>;
+  createLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationCreateLocationArgs, 'data'>>;
   ad?: Resolver<Maybe<ResolversTypes['Ad']>, ParentType, ContextType, RequireFields<MutationAdArgs, 'id'>>;
   createAd?: Resolver<Maybe<ResolversTypes['Ad']>, ParentType, ContextType, RequireFields<MutationCreateAdArgs, never>>;
   createAdResponse?: Resolver<Maybe<ResolversTypes['AdResponse']>, ParentType, ContextType, RequireFields<MutationCreateAdResponseArgs, never>>;
@@ -411,14 +411,14 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   ads?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ad']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type LocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = {
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   ads?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ad']>>>, ParentType, ContextType>;

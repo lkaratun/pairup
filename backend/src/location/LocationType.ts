@@ -8,11 +8,11 @@ export default gql`
 
   extend type Mutation {
     location(id: ID!, data: LocationInput): Location
-    createLocation(data: LocationInput): Location
+    createLocation(data: LocationInput!): Location
   }
 
   type Location {
-    id: String
+    id: ID!
     city: String
     country: String
     ads: [Ad]

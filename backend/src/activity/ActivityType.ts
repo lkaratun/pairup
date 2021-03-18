@@ -11,8 +11,8 @@ export default gql`
   }
 
   type Activity {
-    id: String
-    name: String
+    id: ID!
+    name: String!
     ads: [Ad]
   }
 

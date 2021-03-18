@@ -4,7 +4,7 @@ export default {
       context.prisma.activity.findUnique({
         where: { id: args.id }
       }),
-    activities: (parent, args, context) => context.prisma.activity.findMany()
+    activities: (parent, args, context) => context.prisma.activity.findMany({include: {ads: true}})
   },
   Mutation: {
     activity: async (parent, args, context) => {

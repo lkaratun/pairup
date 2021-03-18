@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
@@ -33,6 +33,6 @@ export default gql`
     imageUrl: String
     userId: ID!
     activityId: ID!
-    locationId: ID
+    locationId: ID!
   }
 `;
