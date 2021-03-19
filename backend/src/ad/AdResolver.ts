@@ -16,8 +16,9 @@ export default {
       });
     },
     createAd: (parent, args, context, info): Promise<Record<string, unknown>> => {
-      const user: Record<string, unknown> = args.data.userId && {
-        connect: { id: args.data.userId }
+    console.log("🚀 ~ file: AdResolver.ts ~ line 19 ~ context.userId", context.userId);
+      const user: Record<string, unknown> = context.userId && {
+        connect: { id: context.userId }
       };
       const activity: Record<string, unknown> = args.data.activityId && {
         connect: { id: args.data.activityId }

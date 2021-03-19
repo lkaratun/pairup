@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 
 export default gql`
-  directive @AuthRequired on FIELD_DEFINITION
+directive @AuthRequired on FIELD_DEFINITION | OBJECT
   extend type Query {
     user(id: ID!): User
     users: [User]

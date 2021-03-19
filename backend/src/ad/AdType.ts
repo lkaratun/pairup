@@ -6,9 +6,9 @@ export default gql`
     ads: [Ad]
   }
 
-  extend type Mutation {
-    ad(id: ID!, data: ModifyAdInput): Ad
-    createAd(data: NewAdInput): Ad
+  extend type Mutation @AuthRequired {
+    ad(id: ID!, data: ModifyAdInput): Ad @AuthRequired
+    createAd(data: NewAdInput): Ad @AuthRequired
   }
 
   type Ad {
@@ -23,7 +23,6 @@ export default gql`
   input ModifyAdInput {
     description: String
     imageUrl: String
-    userId: ID
     activityId: ID
     locationId: ID
   }
@@ -31,7 +30,6 @@ export default gql`
   input NewAdInput {
     description: String
     imageUrl: String
-    userId: ID!
     activityId: ID!
     locationId: ID!
   }

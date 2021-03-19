@@ -13,6 +13,7 @@
     "fetch": false
   },
   "rules": {
+    "class-methods-use-this": "off",
     "import/extensions": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "max-len": [
