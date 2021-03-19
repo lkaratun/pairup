@@ -10,7 +10,7 @@ import LoginButton from "../components/LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
 import { Formik, Form, useField } from "formik";
-import { TextArea, TextInput, DataList } from "components/shared/FormElements";
+import { TextArea, TextInput, Select } from "components/shared/FormElements";
 import * as Yup from "yup";
 import { map } from "lodash";
 import { Activity, Ad } from "generated-types";
@@ -40,22 +40,19 @@ interface Values {
 }
 
 export default function createActivityForm() {
-  const { error, data, loading } = useQuery<{activities: Activity[]}>(getActivitiesQuery);
+  const { error, data, loading } = useQuery<{ activities: Activity[] }>(getActivitiesQuery);
   const apolloClient = useApollo();
-  // console.log("🚀 ~ file: createActivity.tsx ~ line 43 ~ createActivityForm ~ data", data)
-  
-  
+
   const [mutate, mutationResponse] = useMutation(createActivityMutation);
 
   function createActivityOptions() {
-    // console.log("🚀 ~ file: createActivity.tsx ~ line 54 ~ createActivityOptions ~ data?", data);
-    return data?.activities?.map(activity => <option key={activity.id} value={activity.name} />);
-  }
-
-  function validateActivity(activityType: string){
-    // console.log("🚀 ~ file: createActivity.tsx ~ line 56 ~ validateActivity ~ validateActivity")
-    const activityTypeId = data.activities.find(activity => activity.name === activityType);
-    if (!activityTypeId) return "Please select an existing activity type";
+    const options = data?.activities?.map(activity => (
+      <option key={activity.id} value={activity.id}>
+        {activity.name}
+      </option>
+    ));
+    options?.unshift(<option key="placeholder" value="">Choose activity type</option>);
+    return options
   }
 
   return (
@@ -69,27 +66,6 @@ export default function createActivityForm() {
         }}
         validationSchema={Yup.object({
           activityType: Yup.string()
-            .max(10, "Must be 10 characters or less")
-            .test('existing-activity-chosen', 'Please choose an existing activity', (value) => {
-              console.log("🚀 ~ file: createActivity.tsx ~ line 74 ~ .test ~ value", value)
-              console.log("🚀 ~ file: createActivity.tsx ~ line 76 ~ .test ~ apolloClient.cache", apolloClient.cache)
-              const id = apolloClient.cache.identify({
-                __typename: "Activity",
-                name: value,
-              })
-              console.log("🚀 ~ file: createActivity.tsx ~ line 80 ~ .test ~ id", id)
-              const activityCachedData = apolloClient.cache.readFragment({
-                id,
-                fragment: gql`
-                  fragment ActivityFragment on Activity {
-                    id
-                    name
-                  }
-                `,
-              });
-              console.log("🚀 ~ file: createActivity.tsx ~ line 87 ~ .test ~ activityCachedData", activityCachedData)
-              return activityCachedData?.name === value;
-            })
             .required("Required"),
           description: Yup.string()
             .max(1024, "Must be 1024 characters or less")
@@ -99,22 +75,16 @@ export default function createActivityForm() {
             .required("Required")
         })}
         onSubmit={(values: Values) => {
-          const {activityType, description, location } = values;
-          const activityTypeId = data.activities.find(activity => activity.name === activityType).id;
-
-          console.log("🚀 ~ file: createActivity.tsx ~ line 96 ~ createActivityForm ~ activityCachedData", activityCachedData)
-
-
+          const { activityType, description, location } = values;
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
-            // alert({activity: activityTypeId, }, null, 2);
           }, 400);
         }}
       >
         <Form>
-          <DataList label="Category" name="activityType" placeholder="Select activity type" >
+          <Select label="Category" name="activityType" placeholder="Select activity type">
             {createActivityOptions()}
-          </DataList>
+          </Select>
 
           <TextInput label="Location" name="location" type="text" placeholder="Vancouver" />
 
