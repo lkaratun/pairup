@@ -12,14 +12,18 @@ import config from "../config.json";
 import { Formik, Form, useField } from "formik";
 import { TextArea, TextInput, Select } from "components/shared/FormElements";
 import * as Yup from "yup";
-import { map } from "lodash";
-import { Activity, Ad } from "generated-types";
+import { Activity, Location } from "generated-types";
 
-const getActivitiesQuery = gql`
+const getActivitiesLocationsQuery = gql`
   query getActivities {
     activities {
       id
       name
+    }
+    locations {
+      id
+      country
+      city
     }
   }
 `;
@@ -40,7 +44,8 @@ interface Values {
 }
 
 export default function createActivityForm() {
-  const { error, data, loading } = useQuery<{ activities: Activity[] }>(getActivitiesQuery);
+  const { error, data, loading } = useQuery<{ activities: Activity[], locations: Location[]}>(getActivitiesLocationsQuery);
+  console.log("🚀 ~ file: createActivity.tsx ~ line 48 ~ createActivityForm ~ data", data)
   const apolloClient = useApollo();
 
   const [mutate, mutationResponse] = useMutation(createActivityMutation);
@@ -52,6 +57,16 @@ export default function createActivityForm() {
       </option>
     ));
     options?.unshift(<option key="placeholder" value="">Choose activity type</option>);
+    return options
+  }
+
+  function createLocationOptions() {
+    const options = data?.locations?.map(location => (
+      <option key={location.id} value={location.id}>
+        {location.city} ({location.country})
+      </option>
+    ));
+    options?.unshift(<option key="placeholder" value="">Choose location</option>);
     return options
   }
 
@@ -85,8 +100,11 @@ export default function createActivityForm() {
           <Select label="Category" name="activityType" placeholder="Select activity type">
             {createActivityOptions()}
           </Select>
+          <Select label="Location" name="location" placeholder="Select location">
+            {createLocationOptions()}
+          </Select>
 
-          <TextInput label="Location" name="location" type="text" placeholder="Vancouver" />
+          {/* <TextInput label="Location" name="location" type="text" placeholder="Vancouver" /> */}
 
           <TextArea
             label="Description"
