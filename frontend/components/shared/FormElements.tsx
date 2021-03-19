@@ -1,4 +1,4 @@
-import { Formik, Form, useField } from "formik";
+import { Formik, Form, useField, useFormik } from "formik";
 
 interface InputProps {
   label?: string;
@@ -7,6 +7,7 @@ interface InputProps {
   placeholder?: string;
   id?: string;
   children?: JSX.Element | string | (JSX.Element | string)[];
+  validate?: (value: string) => string
 }
 
 export const TextInput = ({ label, ...props }: InputProps) => {
