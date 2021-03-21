@@ -110,7 +110,7 @@ export type MutationActivityArgs = {
 };
 
 
-export type MutationCreateActivityArgs = {
+export type MutationCreateAdArgs = {
   data?: Maybe<NewActivityInput>;
 };
 
@@ -195,7 +195,6 @@ export type Activity = {
 export type ModifyActivityInput = {
   description?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['ID']>;
   activityTypeId?: Maybe<Scalars['ID']>;
   locationId?: Maybe<Scalars['ID']>;
 };
@@ -203,7 +202,6 @@ export type ModifyActivityInput = {
 export type NewActivityInput = {
   description?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
-  userId: Scalars['ID'];
   activityTypeId: Scalars['ID'];
   locationId: Scalars['ID'];
 };
@@ -387,7 +385,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationLocationArgs, 'id'>>;
   createLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationCreateLocationArgs, 'data'>>;
   activity?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationActivityArgs, 'id'>>;
-  createAd?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationCreateActivityArgs, never>>;
+  createAd?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationCreateAdArgs, never>>;
   createActivityResponse?: Resolver<Maybe<ResolversTypes['ActivityResponse']>, ParentType, ContextType, RequireFields<MutationCreateActivityResponseArgs, never>>;
   deleteActivityResponse?: Resolver<Maybe<ResolversTypes['ActivityResponse']>, ParentType, ContextType, RequireFields<MutationDeleteActivityResponseArgs, 'id'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'data'>>;

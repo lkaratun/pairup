@@ -12,7 +12,7 @@ model ActivityType {
   name String @unique
   activities   Activity[]
 
-  @@map(name: "activity")
+  @@map(name: "activity_type")
 }
 
 model Activity {
@@ -28,7 +28,7 @@ model Activity {
   responses   ActivityResponse[]  
 
   @@unique([userId, activityTypeId], name:"one_activityType_per_user")
-  @@map(name: "ad")
+  @@map(name: "activity")
 }
 
 model ActivityResponse {
@@ -39,7 +39,7 @@ model ActivityResponse {
   userId String
 
   @@unique([userId, activityId], name: "UQ_5c24bb96ab60a6e6d502f98a9b9")
-  @@map(name: "ad_response")
+  @@map(name: "activity_response")
 }
 
 model Location {

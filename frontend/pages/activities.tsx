@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { initializeApollo } from "../lib/ApolloClient";
 import { useRouter } from "next/router";
 import Activity from "../components/Activity";
-import { Activity as ActivityType, NewActivityResponseInput } from "generated-types";
+import { ActivityType, NewActivityResponseInput } from "generated-types";
 
 import { gql } from "@apollo/client";
 
