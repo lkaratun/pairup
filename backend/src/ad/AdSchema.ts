@@ -14,7 +14,7 @@ export default gql`
   type Ad {
     id: String
     description: String
-    activity: Activity
+    activitytype: ActivityType
     location: Location
     user: User
     responses: [AdResponse]
@@ -23,14 +23,14 @@ export default gql`
   input ModifyAdInput {
     description: String
     imageUrl: String
-    activityId: ID
+    activitytypeId: ID
     locationId: ID
   }
 
   input NewAdInput {
     description: String
     imageUrl: String
-    activityId: ID!
+    activitytypeId: ID!
     locationId: ID!
   }
 `;

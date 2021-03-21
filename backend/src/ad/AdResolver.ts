@@ -20,8 +20,8 @@ export default {
       const user: Record<string, unknown> = context.userId && {
         connect: { id: context.userId }
       };
-      const activity: Record<string, unknown> = args.data.activityId && {
-        connect: { id: args.data.activityId }
+      const activitytype: Record<string, unknown> = args.data.activitytypeId && {
+        connect: { id: args.data.activitytypeId }
       };
       const location: Record<string, unknown> = args.data.locationId && {
         connect: { id: args.data.locationId }
@@ -33,7 +33,7 @@ export default {
             description: args.data.description,
             imageUrl: args.data.imageUrl,
             user,
-            activity,
+            activitytype,
             location
           }
         }),
@@ -52,12 +52,12 @@ export default {
         })
       );
     },
-    activity: (parent, args, context, info): Promise<Record<string, unknown>> => {
+    activitytype: (parent, args, context, info): Promise<Record<string, unknown>> => {
       return (
-        parent.activityId &&
-        context.prisma.activity.findUnique({
+        parent.activitytypeId &&
+        context.prisma.activitytype.findUnique({
           where: {
-            id: parent.activityId
+            id: parent.activitytypeId
           }
         })
       );

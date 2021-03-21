@@ -2,55 +2,55 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-class ActivityPicker extends Component {
+class ActivityTypePicker extends Component {
   state = {
     popupOpen: false,
-    selectedActivity: "activity"
+    selectedActivityType: "activitytype"
   };
 
-  handleActivitySelection = activity => {
-    // Callback fn that sends selected activity to parent component
+  handleActivityTypeSelection = activitytype => {
+    // Callback fn that sends selected activitytype to parent component
     const { updateSelection } = this.props;
-    this.setState({ popupOpen: false, selectedActivity: activity.name });
-    updateSelection("activity", activity.name, activity.id);
+    this.setState({ popupOpen: false, selectedActivityType: activitytype.name });
+    updateSelection("activitytype", activitytype.name, activitytype.id);
   };
 
   render() {
-    const { popupOpen, selectedActivity } = this.state;
-    const { activities, type } = this.props;
-    const categoryList = activities.map(activityObject => (
-      <ActivityListItem
-        key={activityObject.id}
-        onClick={e => this.handleActivitySelection(activityObject, e)}
+    const { popupOpen, selectedActivityType } = this.state;
+    const { activityTypes, type } = this.props;
+    const categoryList = activityTypes.map(activitytypeObject => (
+      <ActivityTypeListItem
+        key={activitytypeObject.id}
+        onClick={e => this.handleActivityTypeSelection(activitytypeObject, e)}
       >
-        {activityObject.name}
-      </ActivityListItem>
+        {activitytypeObject.name}
+      </ActivityTypeListItem>
     ));
 
     return (
-      <ActivityWrapper type={type}>
-        <ActivityBox
+      <ActivityTypeWrapper type={type}>
+        <ActivityTypeBox
           type={type}
           onFocus={() => this.setState({ popupOpen: true })}
           onClick={() => this.setState({ popupOpen: true })}
         >
-          {selectedActivity}
-        </ActivityBox>
+          {selectedActivityType}
+        </ActivityTypeBox>
         {popupOpen && <ul>{categoryList}</ul>}
-      </ActivityWrapper>
+      </ActivityTypeWrapper>
     );
   }
 }
 
-export default ActivityPicker;
+export default ActivityTypePicker;
 
-ActivityPicker.propTypes = {
+ActivityTypePicker.propTypes = {
   updateSelection: PropTypes.func.isRequired,
-  activities: PropTypes.arrayOf(PropTypes.object).isRequired,
+  activityTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
   type: PropTypes.string.isRequired
 };
 
-const ActivityWrapper = styled.div`
+const ActivityTypeWrapper = styled.div`
   margin-bottom: ${props => (props.type === "form" ? "5px" : "")};
   &:focus {
     outline: none;
@@ -72,7 +72,7 @@ const ActivityWrapper = styled.div`
   }
 `;
 
-const ActivityBox = styled.div`
+const ActivityTypeBox = styled.div`
   width: 90%;
   cursor: pointer;
   text-align: left;
@@ -89,7 +89,7 @@ const ActivityBox = styled.div`
   }
 `;
 
-const ActivityListItem = styled.li`
+const ActivityTypeListItem = styled.li`
   text-transform: capitalize;
   text-align: left;
   cursor: pointer;

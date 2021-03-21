@@ -7,7 +7,7 @@ import Input from "./Input";
 import { WideButton } from "./shared/Buttons";
 import SelectParticipantRange from "./SelectParticipantRange";
 import DateRangePicker from "./DateRangePicker";
-import DynamicActivitySearch from "./DynamicActivitySearch";
+import DynamicActivityTypeSearch from "./DynamicActivityTypeSearch";
 import DynamicLocationSearch from "./DynamicLocationSearch";
 import config from "../config.json";
 
@@ -17,7 +17,7 @@ class EventForm extends Component {
   state = {
     name: "",
     description: "",
-    activityId: null,
+    activitytypeId: null,
     locationId: null,
     dateFrom: null,
     dateTo: null,
@@ -33,7 +33,7 @@ class EventForm extends Component {
       name: this.state.name,
       minPeople: this.state.minPeople,
       maxPeople: this.state.maxPeople,
-      activityId: this.state.activityId,
+      activitytypeId: this.state.activitytypeId,
       locationId: this.state.locationId,
       description: this.state.description,
       dateFrom: this.state.dateFrom,
@@ -41,7 +41,7 @@ class EventForm extends Component {
     };
 
     // validate new object
-    const REQUIRED_FIELDS = ["name", "activityId", "maxPeople"];
+    const REQUIRED_FIELDS = ["name", "activitytypeId", "maxPeople"];
     for (let i = 0; i < REQUIRED_FIELDS.length; i++) {
       if (!newEvent[REQUIRED_FIELDS[i]]) {
         this.setState({ valid: false });
@@ -62,10 +62,10 @@ class EventForm extends Component {
     this.setState(inputValue);
   };
 
-  updateActivity = (payload, existsInDB) => {
+  updateActivityType = (payload, existsInDB) => {
     // existsInDB flag is used to determine if that is a brand new attribute coming and needs to be created in DB or it is existing one
     if (existsInDB) {
-      this.setState({ activityId: payload.id });
+      this.setState({ activitytypeId: payload.id });
     } else {
       // create new instance of attribute with the ID
       const token = localStorage.getItem("token");
@@ -75,14 +75,14 @@ class EventForm extends Component {
       };
       axios({
         method: "post",
-        url: `${backendUrlFull}/activities`,
+        url: `${backendUrlFull}/activityTypes`,
         data,
         headers: {
           Authorization: AuthStr
         }
       })
         .then(response => {
-          this.setState({ activityId: response.data.id });
+          this.setState({ activitytypeId: response.data.id });
         })
         .catch(error => console.error(error));
     }
@@ -145,11 +145,11 @@ class EventForm extends Component {
           placeholder="Description"
           onChange={this.handleInput}
         />
-        <DynamicActivitySearch
-          activities={this.props.activities}
-          updateActivity={this.updateActivity}
-          type="activities"
-          placeholder="Activity"
+        <DynamicActivityTypeSearch
+          activityTypes={this.props.activityTypes}
+          updateActivityType={this.updateActivityType}
+          type="activityTypes"
+          placeholder="ActivityType"
           allowNew
         />
         <DynamicLocationSearch
@@ -164,7 +164,7 @@ class EventForm extends Component {
         <DateRangePicker updateDateRange={this.updateDateRange} />
         {!valid && (
           <ErrorMsg>
-            Please make sure you filled name, activity and max people fields to
+            Please make sure you filled name, activitytype and max people fields to
             continue!
           </ErrorMsg>
         )}

@@ -3,11 +3,11 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import Input from "./Input";
 
-class DynamicActivitySearch extends React.Component {
+class DynamicActivityTypeSearch extends React.Component {
   state = {
     inputVal: "",
-    suggestions: this.props.activities,
-    matchingSuggestions: this.props.activities,
+    suggestions: this.props.activityTypes,
+    matchingSuggestions: this.props.activityTypes,
     selectionID: null,
     selectionName: null,
     showSuggestions: false,
@@ -40,7 +40,7 @@ class DynamicActivitySearch extends React.Component {
 
   // Add suggestion based on the input
   handleAdd = () => {
-    const { updateActivity } = this.props;
+    const { updateActivityType } = this.props;
     const currentValue = this.state.inputVal;
     this.setState({ showAddButton: false });
     // send the info to the parent component indicating new addition to db
@@ -48,15 +48,15 @@ class DynamicActivitySearch extends React.Component {
       name: currentValue,
       id: null
     };
-    updateActivity(payload, false);
+    updateActivityType(payload, false);
   };
 
   // Filter suggestions based on the input
   getSuggestions = async input => {
     const { suggestions } = this.state;
     const regex = new RegExp(input, "gmi");
-    const matchingSuggestions = suggestions.filter(activity =>
-      activity.name.match(regex)
+    const matchingSuggestions = suggestions.filter(activitytype =>
+      activitytype.name.match(regex)
     );
     if (matchingSuggestions.length === 0) {
       this.setState({ showSuggestions: false, matchingSuggestions: [] });
@@ -66,7 +66,7 @@ class DynamicActivitySearch extends React.Component {
   };
 
   resetSearch = e => {
-    const { updateActivity } = this.props;
+    const { updateActivityType } = this.props;
     const { suggestions } = this.state;
     const inputVal = e ? e.target.value : "";
     this.setState({
@@ -75,7 +75,7 @@ class DynamicActivitySearch extends React.Component {
       matchingSuggestions: suggestions,
       focusedItem: null
     });
-    updateActivity({ id: null, name: null }, false);
+    updateActivityType({ id: null, name: null }, false);
   };
 
   handleChange = e => {
@@ -89,7 +89,7 @@ class DynamicActivitySearch extends React.Component {
 
   handleClickSelect = (id, name) => {
     // handler for direct click on suggestion
-    const { updateActivity } = this.props;
+    const { updateActivityType } = this.props;
     const payload = {
       id,
       name
@@ -102,7 +102,7 @@ class DynamicActivitySearch extends React.Component {
       selectionID: id,
       selectionName: name
     });
-    updateActivity(payload, true);
+    updateActivityType(payload, true);
   };
 
   // method that is needed for hiding popup if clicked outside functionality
@@ -114,7 +114,7 @@ class DynamicActivitySearch extends React.Component {
 
   handleKeyDown = (e, id, name) => {
     // e.stopPropagation();
-    const { updateActivity } = this.props;
+    const { updateActivityType } = this.props;
     const { focusedItem, matchingSuggestions } = this.state;
     let payload = {
       id,
@@ -140,7 +140,7 @@ class DynamicActivitySearch extends React.Component {
           id: matchingSuggestions[focusedItem].id,
           name: matchingSuggestions[focusedItem].name
         };
-        updateActivity(payload, true);
+        updateActivityType(payload, true);
       } else {
         this.setState({ showSuggestions: false });
       }
@@ -185,7 +185,7 @@ class DynamicActivitySearch extends React.Component {
           id: matchingSuggestions[focusedItem].id,
           name: matchingSuggestions[focusedItem].name
         };
-        updateActivity(payload, true);
+        updateActivityType(payload, true);
       } else {
         this.setState({ showSuggestions: false });
       }
@@ -237,7 +237,7 @@ class DynamicActivitySearch extends React.Component {
               onClick={this.handleInputClick}
               onChange={this.handleChange}
               type="text"
-              placeholder="Activities"
+              placeholder="ActivityTypes"
               value={inputVal}
               onKeyDown={e => this.handleKeyDown(e)}
             />
@@ -257,14 +257,14 @@ class DynamicActivitySearch extends React.Component {
     );
   }
 }
-DynamicActivitySearch.propTypes = {
+DynamicActivityTypeSearch.propTypes = {
   placeholder: PropTypes.string.isRequired,
   allowNew: PropTypes.bool.isRequired,
-  updateActivity: PropTypes.func,
+  updateActivityType: PropTypes.func,
   cleared: PropTypes.bool
 };
 
-export default DynamicActivitySearch;
+export default DynamicActivityTypeSearch;
 
 const SearchBarWrapper = styled.div`
   position: relative;

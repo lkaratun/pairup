@@ -10,7 +10,7 @@ import config from "../config.json";
 
 import { ColoredButton } from "../components/shared/Buttons";
 import DynamicLocationSearch from "../components/DynamicLocationSearch";
-import DynamicActivitySearch from "../components/DynamicActivitySearch";
+import DynamicActivityTypeSearch from "../components/DynamicActivityTypeSearch";
 
 const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 
@@ -21,8 +21,8 @@ const DateSelectorDynamic = dynamic(() => import("../components/DateSelector"), 
 export async function getServerSideProps({ req }) {
   const temp = await serverSideRequest(req)({
     data: {
-      query: `query activities {
-        activities {
+      query: `query activityTypes {
+        activityTypes {
           id
           name
         }
@@ -33,18 +33,18 @@ export async function getServerSideProps({ req }) {
     .catch(err => console.error(err.response.data));
   console.log("getServerSideProps -> temp", temp);
 
-  const { activities } = temp;
+  const { activityTypes } = temp;
 
   return {
     props: {
-      activities
+      activityTypes
     }
   };
 }
 
 class Dashboard extends Component {
   state = {
-    filters: { dateFrom: null, city: null, activity: null },
+    filters: { dateFrom: null, city: null, activitytype: null },
     events: this.props.events || [],
     offset: 0,
     cleared: null,
@@ -65,10 +65,10 @@ class Dashboard extends Component {
     this.setState({ filters: oldFilters, cleared: false });
   };
 
-  updateActivity = data => {
+  updateActivityType = data => {
     const oldState = { ...this.state };
     const oldFilters = oldState.filters;
-    oldFilters["activity"] = data.name;
+    oldFilters["activitytype"] = data.name;
     // updated the cleared state and filters
     this.setState({ filters: oldFilters, cleared: false });
   };
@@ -82,7 +82,7 @@ class Dashboard extends Component {
 
   clearFilters = () => {
     this.setState({
-      filters: { dateFrom: null, city: null, activity: null },
+      filters: { dateFrom: null, city: null, activitytype: null },
       cleared: true
     });
   };
@@ -126,12 +126,12 @@ class Dashboard extends Component {
           </h4>
         </Divider>
         <FilterControlPanel>
-          {/* <DynamicActivitySearch
-            // placeholder="Activity"
+          {/* <DynamicActivityTypeSearch
+            // placeholder="ActivityType"
             allowNew={false}
-            updateActivity={this.updateActivity}
+            updateActivityType={this.updateActivityType}
             cleared={cleared}
-            activities={this.props.activities}
+            activityTypes={this.props.activityTypes}
           />
           <DynamicLocationSearch
             placeholder="City"

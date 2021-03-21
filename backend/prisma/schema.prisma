@@ -7,27 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Activity {
+model ActivityType {
   id   String @default(dbgenerated()) @id
   name String @unique
   ads   Ad[]
 
-  @@map(name: "activity")
+  @@map(name: "activitytype")
 }
 
 model Ad {
   id          String        @default(dbgenerated()) @id
   description String?
   imageUrl    String?       @map(name: "imageurl")
-  activity    Activity      @relation(fields: [activityId], references: [id])
-  activityId  String
+  activitytype    ActivityType      @relation(fields: [activitytypeId], references: [id])
+  activitytypeId  String
   location    Location?     @relation(fields: [locationId], references: [id])
   locationId  String?
   user        User          @relation(fields: [userId], references: [id])
   userId      String
   responses   AdResponse[]  
 
-  @@unique([userId, activityId], name:"one_activity_per_user")
+  @@unique([userId, activitytypeId], name:"one_activitytype_per_user")
   @@map(name: "ad")
 }
 

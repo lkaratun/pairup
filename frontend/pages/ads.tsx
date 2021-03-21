@@ -13,7 +13,7 @@ export const getAds = gql`
     ads {
       id
       description
-      activity {
+      activitytype {
         id
         name
       }
@@ -45,7 +45,7 @@ function Ads() {
       {data.ads.map(ad => (
         <Ad key={ad.id} ad={ad} refetch={refetch} loading={loading}/>
       ))}
-      <button onClick={() => router.push("/createActivity")}>Create a new activity</button>
+      <button onClick={() => router.push("/createActivityType")}>Create a new activitytype</button>
     </Container>
   );
 }

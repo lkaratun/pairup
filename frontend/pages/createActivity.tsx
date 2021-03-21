@@ -12,11 +12,11 @@ import config from "../config.json";
 import { Formik, Form, useField } from "formik";
 import { TextArea, TextInput, Select } from "components/shared/FormElements";
 import * as Yup from "yup";
-import { Activity, Location } from "generated-types";
+import { ActivityType, Location } from "generated-types";
 
-const getActivitiesLocationsQuery = gql`
-  query getActivities {
-    activities {
+const getActivityTypesLocationsQuery = gql`
+  query getActivityTypes {
+    activityTypes {
       id
       name
     }
@@ -28,7 +28,7 @@ const getActivitiesLocationsQuery = gql`
   }
 `;
 
-const createActivityMutation = gql`
+const createActivityTypeMutation = gql`
   mutation createAd($data: NewAdInput!) {
     createAd(data: $data) {
       id
@@ -38,25 +38,25 @@ const createActivityMutation = gql`
 `;
 
 interface Values {
-  activityId: string;
+  activitytypeId: string;
   description: string;
   locationId: string;
 }
 
-export default function createActivityForm() {
-  const { error, data, loading } = useQuery<{ activities: Activity[], locations: Location[]}>(getActivitiesLocationsQuery);
-  console.log("🚀 ~ file: createActivity.tsx ~ line 48 ~ createActivityForm ~ data", data)
+export default function createActivityTypeForm() {
+  const { error, data, loading } = useQuery<{ activityTypes: ActivityType[], locations: Location[]}>(getActivityTypesLocationsQuery);
+  console.log("🚀 ~ file: createActivityType.tsx ~ line 48 ~ createActivityTypeForm ~ data", data)
   const apolloClient = useApollo();
 
-  const [mutate, mutationResponse] = useMutation(createActivityMutation);
+  const [mutate, mutationResponse] = useMutation(createActivityTypeMutation);
 
-  function createActivityOptions() {
-    const options = data?.activities?.map(activity => (
-      <option key={activity.id} value={activity.id}>
-        {activity.name}
+  function createActivityTypeOptions() {
+    const options = data?.activityTypes?.map(activitytype => (
+      <option key={activitytype.id} value={activitytype.id}>
+        {activitytype.name}
       </option>
     ));
-    options?.unshift(<option key="placeholder" value="">Choose activity type</option>);
+    options?.unshift(<option key="placeholder" value="">Choose activitytype type</option>);
     return options
   }
 
@@ -72,15 +72,15 @@ export default function createActivityForm() {
 
   return (
     <Container>
-      <Header>Create your activity!</Header>
+      <Header>Create your activitytype!</Header>
       <Formik
         initialValues={{
-          activityId: "",
-          description: "New activity description",
+          activitytypeId: "",
+          description: "New activitytype description",
           locationId: "Vancouver"
         }}
         validationSchema={Yup.object({
-          activityId: Yup.string()
+          activitytypeId: Yup.string()
             .required("Required"),
           description: Yup.string()
             .max(1024, "Must be 1024 characters or less")
@@ -90,8 +90,8 @@ export default function createActivityForm() {
             .required("Required")
         })}
         onSubmit={(values: Values) => {
-          // const { activityId, description, locationId } = values;
-          console.log("🚀 ~ file: createActivity.tsx ~ line 96 ~ createActivityForm ~ values", values)
+          // const { activitytypeId, description, locationId } = values;
+          console.log("🚀 ~ file: createActivityType.tsx ~ line 96 ~ createActivityTypeForm ~ values", values)
           mutate({variables: {data: values}});
           // setTimeout(() => {
           //   alert(JSON.stringify(values, null, 2));
@@ -99,8 +99,8 @@ export default function createActivityForm() {
         }}
       >
         <Form>
-          <Select label="Category" name="activityId" placeholder="Select activity type">
-            {createActivityOptions()}
+          <Select label="Category" name="activitytypeId" placeholder="Select activitytype type">
+            {createActivityTypeOptions()}
           </Select>
           <Select label="Location" name="locationId" placeholder="Select location">
             {createLocationOptions()}

@@ -8,8 +8,8 @@ import AdResponseSchema from "./adResponse/AdResponseSchema";
 import AdResponseResolver from "./adResponse/AdResponseResolver";
 import UserSchema from "./user/UserSchema";
 import UserResolver from "./user/UserResolver";
-import ActivitySchema from "./activity/ActivitySchema";
-import ActivityResolver from "./activity/ActivityResolver";
+import ActivityTypeSchema from "./activitytype/ActivityTypeSchema";
+import ActivityTypeResolver from "./activitytype/ActivityTypeResolver";
 import LocationSchema from "./location/LocationSchema";
 import LocationResolver from "./location/LocationResolver";
 import AuthSchema from "./auth/AuthSchema";
@@ -29,8 +29,8 @@ const prisma = new PrismaClient({
 });
 
 const server = new ApolloServer({
-  typeDefs: [typeDefs, UserSchema, ActivitySchema, LocationSchema, AdSchema, AdResponseSchema, AuthSchema],
-  resolvers: merge(AdResolver, AdResponseResolver, UserResolver, ActivityResolver, LocationResolver, AuthResolver),
+  typeDefs: [typeDefs, UserSchema, ActivityTypeSchema, LocationSchema, AdSchema, AdResponseSchema, AuthSchema],
+  resolvers: merge(AdResolver, AdResponseResolver, UserResolver, ActivityTypeResolver, LocationResolver, AuthResolver),
   playground: {
     settings: {
       "request.credentials": "same-origin"

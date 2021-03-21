@@ -9,7 +9,7 @@ class Event extends Component {
     const {
       id,
       name,
-      activity,
+      activitytype,
       description,
       dateFrom: dateFromRaw,
       dateTo: dateToRaw,
@@ -31,7 +31,7 @@ class Event extends Component {
         <Link href={`/event?id=${id}`}>
           <EventTitle>{name}</EventTitle>
         </Link>
-        <EventSubtitle>{activity} </EventSubtitle>
+        <EventSubtitle>{activitytype} </EventSubtitle>
         <EventDate>
           <>
             {dateFromFormatted}
@@ -88,7 +88,7 @@ const EventImage = styled.img`
 Event.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  activity: PropTypes.string.isRequired,
+  activitytype: PropTypes.string.isRequired,
   description: PropTypes.string,
   dateFrom: PropTypes.string,
   dateTo: PropTypes.string,

@@ -19,7 +19,7 @@ function filterEvents(events, filters) {
             everyFilterMatching = false;
           }
         }
-      } else if (filter === "activity") {
+      } else if (filter === "activitytype") {
         if (filters[filter] !== null) {
           const filterValue = filters[filter].toLowerCase();
           const eventValue = event[filter].toLowerCase();
@@ -71,7 +71,7 @@ EventList.propTypes = {
   filters: PropTypes.shape({
     dateFrom: PropTypes.string,
     city: PropTypes.string,
-    activity: PropTypes.string
+    activitytype: PropTypes.string
   }).isRequired,
   loadMoreEvents: PropTypes.func.isRequired
 };

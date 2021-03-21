@@ -6,7 +6,7 @@ import { Ad as AdType, NewAdResponseInput } from "generated-types";
 import { gql, useMutation } from "@apollo/client";
 
 function Ad({ ad, loading, refetch }: { ad: AdType; loading: boolean; refetch: () => void }) {
-  const { activity = {}, description } = ad;
+  const { activitytype = {}, description } = ad;
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
   const respondMutation = gql`
@@ -36,7 +36,7 @@ function Ad({ ad, loading, refetch }: { ad: AdType; loading: boolean; refetch: (
 
   return (
     <AdCard>
-      <AdTitle>{activity?.name} </AdTitle>
+      <AdTitle>{activitytype?.name} </AdTitle>
       <p>{description}</p>
       {cookies.userId ? (
         ad.responses.length === 0 ? (

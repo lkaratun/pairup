@@ -20,7 +20,7 @@ function isUserAttending(userId, attendees) {
 }
 
 function EventPage(props) {
-  const { name, description, country, city, authorId, dateFrom, dateTo, maxPeople, activity } = props;
+  const { name, description, country, city, authorId, dateFrom, dateTo, maxPeople, activitytype } = props;
 
   const [attendees, setAttendees] = useState(props.attendees);
   const [modalIsVisible, setModalVisible] = useState(false);
@@ -91,8 +91,8 @@ function EventPage(props) {
         <Name>{name}</Name>
         <InfoWrapper>
           <InfoPanel>
-            <Title>Activity</Title>
-            <SubTitle>{activity}</SubTitle>
+            <Title>ActivityType</Title>
+            <SubTitle>{activitytype}</SubTitle>
             <Title>Description</Title>
             <SubTitle>{description}</SubTitle>
             <div>
