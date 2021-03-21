@@ -63,11 +63,12 @@ function ProfilePage(props: { currentUser: FullUserInfo }) {
   console.log("🚀 ~ file: profile.tsx ~ line 36 ~ ProfilePage ~ data", data);
   console.log("🚀 ~ file: profile.js ~ line 33 ~ ProfilePage ~ props", props);
 
-  const { lastName, email, image, bio, firstName, id: userId } = data.currentUser;
+  // const { lastName, email, image, bio, firstName, id: userId } = data.currentUser;
 
   const updateUser = useCallback(
     async function(newData: UserInput) {
       if (Object.keys(newData).length === 0) return null;
+      const userId = data.currentUser.id;
 
       console.log("🚀 ~ file: UserProvider.js ~ line 90 ~ updateUser ~ userId", userId);
       const response = await mutate({

@@ -25,7 +25,7 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
     return (
       <div>
         Your activities:
-        {props.currentUser.activities.map(response => <div>{response.id}</div>)}
+        {props.currentUser.activities.map(response => <div key={response.id}>{response.id}</div>)}
       </div>
     );
   }
@@ -35,7 +35,7 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
     return (
       <div>
         Your responses:<br/>
-        {props.currentUser.activityResponses.map(response => <div>{response.id}</div>)}
+        {props.currentUser.activityResponses.map(response => <div key={response.id}>{response.id}</div>)}
       </div>
     );
   }
