@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { gql, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/apolloClient";
+import { initializeApollo } from "../lib/ApolloClient";
 import axios from "../utils/request.js";
 import cookie from "cookie";
 import config from "../config.json";

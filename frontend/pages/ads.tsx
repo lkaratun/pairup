@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import styled from "styled-components";
-import { initializeApollo } from "../lib/apolloClient";
+import { initializeApollo } from "../lib/ApolloClient";
 import { useRouter } from "next/router";
 import Ad from "../components/Ad";
 import { Ad as AdType, NewAdResponseInput } from "generated-types";

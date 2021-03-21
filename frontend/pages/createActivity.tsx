@@ -1,7 +1,7 @@
 import React, { useState, useContext, useCallback, FunctionComponent, useEffect } from "react";
 import { useRouter } from "next/router";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { initializeApollo, useApollo } from "../lib/apolloClient";
+import { initializeApollo, useApollo } from "../lib/ApolloClient";
 import { useCookie } from "next-universal-cookie";
 import styled from "styled-components";
 import { UserContext } from "components/UserProvider";
@@ -38,9 +38,9 @@ const createActivityMutation = gql`
 `;
 
 interface Values {
-  activityType: string;
+  activityId: string;
   description: string;
-  location: string;
+  locationId: string;
 }
 
 export default function createActivityForm() {
@@ -75,36 +75,36 @@ export default function createActivityForm() {
       <Header>Create your activity!</Header>
       <Formik
         initialValues={{
-          activityType: "",
+          activityId: "",
           description: "New activity description",
-          location: "Vancouver"
+          locationId: "Vancouver"
         }}
         validationSchema={Yup.object({
-          activityType: Yup.string()
+          activityId: Yup.string()
             .required("Required"),
           description: Yup.string()
             .max(1024, "Must be 1024 characters or less")
             .required("Required"),
-          location: Yup.string()
+          locationId: Yup.string()
             .max(100, "Must be 100 characters or less")
             .required("Required")
         })}
         onSubmit={(values: Values) => {
-          const { activityType, description, location } = values;
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-          }, 400);
+          // const { activityId, description, locationId } = values;
+          console.log("🚀 ~ file: createActivity.tsx ~ line 96 ~ createActivityForm ~ values", values)
+          mutate({variables: {data: values}});
+          // setTimeout(() => {
+          //   alert(JSON.stringify(values, null, 2));
+          // }, 400);
         }}
       >
         <Form>
-          <Select label="Category" name="activityType" placeholder="Select activity type">
+          <Select label="Category" name="activityId" placeholder="Select activity type">
             {createActivityOptions()}
           </Select>
-          <Select label="Location" name="location" placeholder="Select location">
+          <Select label="Location" name="locationId" placeholder="Select location">
             {createLocationOptions()}
           </Select>
-
-          {/* <TextInput label="Location" name="location" type="text" placeholder="Vancouver" /> */}
 
           <TextArea
             label="Description"

@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/apolloClient";
+import { initializeApollo } from "../lib/ApolloClient";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";

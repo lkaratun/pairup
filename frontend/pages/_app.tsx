@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {applyServerSidePropsCookie} from 'next-universal-cookie';
 
 import { NextCookieProvider } from "next-universal-cookie";
-import { useApollo } from "../lib/apolloClient";
+import { useApollo } from "../lib/ApolloClient";
 import MainLayout from "../components/MainLayout";
 
 App.getInitialProps = async function(appContext) {

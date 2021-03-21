@@ -1,5 +1,5 @@
 import config from "../config.json";
-import { initializeApollo } from "../lib/apolloClient";
+import { initializeApollo } from "../lib/ApolloClient";
 
 const axios = require("axios");
 

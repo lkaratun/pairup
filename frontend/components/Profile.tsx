@@ -23,20 +23,20 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
   function renderAds() {
     if (props.currentUser.ads.length === 0) return null;
     return (
-      <>
+      <div>
         Your ads:
-        {props.currentUser.ads.map(response => response.id)}
-      </>
+        {props.currentUser.ads.map(response => <div>{response.id}</div>)}
+      </div>
     );
   }
   
   function renderAdResponses() {
     if (props.currentUser.adResponses.length === 0) return null;
     return (
-      <>
+      <div>
         Your responses:<br/>
-        {props.currentUser.adResponses.map(response => response.id)}
-      </>
+        {props.currentUser.adResponses.map(response => <div>{response.id}</div>)}
+      </div>
     );
   }
 
@@ -89,7 +89,10 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
       {firstName ? (
         <GridWrapper>
           {renderUserInfo()}
+          <MainContent>
+          {renderAds()}
           {renderAdResponses()}
+          </MainContent>
         </GridWrapper>
       ) : (
         "Please log in to view this page"

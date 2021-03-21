@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import cookie from "cookie";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/apolloClient";
+import { initializeApollo } from "../lib/ApolloClient";
 import Profile from "../components/Profile";
 import { useRouter } from "next/router";
 import { FullUserInfo } from "types/User";

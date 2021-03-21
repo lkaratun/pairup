@@ -1,7 +1,7 @@
 import React, { useState, useContext, useCallback } from "react";
 import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/apolloClient";
+import { initializeApollo } from "../lib/ApolloClient";
 import { useCookie } from "next-universal-cookie";
 import styled from "styled-components";
 import { UserContext } from "components/UserProvider";
