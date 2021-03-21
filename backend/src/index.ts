@@ -2,17 +2,17 @@ import "reflect-metadata";
 import typeDefs from "./typeDefs";
 import { PrismaClient } from "@prisma/client";
 import { merge, keyBy, cloneDeepWith, cloneDeep, mapValues } from "lodash";
-import AdType from "./ad/AdType";
+import AdSchema from "./ad/AdSchema";
 import AdResolver from "./ad/AdResolver";
-import AdResponseType from "./adResponse/AdResponseType";
+import AdResponseSchema from "./adResponse/AdResponseSchema";
 import AdResponseResolver from "./adResponse/AdResponseResolver";
-import UserType from "./user/UserType";
+import UserSchema from "./user/UserSchema";
 import UserResolver from "./user/UserResolver";
-import ActivityType from "./activity/ActivityType";
+import ActivitySchema from "./activity/ActivitySchema";
 import ActivityResolver from "./activity/ActivityResolver";
-import LocationType from "./location/LocationType";
+import LocationSchema from "./location/LocationSchema";
 import LocationResolver from "./location/LocationResolver";
-import AuthType from "./auth/AuthType";
+import AuthSchema from "./auth/AuthSchema";
 import AuthResolver from "./auth/AuthResolver";
 import AuthRequired from "./directives/AuthRequired";
 import { ApolloServer } from "apollo-server-express";
@@ -29,7 +29,7 @@ const prisma = new PrismaClient({
 });
 
 const server = new ApolloServer({
-  typeDefs: [typeDefs, UserType, ActivityType, LocationType, AdType, AdResponseType, AuthType],
+  typeDefs: [typeDefs, UserSchema, ActivitySchema, LocationSchema, AdSchema, AdResponseSchema, AuthSchema],
   resolvers: merge(AdResolver, AdResponseResolver, UserResolver, ActivityResolver, LocationResolver, AuthResolver),
   playground: {
     settings: {
