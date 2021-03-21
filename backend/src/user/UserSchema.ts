@@ -20,8 +20,8 @@ directive @AuthRequired on FIELD_DEFINITION | OBJECT
     image: String
     lastName: String
     password: String
-    ads: [Ad]
-    adResponses: [AdResponse]
+    activities: [Activity]
+    activityResponses: [ActivityResponse]
   }
 
   input UserInput {

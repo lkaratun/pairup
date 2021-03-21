@@ -8,7 +8,7 @@ export default function Index() {
         <CallToAction>
           <h3>Experiences are to be enjoyed with others</h3>
           <p>Find people to do things together</p>
-          <EventsBtn href="/ads">Ads</EventsBtn>
+          <EventsBtn href="/activities">Activities</EventsBtn>
         </CallToAction>
         <HeroPicture>
           <source media="(max-width: 450px)" srcSet=".././static/hero-mobile.jpg" />

@@ -15,7 +15,7 @@ export default gql`
     id: ID!
     city: String
     country: String
-    ads: [Ad]
+    activities: [Activity]
   }
 
   input LocationInput {

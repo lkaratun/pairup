@@ -17,7 +17,7 @@ class EventForm extends Component {
   state = {
     name: "",
     description: "",
-    activitytypeId: null,
+    activityTypeId: null,
     locationId: null,
     dateFrom: null,
     dateTo: null,
@@ -33,7 +33,7 @@ class EventForm extends Component {
       name: this.state.name,
       minPeople: this.state.minPeople,
       maxPeople: this.state.maxPeople,
-      activitytypeId: this.state.activitytypeId,
+      activityTypeId: this.state.activityTypeId,
       locationId: this.state.locationId,
       description: this.state.description,
       dateFrom: this.state.dateFrom,
@@ -41,7 +41,7 @@ class EventForm extends Component {
     };
 
     // validate new object
-    const REQUIRED_FIELDS = ["name", "activitytypeId", "maxPeople"];
+    const REQUIRED_FIELDS = ["name", "activityTypeId", "maxPeople"];
     for (let i = 0; i < REQUIRED_FIELDS.length; i++) {
       if (!newEvent[REQUIRED_FIELDS[i]]) {
         this.setState({ valid: false });
@@ -65,7 +65,7 @@ class EventForm extends Component {
   updateActivityType = (payload, existsInDB) => {
     // existsInDB flag is used to determine if that is a brand new attribute coming and needs to be created in DB or it is existing one
     if (existsInDB) {
-      this.setState({ activitytypeId: payload.id });
+      this.setState({ activityTypeId: payload.id });
     } else {
       // create new instance of attribute with the ID
       const token = localStorage.getItem("token");
@@ -82,7 +82,7 @@ class EventForm extends Component {
         }
       })
         .then(response => {
-          this.setState({ activitytypeId: response.data.id });
+          this.setState({ activityTypeId: response.data.id });
         })
         .catch(error => console.error(error));
     }
@@ -164,7 +164,7 @@ class EventForm extends Component {
         <DateRangePicker updateDateRange={this.updateDateRange} />
         {!valid && (
           <ErrorMsg>
-            Please make sure you filled name, activitytype and max people fields to
+            Please make sure you filled name, activityType and max people fields to
             continue!
           </ErrorMsg>
         )}

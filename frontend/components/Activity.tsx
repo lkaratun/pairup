@@ -2,21 +2,21 @@ import React, { useCallback, useContext } from "react";
 import styled from "styled-components";
 import { WideButton } from "./shared/Buttons";
 import { useCookie } from "next-universal-cookie";
-import { Ad as AdType, NewAdResponseInput } from "generated-types";
+import { Activity as ActivityType, NewActivityResponseInput } from "generated-types";
 import { gql, useMutation } from "@apollo/client";
 
-function Ad({ ad, loading, refetch }: { ad: AdType; loading: boolean; refetch: () => void }) {
-  const { activitytype = {}, description } = ad;
+function Activity({ activity, loading, refetch }: { activity: ActivityType; loading: boolean; refetch: () => void }) {
+  const { activityType = {}, description } = activity;
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
   const respondMutation = gql`
-    mutation createAdResponse($data: NewAdResponseInput!) {
-      createAdResponse(data: $data) {
+    mutation createActivityResponse($data: NewActivityResponseInput!) {
+      createActivityResponse(data: $data) {
         id
         user {
           id
         }
-        ad {
+        activity {
           id
         }
       }
@@ -26,36 +26,36 @@ function Ad({ ad, loading, refetch }: { ad: AdType; loading: boolean; refetch: (
 
   async function handleRespond() {
     const response = await mutate({
-      variables: { data: { userId: cookies.userId, adId: ad.id } }
+      variables: { data: { userId: cookies.userId, activityId: activity.id } }
     });
 
-    console.log("🚀 ~ file: Ad.tsx ~ line 37 ~ function ~ response.data", response.data);
+    console.log("🚀 ~ file: Activity.tsx ~ line 37 ~ function ~ response.data", response.data);
     refetch();
     return response.data.user;
   }
 
   return (
-    <AdCard>
-      <AdTitle>{activitytype?.name} </AdTitle>
+    <ActivityCard>
+      <ActivityTitle>{activityType?.name} </ActivityTitle>
       <p>{description}</p>
       {cookies.userId ? (
-        ad.responses.length === 0 ? (
+        activity.responses.length === 0 ? (
           loading ? (
             "Loading"
           ) : (
             <WideButton onClick={handleRespond}>Respond</WideButton>
           )
         ) : (
-          "You have already responded to this ad"
+          "You have already responded to this activity"
         )
       ) : (
-        <NotLoggedInMessage>Please log in to respond to ads</NotLoggedInMessage>
+        <NotLoggedInMessage>Please log in to respond to activities</NotLoggedInMessage>
       )}
-    </AdCard>
+    </ActivityCard>
   );
 }
 
-const AdCard = styled.div`
+const ActivityCard = styled.div`
   padding: 1em;
   margin: 1em;
   flex-basis: 20%;
@@ -64,7 +64,7 @@ const AdCard = styled.div`
   box-shadow: 2px 2px 11px -4px rgba(0, 0, 0, 0.5);
   min-height: 15vh;
 `;
-const AdTitle = styled.h2`
+const ActivityTitle = styled.h2`
   font-size: 1.4em;
   margin: 0.5em 0;
   cursor: pointer;
@@ -79,4 +79,4 @@ const NotLoggedInMessage = styled.div`
   color: hsla(0, 0%, 0%, 0.5);
 `;
 
-export default Ad;
+export default Activity;

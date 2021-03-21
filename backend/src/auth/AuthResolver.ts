@@ -41,7 +41,7 @@ export default {
         userId = (jwt.verify(token, SECRET) as User).userId;
         user = await context.prisma.user.findUnique(
           { where: { id: userId } },
-          { include: { ads: true, adResponses: true } }
+          { include: { activities: true, activityResponses: true } }
         );
         console.log("🚀 ~ file: AuthResolver.ts ~ line 47 ~ currentUser: ~ user", user);
       } catch (err) {

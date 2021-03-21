@@ -10,35 +10,35 @@ datasource db {
 model ActivityType {
   id   String @default(dbgenerated()) @id
   name String @unique
-  ads   Ad[]
+  activities   Activity[]
 
-  @@map(name: "activitytype")
+  @@map(name: "activity")
 }
 
-model Ad {
+model Activity {
   id          String        @default(dbgenerated()) @id
   description String?
   imageUrl    String?       @map(name: "imageurl")
-  activitytype    ActivityType      @relation(fields: [activitytypeId], references: [id])
-  activitytypeId  String
+  activityType    ActivityType      @relation(fields: [activityTypeId], references: [id])
+  activityTypeId  String
   location    Location?     @relation(fields: [locationId], references: [id])
   locationId  String?
   user        User          @relation(fields: [userId], references: [id])
   userId      String
-  responses   AdResponse[]  
+  responses   ActivityResponse[]  
 
-  @@unique([userId, activitytypeId], name:"one_activitytype_per_user")
+  @@unique([userId, activityTypeId], name:"one_activityType_per_user")
   @@map(name: "ad")
 }
 
-model AdResponse {
+model ActivityResponse {
   id     String  @default(dbgenerated()) @id
-  ad     Ad      @relation(fields: [adId], references: [id])
-  adId   String
+  activity     Activity      @relation(fields: [activityId], references: [id])
+  activityId   String
   user   User    @relation(fields: [userId], references: [id])
   userId String
 
-  @@unique([userId, adId], name: "UQ_5c24bb96ab60a6e6d502f98a9b9")
+  @@unique([userId, activityId], name: "UQ_5c24bb96ab60a6e6d502f98a9b9")
   @@map(name: "ad_response")
 }
 
@@ -46,7 +46,7 @@ model Location {
   id      String @default(dbgenerated()) @id
   city    String
   country String
-  ad      Ad[]
+  activity      Activity[]
 
   @@unique([country, city], name: "UQ_92b8dedd383ea612bf0ffb77be4")
   @@map(name: "location")
@@ -62,8 +62,8 @@ model User {
   image              String?
   lastName           String?
   password           String?
-  ads                Ad[]
-  adResponses        AdResponse[]
+  activities                Activity[]
+  activityResponses        ActivityResponse[]
 
   @@map(name: "user")
 }

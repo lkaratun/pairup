@@ -64,8 +64,8 @@ function Navbar() {
           </Link>
         </li>
         <li>
-          <Link href="/ads">
-            <NavLink>Ads</NavLink>
+          <Link href="/activities">
+            <NavLink>Activities</NavLink>
           </Link>
         </li>
       </>

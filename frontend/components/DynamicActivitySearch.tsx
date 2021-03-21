@@ -55,8 +55,8 @@ class DynamicActivityTypeSearch extends React.Component {
   getSuggestions = async input => {
     const { suggestions } = this.state;
     const regex = new RegExp(input, "gmi");
-    const matchingSuggestions = suggestions.filter(activitytype =>
-      activitytype.name.match(regex)
+    const matchingSuggestions = suggestions.filter(activityType =>
+      activityType.name.match(regex)
     );
     if (matchingSuggestions.length === 0) {
       this.setState({ showSuggestions: false, matchingSuggestions: [] });

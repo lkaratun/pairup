@@ -9,6 +9,6 @@ export interface FullUserInfo extends BasicUserInfo {
   email: string;
   image: string;
   bio: string;
-  ads: {id: string}[];
-  adResponses: {id: string}[];
+  activities: {id: string}[];
+  activityResponses: {id: string}[];
 }

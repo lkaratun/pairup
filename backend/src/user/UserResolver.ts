@@ -4,12 +4,12 @@ export default {
       console.log("🚀 ~ file: UserResolver.ts ~ line 19 ~ users: ~ context.prisma", context.prisma);
       return context.prisma.user.findUnique({
         where: { id: args.id },
-        include: { ads: true, adResponses: true } 
+        include: { activities: true, activityResponses: true } 
       });
     },
     users: async (parent, args, context) => {
       console.log("In users resolver");
-      const users = await context.prisma.user.findMany({ include: { ads: true, adResponses: true } });
+      const users = await context.prisma.user.findMany({ include: { activities: true, activityResponses: true } });
       console.log("🚀 ~ file: UserResolver.ts ~ line 10 ~ users", users);
       return users;
     }
@@ -25,13 +25,13 @@ export default {
     }
   },
   User: {
-    ads: async (parent, args, context) => {
-      return context.prisma.ad.findMany({
+    activities: async (parent, args, context) => {
+      return context.prisma.activity.findMany({
         where: { userId: parent.id }
       });
     },
-    adResponses: async (parent, args, context) => {
-      return context.prisma.adResponse.findMany({
+    activityResponses: async (parent, args, context) => {
+      return context.prisma.activityResponse.findMany({
         where: { userId: parent.id }
       });
     }

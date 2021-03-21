@@ -44,7 +44,7 @@ export async function getServerSideProps({ req }) {
 
 class Dashboard extends Component {
   state = {
-    filters: { dateFrom: null, city: null, activitytype: null },
+    filters: { dateFrom: null, city: null, activityType: null },
     events: this.props.events || [],
     offset: 0,
     cleared: null,
@@ -68,7 +68,7 @@ class Dashboard extends Component {
   updateActivityType = data => {
     const oldState = { ...this.state };
     const oldFilters = oldState.filters;
-    oldFilters["activitytype"] = data.name;
+    oldFilters["activityType"] = data.name;
     // updated the cleared state and filters
     this.setState({ filters: oldFilters, cleared: false });
   };
@@ -82,7 +82,7 @@ class Dashboard extends Component {
 
   clearFilters = () => {
     this.setState({
-      filters: { dateFrom: null, city: null, activitytype: null },
+      filters: { dateFrom: null, city: null, activityType: null },
       cleared: true
     });
   };

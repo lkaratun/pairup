@@ -1,20 +1,20 @@
 export default {
   Query: {
-    activitytype: (parent, args, context, info) =>
-      context.prisma.activitytype.findUnique({
+    activityType: (parent, args, context, info) =>
+      context.prisma.activityType.findUnique({
         where: { id: args.id }
       }),
-    activityTypes: (parent, args, context) => context.prisma.activitytype.findMany({include: {ads: true}})
+    activityTypes: (parent, args, context) => context.prisma.activityType.findMany({include: {activities: true}})
   },
   Mutation: {
-    activitytype: async (parent, args, context) => {
-      return context.prisma.activitytype.update({
+    activityType: async (parent, args, context) => {
+      return context.prisma.activityType.update({
         where: { id: args.id },
         data: args.data
       });
     },
     createActivityType: (parent, args, context, info) => {
-      return context.prisma.activitytype.create({
+      return context.prisma.activityType.create({
         data: {
           name: args.data.name
         }

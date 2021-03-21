@@ -21,21 +21,21 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
   const hideBioEditor = () => setBioEditorOpened(false);
 
   function renderAds() {
-    if (props.currentUser.ads.length === 0) return null;
+    if (props.currentUser.activities.length === 0) return null;
     return (
       <div>
-        Your ads:
-        {props.currentUser.ads.map(response => <div>{response.id}</div>)}
+        Your activities:
+        {props.currentUser.activities.map(response => <div>{response.id}</div>)}
       </div>
     );
   }
   
-  function renderAdResponses() {
-    if (props.currentUser.adResponses.length === 0) return null;
+  function renderActivityResponses() {
+    if (props.currentUser.activityResponses.length === 0) return null;
     return (
       <div>
         Your responses:<br/>
-        {props.currentUser.adResponses.map(response => <div>{response.id}</div>)}
+        {props.currentUser.activityResponses.map(response => <div>{response.id}</div>)}
       </div>
     );
   }
@@ -91,7 +91,7 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
           {renderUserInfo()}
           <MainContent>
           {renderAds()}
-          {renderAdResponses()}
+          {renderActivityResponses()}
           </MainContent>
         </GridWrapper>
       ) : (

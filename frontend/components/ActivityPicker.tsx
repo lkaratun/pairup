@@ -5,25 +5,25 @@ import PropTypes from "prop-types";
 class ActivityTypePicker extends Component {
   state = {
     popupOpen: false,
-    selectedActivityType: "activitytype"
+    selectedActivityType: "activityType"
   };
 
-  handleActivityTypeSelection = activitytype => {
-    // Callback fn that sends selected activitytype to parent component
+  handleActivityTypeSelection = activityType => {
+    // Callback fn that sends selected activityType to parent component
     const { updateSelection } = this.props;
-    this.setState({ popupOpen: false, selectedActivityType: activitytype.name });
-    updateSelection("activitytype", activitytype.name, activitytype.id);
+    this.setState({ popupOpen: false, selectedActivityType: activityType.name });
+    updateSelection("activityType", activityType.name, activityType.id);
   };
 
   render() {
     const { popupOpen, selectedActivityType } = this.state;
     const { activityTypes, type } = this.props;
-    const categoryList = activityTypes.map(activitytypeObject => (
+    const categoryList = activityTypes.map(activityTypeObject => (
       <ActivityTypeListItem
-        key={activitytypeObject.id}
-        onClick={e => this.handleActivityTypeSelection(activitytypeObject, e)}
+        key={activityTypeObject.id}
+        onClick={e => this.handleActivityTypeSelection(activityTypeObject, e)}
       >
-        {activitytypeObject.name}
+        {activityTypeObject.name}
       </ActivityTypeListItem>
     ));
 

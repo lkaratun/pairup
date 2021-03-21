@@ -3,17 +3,17 @@ import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { initializeApollo } from "../lib/ApolloClient";
 import { useRouter } from "next/router";
-import Ad from "../components/Ad";
-import { Ad as AdType, NewAdResponseInput } from "generated-types";
+import Activity from "../components/Activity";
+import { Activity as ActivityType, NewActivityResponseInput } from "generated-types";
 
 import { gql } from "@apollo/client";
 
 export const getAds = gql`
   query GetAds {
-    ads {
+    activities {
       id
       description
-      activitytype {
+      activityType {
         id
         name
       }
@@ -34,23 +34,23 @@ export async function getServerSideProps(ctx) {
   return { props: { initialApolloState: apolloClient.cache.extract() } };
 }
 
-function Ads() {
+function Activities() {
   const { error, data, loading, refetch } = useQuery(getAds);
   const router = useRouter();
-  if (error) return `Error fetching ads data: ${error}`;
+  if (error) return `Error fetching activities data: ${error}`;
 
   return (
     <Container>
-      <Header>Ads</Header>
-      {data.ads.map(ad => (
-        <Ad key={ad.id} ad={ad} refetch={refetch} loading={loading}/>
+      <Header>Activities</Header>
+      {data.activities.map(activity => (
+        <Activity key={activity.id} activity={activity} refetch={refetch} loading={loading}/>
       ))}
-      <button onClick={() => router.push("/createActivityType")}>Create a new activitytype</button>
+      <button onClick={() => router.push("/createActivityType")}>Create a new activityType</button>
     </Container>
   );
 }
 
-export default Ads;
+export default Activities;
 
 const Header = styled.h1`
   margin: 1rem auto;

@@ -22,14 +22,14 @@ export type Query = {
   _empty?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
-  activitytype?: Maybe<ActivityType>;
+  activityType?: Maybe<ActivityType>;
   activityTypes?: Maybe<Array<Maybe<ActivityType>>>;
   location?: Maybe<Location>;
   locations?: Maybe<Array<Maybe<Location>>>;
-  ad?: Maybe<Ad>;
-  ads?: Maybe<Array<Maybe<Ad>>>;
-  adResponse?: Maybe<AdResponse>;
-  adResponses?: Maybe<Array<Maybe<AdResponse>>>;
+  activity?: Maybe<Activity>;
+  activities?: Maybe<Array<Maybe<Activity>>>;
+  activityResponse?: Maybe<ActivityResponse>;
+  activityResponses?: Maybe<Array<Maybe<ActivityResponse>>>;
   currentUser?: Maybe<User>;
 };
 
@@ -49,12 +49,12 @@ export type QueryLocationArgs = {
 };
 
 
-export type QueryAdArgs = {
+export type QueryActivityArgs = {
   id: Scalars['ID'];
 };
 
 
-export type QueryAdResponseArgs = {
+export type QueryActivityResponseArgs = {
   id: Scalars['ID'];
 };
 
@@ -62,14 +62,14 @@ export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
-  activitytype?: Maybe<ActivityType>;
+  activityType?: Maybe<ActivityType>;
   createActivityType?: Maybe<ActivityType>;
   location?: Maybe<Location>;
   createLocation?: Maybe<Location>;
-  ad?: Maybe<Ad>;
-  createAd?: Maybe<Ad>;
-  createAdResponse?: Maybe<AdResponse>;
-  deleteAdResponse?: Maybe<AdResponse>;
+  activity?: Maybe<Activity>;
+  createAd?: Maybe<Activity>;
+  createActivityResponse?: Maybe<ActivityResponse>;
+  deleteActivityResponse?: Maybe<ActivityResponse>;
   register?: Maybe<User>;
   logIn?: Maybe<User>;
   logOut?: Maybe<Scalars['Boolean']>;
@@ -104,23 +104,23 @@ export type MutationCreateLocationArgs = {
 };
 
 
-export type MutationAdArgs = {
+export type MutationActivityArgs = {
   id: Scalars['ID'];
-  data?: Maybe<ModifyAdInput>;
+  data?: Maybe<ModifyActivityInput>;
 };
 
 
-export type MutationCreateAdArgs = {
-  data?: Maybe<NewAdInput>;
+export type MutationCreateActivityArgs = {
+  data?: Maybe<NewActivityInput>;
 };
 
 
-export type MutationCreateAdResponseArgs = {
-  data?: Maybe<NewAdResponseInput>;
+export type MutationCreateActivityResponseArgs = {
+  data?: Maybe<NewActivityResponseInput>;
 };
 
 
-export type MutationDeleteAdResponseArgs = {
+export type MutationDeleteActivityResponseArgs = {
   id: Scalars['ID'];
 };
 
@@ -146,8 +146,8 @@ export type User = {
   image?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
-  ads?: Maybe<Array<Maybe<Ad>>>;
-  adResponses?: Maybe<Array<Maybe<AdResponse>>>;
+  activities?: Maybe<Array<Maybe<Activity>>>;
+  activityResponses?: Maybe<Array<Maybe<ActivityResponse>>>;
 };
 
 export type UserInput = {
@@ -162,7 +162,7 @@ export type ActivityType = {
   __typename?: 'ActivityType';
   id: Scalars['ID'];
   name: Scalars['String'];
-  ads?: Maybe<Array<Maybe<Ad>>>;
+  activities?: Maybe<Array<Maybe<Activity>>>;
 };
 
 export type ActivityTypeInput = {
@@ -174,7 +174,7 @@ export type Location = {
   id: Scalars['ID'];
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
-  ads?: Maybe<Array<Maybe<Ad>>>;
+  activities?: Maybe<Array<Maybe<Activity>>>;
 };
 
 export type LocationInput = {
@@ -182,41 +182,41 @@ export type LocationInput = {
   country?: Maybe<Scalars['String']>;
 };
 
-export type Ad = {
-  __typename?: 'Ad';
+export type Activity = {
+  __typename?: 'Activity';
   id?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  activitytype?: Maybe<ActivityType>;
+  activityType?: Maybe<ActivityType>;
   location?: Maybe<Location>;
   user?: Maybe<User>;
-  responses?: Maybe<Array<Maybe<AdResponse>>>;
+  responses?: Maybe<Array<Maybe<ActivityResponse>>>;
 };
 
-export type ModifyAdInput = {
+export type ModifyActivityInput = {
   description?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['ID']>;
-  activitytypeId?: Maybe<Scalars['ID']>;
+  activityTypeId?: Maybe<Scalars['ID']>;
   locationId?: Maybe<Scalars['ID']>;
 };
 
-export type NewAdInput = {
+export type NewActivityInput = {
   description?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   userId: Scalars['ID'];
-  activitytypeId: Scalars['ID'];
+  activityTypeId: Scalars['ID'];
   locationId: Scalars['ID'];
 };
 
-export type AdResponse = {
-  __typename?: 'AdResponse';
+export type ActivityResponse = {
+  __typename?: 'ActivityResponse';
   id: Scalars['String'];
-  ad: Ad;
+  activity: Activity;
   user: User;
 };
 
-export type NewAdResponseInput = {
-  adId: Scalars['ID'];
+export type NewActivityResponseInput = {
+  activityId: Scalars['ID'];
   userId: Scalars['ID'];
 };
 
@@ -321,11 +321,11 @@ export type ResolversTypes = {
   ActivityTypeInput: ActivityTypeInput;
   Location: ResolverTypeWrapper<Location>;
   LocationInput: LocationInput;
-  Ad: ResolverTypeWrapper<Ad>;
-  ModifyAdInput: ModifyAdInput;
-  NewAdInput: NewAdInput;
-  AdResponse: ResolverTypeWrapper<AdResponse>;
-  NewAdResponseInput: NewAdResponseInput;
+  Activity: ResolverTypeWrapper<Activity>;
+  ModifyActivityInput: ModifyActivityInput;
+  NewActivityInput: NewActivityInput;
+  ActivityResponse: ResolverTypeWrapper<ActivityResponse>;
+  NewActivityResponseInput: NewActivityResponseInput;
   RegisterInput: RegisterInput;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -345,11 +345,11 @@ export type ResolversParentTypes = {
   ActivityTypeInput: ActivityTypeInput;
   Location: Location;
   LocationInput: LocationInput;
-  Ad: Ad;
-  ModifyAdInput: ModifyAdInput;
-  NewAdInput: NewAdInput;
-  AdResponse: AdResponse;
-  NewAdResponseInput: NewAdResponseInput;
+  Activity: Activity;
+  ModifyActivityInput: ModifyActivityInput;
+  NewActivityInput: NewActivityInput;
+  ActivityResponse: ActivityResponse;
+  NewActivityResponseInput: NewActivityResponseInput;
   RegisterInput: RegisterInput;
   Upload: Scalars['Upload'];
   Int: Scalars['Int'];
@@ -368,28 +368,28 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
-  activitytype?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType, RequireFields<QueryActivityTypeArgs, 'id'>>;
+  activityType?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType, RequireFields<QueryActivityTypeArgs, 'id'>>;
   activityTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['ActivityType']>>>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<QueryLocationArgs, 'id'>>;
   locations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Location']>>>, ParentType, ContextType>;
-  ad?: Resolver<Maybe<ResolversTypes['Ad']>, ParentType, ContextType, RequireFields<QueryAdArgs, 'id'>>;
-  ads?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ad']>>>, ParentType, ContextType>;
-  adResponse?: Resolver<Maybe<ResolversTypes['AdResponse']>, ParentType, ContextType, RequireFields<QueryAdResponseArgs, 'id'>>;
-  adResponses?: Resolver<Maybe<Array<Maybe<ResolversTypes['AdResponse']>>>, ParentType, ContextType>;
+  activity?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<QueryActivityArgs, 'id'>>;
+  activities?: Resolver<Maybe<Array<Maybe<ResolversTypes['Activity']>>>, ParentType, ContextType>;
+  activityResponse?: Resolver<Maybe<ResolversTypes['ActivityResponse']>, ParentType, ContextType, RequireFields<QueryActivityResponseArgs, 'id'>>;
+  activityResponses?: Resolver<Maybe<Array<Maybe<ResolversTypes['ActivityResponse']>>>, ParentType, ContextType>;
   currentUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUserArgs, 'id'>>;
-  activitytype?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType, RequireFields<MutationActivityTypeArgs, 'id'>>;
+  activityType?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType, RequireFields<MutationActivityTypeArgs, 'id'>>;
   createActivityType?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType, RequireFields<MutationCreateActivityTypeArgs, never>>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationLocationArgs, 'id'>>;
   createLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<MutationCreateLocationArgs, 'data'>>;
-  ad?: Resolver<Maybe<ResolversTypes['Ad']>, ParentType, ContextType, RequireFields<MutationAdArgs, 'id'>>;
-  createAd?: Resolver<Maybe<ResolversTypes['Ad']>, ParentType, ContextType, RequireFields<MutationCreateAdArgs, never>>;
-  createAdResponse?: Resolver<Maybe<ResolversTypes['AdResponse']>, ParentType, ContextType, RequireFields<MutationCreateAdResponseArgs, never>>;
-  deleteAdResponse?: Resolver<Maybe<ResolversTypes['AdResponse']>, ParentType, ContextType, RequireFields<MutationDeleteAdResponseArgs, 'id'>>;
+  activity?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationActivityArgs, 'id'>>;
+  createAd?: Resolver<Maybe<ResolversTypes['Activity']>, ParentType, ContextType, RequireFields<MutationCreateActivityArgs, never>>;
+  createActivityResponse?: Resolver<Maybe<ResolversTypes['ActivityResponse']>, ParentType, ContextType, RequireFields<MutationCreateActivityResponseArgs, never>>;
+  deleteActivityResponse?: Resolver<Maybe<ResolversTypes['ActivityResponse']>, ParentType, ContextType, RequireFields<MutationDeleteActivityResponseArgs, 'id'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'data'>>;
   logIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationLogInArgs, 'email' | 'password'>>;
   logOut?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -405,15 +405,15 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  ads?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ad']>>>, ParentType, ContextType>;
-  adResponses?: Resolver<Maybe<Array<Maybe<ResolversTypes['AdResponse']>>>, ParentType, ContextType>;
+  activities?: Resolver<Maybe<Array<Maybe<ResolversTypes['Activity']>>>, ParentType, ContextType>;
+  activityResponses?: Resolver<Maybe<Array<Maybe<ResolversTypes['ActivityResponse']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ActivityTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivityType'] = ResolversParentTypes['ActivityType']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  ads?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ad']>>>, ParentType, ContextType>;
+  activities?: Resolver<Maybe<Array<Maybe<ResolversTypes['Activity']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -421,23 +421,23 @@ export type LocationResolvers<ContextType = any, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  ads?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ad']>>>, ParentType, ContextType>;
+  activities?: Resolver<Maybe<Array<Maybe<ResolversTypes['Activity']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AdResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ad'] = ResolversParentTypes['Ad']> = {
+export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  activitytype?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType>;
+  activityType?: Resolver<Maybe<ResolversTypes['ActivityType']>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  responses?: Resolver<Maybe<Array<Maybe<ResolversTypes['AdResponse']>>>, ParentType, ContextType>;
+  responses?: Resolver<Maybe<Array<Maybe<ResolversTypes['ActivityResponse']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AdResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdResponse'] = ResolversParentTypes['AdResponse']> = {
+export type ActivityResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivityResponse'] = ResolversParentTypes['ActivityResponse']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  ad?: Resolver<ResolversTypes['Ad'], ParentType, ContextType>;
+  activity?: Resolver<ResolversTypes['Activity'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -452,8 +452,8 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   ActivityType?: ActivityTypeResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
-  Ad?: AdResolvers<ContextType>;
-  AdResponse?: AdResponseResolvers<ContextType>;
+  Activity?: ActivityResolvers<ContextType>;
+  ActivityResponse?: ActivityResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
 

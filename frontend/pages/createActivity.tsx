@@ -29,7 +29,7 @@ const getActivityTypesLocationsQuery = gql`
 `;
 
 const createActivityTypeMutation = gql`
-  mutation createAd($data: NewAdInput!) {
+  mutation createAd($data: NewActivityInput!) {
     createAd(data: $data) {
       id
       description
@@ -38,7 +38,7 @@ const createActivityTypeMutation = gql`
 `;
 
 interface Values {
-  activitytypeId: string;
+  activityTypeId: string;
   description: string;
   locationId: string;
 }
@@ -51,12 +51,12 @@ export default function createActivityTypeForm() {
   const [mutate, mutationResponse] = useMutation(createActivityTypeMutation);
 
   function createActivityTypeOptions() {
-    const options = data?.activityTypes?.map(activitytype => (
-      <option key={activitytype.id} value={activitytype.id}>
-        {activitytype.name}
+    const options = data?.activityTypes?.map(activityType => (
+      <option key={activityType.id} value={activityType.id}>
+        {activityType.name}
       </option>
     ));
-    options?.unshift(<option key="placeholder" value="">Choose activitytype type</option>);
+    options?.unshift(<option key="placeholder" value="">Choose activityType type</option>);
     return options
   }
 
@@ -72,15 +72,15 @@ export default function createActivityTypeForm() {
 
   return (
     <Container>
-      <Header>Create your activitytype!</Header>
+      <Header>Create your activityType!</Header>
       <Formik
         initialValues={{
-          activitytypeId: "",
-          description: "New activitytype description",
+          activityTypeId: "",
+          description: "New activityType description",
           locationId: "Vancouver"
         }}
         validationSchema={Yup.object({
-          activitytypeId: Yup.string()
+          activityTypeId: Yup.string()
             .required("Required"),
           description: Yup.string()
             .max(1024, "Must be 1024 characters or less")
@@ -90,7 +90,7 @@ export default function createActivityTypeForm() {
             .required("Required")
         })}
         onSubmit={(values: Values) => {
-          // const { activitytypeId, description, locationId } = values;
+          // const { activityTypeId, description, locationId } = values;
           console.log("🚀 ~ file: createActivityType.tsx ~ line 96 ~ createActivityTypeForm ~ values", values)
           mutate({variables: {data: values}});
           // setTimeout(() => {
@@ -99,7 +99,7 @@ export default function createActivityTypeForm() {
         }}
       >
         <Form>
-          <Select label="Category" name="activitytypeId" placeholder="Select activitytype type">
+          <Select label="Category" name="activityTypeId" placeholder="Select activityType type">
             {createActivityTypeOptions()}
           </Select>
           <Select label="Location" name="locationId" placeholder="Select location">

@@ -64,7 +64,7 @@ class DynamicLocationSearch extends React.Component {
     const { suggestions } = this.state;
     const regex = new RegExp(input, "gmi");
     const matchingSuggestions = suggestions
-      .filter(activitytype => activitytype.city.match(regex))
+      .filter(activityType => activityType.city.match(regex))
       .slice(0, 10);
     if (matchingSuggestions.length === 0) {
       this.setState({ showSuggestions: false, matchingSuggestions: [] });
