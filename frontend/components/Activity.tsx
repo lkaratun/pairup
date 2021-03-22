@@ -2,11 +2,11 @@ import React, { useCallback, useContext } from "react";
 import styled from "styled-components";
 import { WideButton } from "./shared/Buttons";
 import { useCookie } from "next-universal-cookie";
-import { Activity as ActivityType, NewActivityResponseInput } from "generated-types";
+import { Activity, ActivityType, NewActivityResponseInput } from "generated-types";
 import { gql, useMutation } from "@apollo/client";
 
-function Activity({ activity, loading, refetch }: { activity: ActivityType; loading: boolean; refetch: () => void }) {
-  const { activityType = {}, description } = activity;
+function ActivityDisplay({ activity, loading, refetch }: { activity: Activity; loading: boolean; refetch: () => void }) {
+  const { activityType = {} as ActivityType, description } = activity;
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
   const respondMutation = gql`
@@ -79,4 +79,4 @@ const NotLoggedInMessage = styled.div`
   color: hsla(0, 0%, 0%, 0.5);
 `;
 
-export default Activity;
+export default ActivityDisplay;

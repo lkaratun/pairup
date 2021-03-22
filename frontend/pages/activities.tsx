@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { initializeApollo } from "../lib/ApolloClient";
 import { useRouter } from "next/router";
-import Activity from "../components/Activity";
+import ActivityDisplay from "../components/Activity";
 import { ActivityType, NewActivityResponseInput } from "generated-types";
 
 import { gql } from "@apollo/client";
@@ -43,7 +43,7 @@ function Activities() {
     <Container>
       <Header>Activities</Header>
       {data.activities.map(activity => (
-        <Activity key={activity.id} activity={activity} refetch={refetch} loading={loading}/>
+        <ActivityDisplay key={activity.id} activity={activity} refetch={refetch} loading={loading}/>
       ))}
       <button onClick={() => router.push("/createActivityType")}>Create a new activityType</button>
     </Container>
