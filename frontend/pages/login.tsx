@@ -18,7 +18,7 @@ function LoginPage() {
             <StyledLink>register!</StyledLink>
           </Link>
         </LinkWrapper>
-        <UserConsumer>{context => <LoginForm context={context} />}</UserConsumer>
+        <UserConsumer>{context => <LoginForm />}</UserConsumer>
       </InputSection>
     </LoginWrapper>
   );

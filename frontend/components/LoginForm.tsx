@@ -10,6 +10,12 @@ import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
 
+import GoogleLogin from "react-google-login";
+
+const responseGoogle = response => {
+  console.log("Google response = ", response);
+};
+
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 
 export default () => {
@@ -73,9 +79,16 @@ export default () => {
         />
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
         <HalfWidthButton type="submit">Log in</HalfWidthButton>
-        <HalfWidthButton type="button" onClick={() => router.push(`${backendUrl}`)}>
+        <GoogleLogin
+          clientId="518450911507-fu0js4mqkdhbsspfqcmtkddn76j7frns.apps.googleusercontent.com"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+        >
           Log in with Google
-        </HalfWidthButton>
+        </GoogleLogin>
+        {/* <HalfWidthButton type="button" onClick={() => router.push(`${backendUrl}`)}>
+          Log in with Google
+        </HalfWidthButton> */}
       </form>
     </>
   );
