@@ -1,10 +1,12 @@
 {
   "development": {
     "BACKEND_URL": "//api.local.pair-up.net/graphql",
-    "BACKEND_URL_FULL": "http://api.local.pair-up.net/graphql"
+    "BACKEND_URL_FULL": "http://api.local.pair-up.net/graphql",
+    "GOOGLE_CLIENT_ID": "518450911507-fu0js4mqkdhbsspfqcmtkddn76j7frns.apps.googleusercontent.com"
   },
   "production": {
     "BACKEND_URL": "//api.pair-up.net/graphql",
-    "BACKEND_URL_FULL": "https://api.pair-up.net/graphql"
+    "BACKEND_URL_FULL": "https://api.pair-up.net/graphql",
+    "GOOGLE_CLIENT_ID": "518450911507-fu0js4mqkdhbsspfqcmtkddn76j7frns.apps.googleusercontent.com"
   }
 }

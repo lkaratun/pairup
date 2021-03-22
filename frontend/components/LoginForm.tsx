@@ -9,14 +9,10 @@ import Input from "./Input";
 import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
 import config from "../config.json";
-
 import GoogleLogin from "react-google-login";
 
-const responseGoogle = response => {
-  console.log("Google response = ", response);
-};
-
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
+const googleClientId = config[process.env.NODE_ENV].GOOGLE_CLIENT_ID;
 
 export default () => {
   const [email, setEmail] = useState("");
@@ -46,21 +42,25 @@ export default () => {
     setCookie("userId", logInData.id);
   }, []);
   
-  const googleLogIn = useCallback(async function({ email, password }) {
+  const googleLogIn = useCallback(async function({ accessToken }) {
     const logInMutation = gql`
       mutation googleLogIn($accessToken: String!) {
         googleLogIn(accessToken: $accessToken) {
-          accessToken
+          firstName
+          email
+          id
+          password
         }
       }
     `;
 
     const apolloClient = initializeApollo();
     const {
-      data: { logIn: logInData }
-    } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+      data: { googleLogIn: logInData }
+    } = await apolloClient.mutate({ mutation: logInMutation, variables: { accessToken } });
     setCookie("firstName", logInData.firstName);
     setCookie("userId", logInData.id);
+    router.push("/");
   }, []);
 
   const handleSubmit = e => {
@@ -97,15 +97,12 @@ export default () => {
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
         <HalfWidthButton type="submit">Log in</HalfWidthButton>
         <GoogleLogin
-          clientId="518450911507-fu0js4mqkdhbsspfqcmtkddn76j7frns.apps.googleusercontent.com"
-          onSuccess={responseGoogle}
-          onFailure={responseGoogle}
+          clientId={googleClientId}
+          onSuccess={googleLogIn}
+          onFailure={console.error}
         >
           Log in with Google
         </GoogleLogin>
-        {/* <HalfWidthButton type="button" onClick={() => router.push(`${backendUrl}`)}>
-          Log in with Google
-        </HalfWidthButton> */}
       </form>
     </>
   );
