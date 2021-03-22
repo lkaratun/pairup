@@ -4,9 +4,19 @@ import { WideButton } from "./shared/Buttons";
 import { useCookie } from "next-universal-cookie";
 import { Activity, ActivityType, NewActivityResponseInput } from "generated-types";
 import { gql, useMutation } from "@apollo/client";
+import { initializeApollo, useApollo } from "../lib/ApolloClient";
 
-function ActivityDisplay({ activity, loading, refetch }: { activity: Activity; loading: boolean; refetch: () => void }) {
+function ActivityDisplay({
+  activity,
+  loading,
+  refetch
+}: {
+  activity: Activity;
+  loading: boolean;
+  refetch: () => void;
+}) {
   const { activityType = {} as ActivityType, description } = activity;
+  const apolloClient = useApollo();
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
   const respondMutation = gql`
@@ -34,19 +44,22 @@ function ActivityDisplay({ activity, loading, refetch }: { activity: Activity; l
     return response.data.user;
   }
 
+  function alreadyResponded(activity: Activity): boolean {
+    const userIds = activity.responses.map(response => response.user?.id);
+    return userIds.includes(cookies.userId);
+  }
+
   return (
     <ActivityCard>
       <ActivityTitle>{activityType?.name} </ActivityTitle>
       <p>{description}</p>
       {cookies.userId ? (
-        activity.responses.length === 0 ? (
-          loading ? (
-            "Loading"
-          ) : (
-            <WideButton onClick={handleRespond}>Respond</WideButton>
-          )
-        ) : (
+        alreadyResponded(activity) ? (
           "You have already responded to this activity"
+        ) : loading ? (
+          "Loading"
+        ) : (
+          <WideButton onClick={handleRespond}>Respond</WideButton>
         )
       ) : (
         <NotLoggedInMessage>Please log in to respond to activities</NotLoggedInMessage>

@@ -1,10 +1,10 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import styled from "styled-components";
-import { initializeApollo } from "../lib/ApolloClient";
 import { useRouter } from "next/router";
 import ActivityDisplay from "../components/Activity";
 import { ActivityType, NewActivityResponseInput } from "generated-types";
+import { initializeApollo } from "../lib/ApolloClient";
 
 import { gql } from "@apollo/client";
 
@@ -20,6 +20,7 @@ export const getAds = gql`
       responses {
         id
         user {
+          id
           firstName
         }
       }
