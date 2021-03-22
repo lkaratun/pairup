@@ -26,7 +26,7 @@ export default () => {
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
-  const logIn = useCallback(async function({ email, password }) {
+  const emailPasswordLogIn = useCallback(async function({ email, password }) {
     const logInMutation = gql`
       mutation logIn($email: String!, $password: String!) {
         logIn(email: $email, password: $password) {
@@ -45,10 +45,27 @@ export default () => {
     setCookie("firstName", logInData.firstName);
     setCookie("userId", logInData.id);
   }, []);
+  
+  const googleLogIn = useCallback(async function({ email, password }) {
+    const logInMutation = gql`
+      mutation googleLogIn($accessToken: String!) {
+        googleLogIn(accessToken: $accessToken) {
+          accessToken
+        }
+      }
+    `;
+
+    const apolloClient = initializeApollo();
+    const {
+      data: { logIn: logInData }
+    } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+    setCookie("firstName", logInData.firstName);
+    setCookie("userId", logInData.id);
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
-    logIn({ email, password })
+    emailPasswordLogIn({ email, password })
       .then(() => router.push("/"))
       .catch(err => {
         console.error(err.response);

@@ -12,7 +12,7 @@ directive @AuthRequired on FIELD_DEFINITION | OBJECT
 
   type User {
     id: String!
-    email: String @AuthRequired
+    email: String
     bio: String
     firstName: String
     googleAccessToken: String
