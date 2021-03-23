@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.12",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "cookie": "^0.4.0",
     "cross-fetch": "^3.0.6",
@@ -23,7 +23,7 @@
     "forever": "^2.0.0",
     "formik": "^2.2.6",
     "graphql": "^15.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "next": "^9.3.0",
     "next-universal-cookie": "^2.0.0",
