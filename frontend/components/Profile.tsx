@@ -1,19 +1,18 @@
 import React, { useState, useContext, useCallback } from "react";
 import styled from "styled-components";
 
-import { FullUserInfo } from "types/User";
 import NameModal from "./NameModal";
 import BioModal from "./BioModal";
-import { UserInput } from "generated-types";
+import { UserInput, User } from "generated-types";
 type updateUserHandler = (userInfo: { firstName?: string; lastName?: string }) => void;
 
-function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandler }) {
+function Profile(props: { currentUser: User; updateUser: updateUserHandler }) {
   const [bioEditorOpened, setBioEditorOpened] = useState(false);
   const [nameEditorOpened, setNameEditorOpened] = useState(false);
 
   console.log("🚀 ~ file: Profile.js ~ line 10 ~ Profile ~ props.currentUser", props.currentUser);
 
-  const { lastName, email, image, bio, firstName, userId } = props.currentUser;
+  const { lastName, email, image, bio, firstName } = props.currentUser;
 
   const showNameEditor = () => setNameEditorOpened(true);
   const hideNameEditor = () => setNameEditorOpened(false);
@@ -25,21 +24,25 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
     return (
       <div>
         Your activities:
-        {props.currentUser.activities.map(response => <div key={response.id}>{response.id}</div>)}
-      </div>
-    );
-  }
-  
-  function renderActivityResponses() {
-    if (props.currentUser.activityResponses.length === 0) return null;
-    return (
-      <div>
-        Your responses:<br/>
-        {props.currentUser.activityResponses.map(response => <div key={response.id}>{response.id}</div>)}
+        {props.currentUser.activities.map(response => (
+          <div key={response.id}>{response.id}</div>
+        ))}
       </div>
     );
   }
 
+  function renderActivityResponses() {
+    if (props.currentUser.activityResponses.length === 0) return null;
+    return (
+      <div>
+        Your responses:
+        <br />
+        {props.currentUser.activityResponses.map(response => (
+          <div key={response.id}>{response.id}</div>
+        ))}
+      </div>
+    );
+  }
 
   function renderUserInfo() {
     return (
@@ -90,8 +93,8 @@ function Profile(props: { currentUser: FullUserInfo; updateUser: updateUserHandl
         <GridWrapper>
           {renderUserInfo()}
           <MainContent>
-          {renderAds()}
-          {renderActivityResponses()}
+            {renderAds()}
+            {renderActivityResponses()}
           </MainContent>
         </GridWrapper>
       ) : (

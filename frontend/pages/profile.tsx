@@ -3,10 +3,8 @@ import cookie from "cookie";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/ApolloClient";
 import Profile from "../components/Profile";
-import { useRouter } from "next/router";
-import { FullUserInfo } from "types/User";
 import { useCookie } from "next-universal-cookie";
-import { UserInput } from "../../backend/src/generated/graphql";
+import { User, UserInput } from "generated-types";
 
 const GetCurrentUserQuery = gql`
   query GetCurrentUser {
@@ -54,7 +52,7 @@ const updateUserMutation = gql`
   }
 `;
 
-function ProfilePage(props: { currentUser: FullUserInfo }) {
+function ProfilePage(props: { currentUser: User }) {
   const { error, data } = useQuery(GetCurrentUserQuery);
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
   const [mutate, mutationResponse] = useMutation(updateUserMutation);
@@ -62,10 +60,10 @@ function ProfilePage(props: { currentUser: FullUserInfo }) {
   const updateUser = useCallback(
     async function(newData: UserInput) {
       if (Object.keys(newData).length === 0) return null;
-      const userId = data.currentUser.id;
+      const id = data.currentUser.id;
 
       const response = await mutate({
-        variables: { id: userId, data: newData }
+        variables: { id, data: newData }
       });
 
       setCookie("firstName", response.data.user.firstName);
