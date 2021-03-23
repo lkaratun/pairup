@@ -1,18 +1,11 @@
-import React, { useState, useContext, useCallback, FunctionComponent, useEffect } from "react";
-import { useRouter } from "next/router";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { initializeApollo, useApollo } from "../lib/ApolloClient";
-import { useCookie } from "next-universal-cookie";
-import styled from "styled-components";
-import { UserContext } from "components/UserProvider";
-import Input from "../components/Input";
-import LoginButton from "../components/LoginButton";
-import StyledErrorMsg from "../styles/StyledErrorMsg";
-import config from "../config.json";
-import { Formik, Form, useField } from "formik";
-import { TextArea, TextInput, Select } from "components/shared/FormElements";
-import * as Yup from "yup";
+import { Select, TextArea } from "components/shared/FormElements";
+import { Form, Formik } from "formik";
 import { ActivityType, Location } from "generated-types";
+import React from "react";
+import styled from "styled-components";
+import * as Yup from "yup";
+import { useApollo } from "../lib/ApolloClient";
 
 const getActivityTypesLocationsQuery = gql`
   query getActivityTypes {
@@ -44,8 +37,10 @@ interface Values {
 }
 
 export default function createActivityTypeForm() {
-  const { error, data, loading } = useQuery<{ activityTypes: ActivityType[], locations: Location[]}>(getActivityTypesLocationsQuery);
-  console.log("🚀 ~ file: createActivityType.tsx ~ line 48 ~ createActivityTypeForm ~ data", data)
+  const { error, data, loading } = useQuery<{ activityTypes: ActivityType[]; locations: Location[] }>(
+    getActivityTypesLocationsQuery
+  );
+  console.log("🚀 ~ file: createActivityType.tsx ~ line 48 ~ createActivityTypeForm ~ data", data);
   const apolloClient = useApollo();
 
   const [mutate, mutationResponse] = useMutation(createActivityTypeMutation);
@@ -56,8 +51,12 @@ export default function createActivityTypeForm() {
         {activityType.name}
       </option>
     ));
-    options?.unshift(<option key="placeholder" value="">Choose activityType type</option>);
-    return options
+    options?.unshift(
+      <option key="placeholder" value="">
+        Choose activityType type
+      </option>
+    );
+    return options;
   }
 
   function createLocationOptions() {
@@ -66,8 +65,12 @@ export default function createActivityTypeForm() {
         {location.city} ({location.country})
       </option>
     ));
-    options?.unshift(<option key="placeholder" value="">Choose location</option>);
-    return options
+    options?.unshift(
+      <option key="placeholder" value="">
+        Choose location
+      </option>
+    );
+    return options;
   }
 
   return (
@@ -80,8 +83,7 @@ export default function createActivityTypeForm() {
           locationId: "Vancouver"
         }}
         validationSchema={Yup.object({
-          activityTypeId: Yup.string()
-            .required("Required"),
+          activityTypeId: Yup.string().required("Required"),
           description: Yup.string()
             .max(1024, "Must be 1024 characters or less")
             .required("Required"),
@@ -91,8 +93,8 @@ export default function createActivityTypeForm() {
         })}
         onSubmit={(values: Values) => {
           // const { activityTypeId, description, locationId } = values;
-          console.log("🚀 ~ file: createActivityType.tsx ~ line 96 ~ createActivityTypeForm ~ values", values)
-          mutate({variables: {data: values}});
+          console.log("🚀 ~ file: createActivityType.tsx ~ line 96 ~ createActivityTypeForm ~ values", values);
+          mutate({ variables: { data: values } });
           // setTimeout(() => {
           //   alert(JSON.stringify(values, null, 2));
           // }, 400);

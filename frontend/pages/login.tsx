@@ -1,10 +1,8 @@
 import React from "react";
-
 import Link from "next/link";
 import styled from "styled-components";
 import LoginForm from "../components/LoginForm";
 
-import { UserConsumer } from "../components/UserProvider";
 import mediaWrapper from "../styles/mediaWrapper";
 
 function LoginPage() {
@@ -18,7 +16,7 @@ function LoginPage() {
             <StyledLink>register!</StyledLink>
           </Link>
         </LinkWrapper>
-        <UserConsumer>{context => <LoginForm />}</UserConsumer>
+        <LoginForm />
       </InputSection>
     </LoginWrapper>
   );

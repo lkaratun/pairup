@@ -1,20 +1,12 @@
-import React from "react";
+import { ApolloProvider } from "@apollo/client";
 import cookie from "cookie";
-import withApollo from "next-with-apollo";
-import { ApolloProvider, InMemoryCache, HttpLink } from "@apollo/client";
+import { applyServerSidePropsCookie, NextCookieProvider } from "next-universal-cookie";
+import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
-// import { UserProvider } from "../components/UserProvider";
-// import { CookiesProvider } from "react-cookie";
-import {applyServerSidePropsCookie} from 'next-universal-cookie';
-
-import { NextCookieProvider } from "next-universal-cookie";
-import { useApollo } from "../lib/ApolloClient";
 import MainLayout from "../components/MainLayout";
+import { useApollo } from "../lib/ApolloClient";
 
 App.getInitialProps = async function(appContext) {
-  console.log("🚀 ~ file: _app.tsx ~ line 15 ~ App.getInitialProps=function ~ App.getInitialProps");
-  // const cookies = cookie.parse(appContext?.ctx?.req?.headers?.cookie || "");
-  
   if (!appContext.ctx.req || !appContext.ctx.res) {
     console.log("req does not exist here");
     return { props: { cookies: {} } };

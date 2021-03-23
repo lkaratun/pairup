@@ -1,7 +1,28 @@
 import React from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+
+interface ConfirmModalProps {
+  showModal: boolean;
+  hide: () => void;
+  confirm: () => void;
+}
+
+export default class ConfirmModal extends React.Component<ConfirmModalProps> {
+  render() {
+    const { showModal, hide, confirm } = this.props;
+    return (
+      <Modal isOpen={showModal} onRequestClose={hide} style={customStyles} contentLabel="Confirmation Modal">
+        <Close onClick={hide}>X</Close>
+        <h3>Are you sure you want to delete event?</h3>
+        <DeleteButton onClick={confirm}>Delete</DeleteButton>
+        <CancelButton onClick={hide}>Cancel</CancelButton>
+      </Modal>
+    );
+  }
+}
+
+Modal.setAppElement("#__next");
 
 const customStyles = {
   content: {
@@ -15,30 +36,6 @@ const customStyles = {
     padding: "30px"
   }
 };
-
-Modal.setAppElement("#__next");
-
-class ConfirmModal extends React.Component {
-  render() {
-    const { showModal, hide, confirm } = this.props;
-    return (
-      <Modal
-        isOpen={showModal}
-        onAfterOpen={this.afterOpenModal}
-        onRequestClose={hide}
-        style={customStyles}
-        contentLabel="Confirmation Modal"
-      >
-        <Close onClick={hide}>X</Close>
-        <h3>Are you sure you want to delete event?</h3>
-        <DeleteButton onClick={confirm}>Delete</DeleteButton>
-        <CancelButton onClick={hide}>Cancel</CancelButton>
-      </Modal>
-    );
-  }
-}
-
-export default ConfirmModal;
 
 const Close = styled.button`
   cursor: pointer;
@@ -78,9 +75,3 @@ const CancelButton = styled.button`
   padding: 0 15px;
   height: 35px;
 `;
-
-ConfirmModal.propTypes = {
-  showModal: PropTypes.bool.isRequired,
-  hide: PropTypes.func.isRequired,
-  confirm: PropTypes.func.isRequired
-};

@@ -4,7 +4,6 @@ import { gql, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/ApolloClient";
 import { useCookie } from "next-universal-cookie";
 import styled from "styled-components";
-import { UserContext } from "components/UserProvider";
 import Input from "./Input";
 import LoginButton from "./LoginButton";
 import StyledErrorMsg from "../styles/StyledErrorMsg";
@@ -18,7 +17,6 @@ export default () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginFailed, setLoginFailed] = useState(false);
-  const user = useContext(UserContext);
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
 
@@ -41,7 +39,7 @@ export default () => {
     setCookie("firstName", logInData.firstName);
     setCookie("userId", logInData.id);
   }, []);
-  
+
   const googleLogIn = useCallback(async function({ accessToken }) {
     const logInMutation = gql`
       mutation googleLogIn($accessToken: String!) {
@@ -96,11 +94,7 @@ export default () => {
         />
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
         <HalfWidthButton type="submit">Log in</HalfWidthButton>
-        <GoogleLogin
-          clientId={googleClientId}
-          onSuccess={googleLogIn}
-          onFailure={console.error}
-        >
+        <GoogleLogin clientId={googleClientId} onSuccess={googleLogIn} onFailure={console.error}>
           Log in with Google
         </GoogleLogin>
       </form>

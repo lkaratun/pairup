@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
-import { UserContext } from "./UserProvider";
 
 Modal.setAppElement("#__next");
 
@@ -10,14 +9,13 @@ interface NameModalProps {
   firstName: string;
   lastName: string;
   hide: () => void;
-  confirm: (newData: {firstName: string, lastName: string}) => void;
+  confirm: (newData: { firstName: string; lastName: string }) => void;
 }
 
 interface NameModalState {
   firstName: string;
   lastName: string;
 }
-
 
 class NameModal extends React.Component<NameModalProps, NameModalState> {
   private firstNameInput;
@@ -29,7 +27,7 @@ class NameModal extends React.Component<NameModalProps, NameModalState> {
   handleKeyPress = e => {
     const { hide, confirm } = this.props;
     if (e.key === "Enter") {
-      confirm({firstName: this.state.firstName, lastName: this.state.lastName});
+      confirm({ firstName: this.state.firstName, lastName: this.state.lastName });
       hide();
     }
   };
@@ -81,7 +79,7 @@ class NameModal extends React.Component<NameModalProps, NameModalState> {
         <CancelButton onClick={hide}>Cancel</CancelButton>
         <ConfirmButton
           onClick={() => {
-            confirm({  firstName: this.state.firstName, lastName: this.state.lastName  });
+            confirm({ firstName: this.state.firstName, lastName: this.state.lastName });
             hide();
           }}
         >
@@ -149,5 +147,3 @@ const CancelButton = styled.button`
   height: 35px;
   margin: 0.5em;
 `;
-
-NameModal.contextType = UserContext;

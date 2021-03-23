@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import typeDefs from "./typeDefs";
 import { PrismaClient } from "@prisma/client";
-import { merge, keyBy, cloneDeepWith, cloneDeep, mapValues } from "lodash";
+import { merge } from "lodash";
 import ActivitySchema from "./activity/ActivitySchema";
 import ActivityResolver from "./activity/ActivityResolver";
 import ActivityResponseSchema from "./activityResponse/ActivityResponseSchema";
@@ -29,8 +29,23 @@ const prisma = new PrismaClient({
 });
 
 const server = new ApolloServer({
-  typeDefs: [typeDefs, UserSchema, ActivityTypeSchema, LocationSchema, ActivitySchema, ActivityResponseSchema, AuthSchema],
-  resolvers: merge(ActivityResolver, ActivityResponseResolver, UserResolver, ActivityTypeResolver, LocationResolver, AuthResolver),
+  typeDefs: [
+    typeDefs,
+    UserSchema,
+    ActivityTypeSchema,
+    LocationSchema,
+    ActivitySchema,
+    ActivityResponseSchema,
+    AuthSchema
+  ],
+  resolvers: merge(
+    ActivityResolver,
+    ActivityResponseResolver,
+    UserResolver,
+    ActivityTypeResolver,
+    LocationResolver,
+    AuthResolver
+  ),
   playground: {
     settings: {
       "request.credentials": "same-origin"
@@ -39,37 +54,7 @@ const server = new ApolloServer({
   schemaDirectives: { AuthRequired },
   context: async ctx => {
     return { ...ctx, prisma };
-  },
-  // formatResponse: (response, requestContext) => {
-  //   const { data, errors } = response;
-  //   if (errors) return response;
-    
-  //   function isPrimitive(val) {
-  //     if (typeof val === 'object') {
-  //       return val === null;
-  //     }
-  //     return typeof val !== 'function';
-  //   }
-    
-  //   function  isObject(value) {
-  //     return typeof value === 'object' && value !== null;
-  //   }
-    
-  //   function myKeyBy(value) {
-  //     if (isPrimitive(value)) return value;
-  //     if (Array.isArray(value)) return myKeyBy(keyBy(value, 'id'));
-  //     if (isObject(value)) {
-  //       const result = mapValues(value, d => myKeyBy(d));
-  //       // Object.setPrototypeOf(result, null);
-  //       return result;
-  //     }
-  //     return value;
-  //   }
-    
-  //   const newData = myKeyBy(cloneDeep(data));
-    
-  //   return {data: newData};
-  // }
+  }
 });
 
 const app = express();

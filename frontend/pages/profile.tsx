@@ -19,7 +19,7 @@ const GetCurrentUserQuery = gql`
       activities {
         id
       }
-      activityResponses{
+      activityResponses {
         id
       }
     }
@@ -56,27 +56,19 @@ const updateUserMutation = gql`
 
 function ProfilePage(props: { currentUser: FullUserInfo }) {
   const { error, data } = useQuery(GetCurrentUserQuery);
-  const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
   const [mutate, mutationResponse] = useMutation(updateUserMutation);
-  console.log("🚀 ~ file: profile.tsx ~ line 36 ~ ProfilePage ~ error", error);
-  console.log("🚀 ~ file: profile.tsx ~ line 36 ~ ProfilePage ~ data", data);
-  console.log("🚀 ~ file: profile.js ~ line 33 ~ ProfilePage ~ props", props);
-
-  // const { lastName, email, image, bio, firstName, id: userId } = data.currentUser;
 
   const updateUser = useCallback(
     async function(newData: UserInput) {
       if (Object.keys(newData).length === 0) return null;
       const userId = data.currentUser.id;
 
-      console.log("🚀 ~ file: UserProvider.js ~ line 90 ~ updateUser ~ userId", userId);
       const response = await mutate({
         variables: { id: userId, data: newData }
       });
 
       setCookie("firstName", response.data.user.firstName);
-      console.log("🚀 ~ file: profile.tsx ~ line 71 ~ function ~ response.data.user", response.data.user);
       return response.data.user;
     },
 

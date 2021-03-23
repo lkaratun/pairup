@@ -3,7 +3,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import RegisterForm from "../components/RegisterForm";
 
-import { UserConsumer } from "../components/UserProvider";
 import mediaWrapper from "../styles/mediaWrapper";
 
 class Register extends Component {
@@ -15,10 +14,10 @@ class Register extends Component {
           <LinkWrapper>
             <p>If you have an account:&nbsp; </p>
             <Link href="/register">
-              <StyledLink>log in!</StyledLink>
+              <StyledLink>Log in!</StyledLink>
             </Link>
           </LinkWrapper>
-          <UserConsumer>{context => <RegisterForm context={context} />}</UserConsumer>
+          <RegisterForm />
         </InputSection>
       </RegisterWrapper>
     );

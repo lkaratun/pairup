@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "utils/request";
-import { UserContext } from "./UserProvider";
 import config from "../config.json";
 import { WideButton } from "./shared/Buttons";
 
@@ -55,8 +54,6 @@ class ImageUploader extends Component {
     );
   }
 }
-
-ImageUploader.contextType = UserContext;
 
 export default ImageUploader;
 

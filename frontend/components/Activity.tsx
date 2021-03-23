@@ -16,8 +16,7 @@ function ActivityDisplay({
   refetch: () => void;
 }) {
   const { activityType = {} as ActivityType, description } = activity;
-  const apolloClient = useApollo();
-  const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
+  const [cookies] = useCookie(["firstName", "userId"]);
 
   const respondMutation = gql`
     mutation createActivityResponse($data: NewActivityResponseInput!) {
@@ -32,7 +31,7 @@ function ActivityDisplay({
       }
     }
   `;
-  const [mutate, mutationResponse] = useMutation(respondMutation);
+  const [mutate] = useMutation(respondMutation);
 
   async function handleRespond() {
     const response = await mutate({

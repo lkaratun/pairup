@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
-import { UserContext } from "components/UserProvider";
 import axios from "utils/request";
 import Input from "./Input";
 import TextArea from "./TextArea";
@@ -87,29 +86,12 @@ function RegisterForm() {
           onChange={handleInput}
           required
         />
-        <Input
-          id="firstName"
-          name="firstName"
-          type="text"
-          placeholder="First Name"
-          onChange={handleInput}
-          required
-        />
+        <Input id="firstName" name="firstName" type="text" placeholder="First Name" onChange={handleInput} required />
         <p> Optional fields:</p>
-        <Input
-          id="lastName"
-          name="lastName"
-          type="text"
-          placeholder="Last Name"
-          onChange={handleInput}
-        />
+        <Input id="lastName" name="lastName" type="text" placeholder="Last Name" onChange={handleInput} />
         <TextArea placeholder="Short Bio" onChange={handleInput} />
         <LoginButton>Register</LoginButton>
-        {registrationFailed && (
-          <StyledErrorMsg>
-            Registration failed. Reason: {state.failReason}
-          </StyledErrorMsg>
-        )}
+        {registrationFailed && <StyledErrorMsg>Registration failed. Reason: {state.failReason}</StyledErrorMsg>}
       </form>
     </>
   );

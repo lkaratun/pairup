@@ -1,8 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { UserContext } from "./UserProvider";
 
 interface BioModalProps {
   showModal: boolean;
@@ -16,7 +14,7 @@ interface BioModalState {
 }
 
 class EditModal extends React.Component<BioModalProps, BioModalState> {
-  state = { bio: this.props.initialBio ?? ''};
+  state = { bio: this.props.initialBio ?? "" };
   private textArea;
 
   handleInput = e => this.setState({ bio: e.target.value });
@@ -39,7 +37,7 @@ class EditModal extends React.Component<BioModalProps, BioModalState> {
         <CancelButton onClick={hide}>Cancel</CancelButton>
         <ConfirmButton
           onClick={() => {
-            confirm({bio: this.state.bio});
+            confirm({ bio: this.state.bio });
             hide();
           }}
         >
