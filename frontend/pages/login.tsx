@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/logIn/LoginForm";
 
 import mediaWrapper from "../styles/mediaWrapper";
 

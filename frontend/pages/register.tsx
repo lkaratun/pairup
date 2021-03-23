@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import RegisterForm from "../components/RegisterForm";
+import RegisterForm from "../components/register/RegisterForm";
 import mediaWrapper from "../styles/mediaWrapper";
 
 function Register() {

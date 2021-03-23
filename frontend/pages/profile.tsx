@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import cookie from "cookie";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/ApolloClient";
-import Profile from "../components/Profile";
+import Profile from "../components/profile/Profile";
 import { useCookie } from "next-universal-cookie";
 import { User, UserInput } from "generated-types";
 

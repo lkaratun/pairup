@@ -3,7 +3,7 @@ import { Activity, ActivityType } from "generated-types";
 import { useCookie } from "next-universal-cookie";
 import React from "react";
 import styled from "styled-components";
-import { WideButton } from "./shared/Buttons";
+import { WideButton } from "../shared/Buttons";
 
 function ActivityDisplay({
   activity,

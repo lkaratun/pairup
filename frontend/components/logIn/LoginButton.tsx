@@ -1,5 +1,5 @@
 import React from "react";
-import { WideButton } from "./shared/Buttons";
+import { WideButton } from "../shared/Buttons";
 
 const LoginButton = (props: {children: string}) => {
   const { children } = props;

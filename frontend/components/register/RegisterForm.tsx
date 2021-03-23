@@ -1,41 +1,41 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { useCookie } from "next-universal-cookie";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import GoogleLogin from "react-google-login";
 import styled from "styled-components";
-import config from "../config.json";
-import { initializeApollo } from "../lib/ApolloClient";
-import StyledErrorMsg from "../styles/StyledErrorMsg";
-import Input from "./Input";
-import LoginButton from "./LoginButton";
+import config from "../../config.json";
+import { initializeApollo } from "../../lib/ApolloClient";
+import StyledErrorMsg from "../../styles/StyledErrorMsg";
+import Input from "../shared/Input";
+import LoginButton from "../logIn/LoginButton";
 
-const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 const googleClientId = config[process.env.NODE_ENV].GOOGLE_CLIENT_ID;
 
-export default () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginFailed, setLoginFailed] = useState(false);
+const registerMutation = gql`
+  mutation register($data: RegisterInput!) {
+    register(data: $data) {
+      id
+      email
+      firstName
+      password
+    }
+  }
+`;
+
+export default function RegisterForm() {
+  const [email, setEmail] = useState<String>("");
+  const [password, setPassword] = useState<String>("");
+  const [firstName, setFirstName] = useState<String>("");
+  const [loginFailed, setLoginFailed] = useState<boolean>(false);
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookie(["firstName", "userId"]);
+  const [mutate] = useMutation(registerMutation);
 
-  const emailPasswordLogIn = useCallback(async function({ email, password }) {
-    const logInMutation = gql`
-      mutation logIn($email: String!, $password: String!) {
-        logIn(email: $email, password: $password) {
-          firstName
-          email
-          id
-          password
-        }
-      }
-    `;
-
-    const apolloClient = initializeApollo();
+  const register = useCallback(async function({ email, password, firstName }) {
     const {
-      data: { logIn: logInData }
-    } = await apolloClient.mutate({ mutation: logInMutation, variables: { email, password } });
+      data: { register: logInData }
+    } = await mutate({ variables: { data: { email, password, firstName } } });
     setCookie("firstName", logInData.firstName);
     setCookie("userId", logInData.id);
   }, []);
@@ -63,10 +63,10 @@ export default () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    emailPasswordLogIn({ email, password })
+    register({ email, password, firstName })
       .then(() => router.push("/"))
       .catch(err => {
-        console.error(err.response);
+        console.error(err);
         setLoginFailed(true);
       });
   };
@@ -74,6 +74,14 @@ export default () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <Input
+          id="firstName"
+          name="firstName"
+          type="firstName"
+          placeholder="First name"
+          onChange={e => setFirstName(e.target.value)}
+          required
+        />
         <Input
           id="email"
           name="email"
@@ -95,12 +103,12 @@ export default () => {
         {loginFailed && <StyledErrorMsg>Log in failed!</StyledErrorMsg>}
         <HalfWidthButton type="submit">Log in</HalfWidthButton>
         <GoogleLogin clientId={googleClientId} onSuccess={googleLogIn} onFailure={console.error}>
-          Log in with Google
+          Sign in with Google
         </GoogleLogin>
       </form>
     </>
   );
-};
+}
 
 const HalfWidthButton = styled(LoginButton)`
   width: 49%;

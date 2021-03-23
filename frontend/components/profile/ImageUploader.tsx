@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "utils/request";
-import config from "../config.json";
-import { WideButton } from "./shared/Buttons";
+import config from "../../config.json";
+import { WideButton } from "../shared/Buttons";
 
 const backendUrlFull = config[process.env.NODE_ENV].BACKEND_URL_FULL;
 

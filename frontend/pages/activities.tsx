@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import ActivityDisplay from "../components/Activity";
+import ActivityDisplay from "../components/activities/Activity";
 import { ActivityType, NewActivityResponseInput } from "generated-types";
 import { initializeApollo } from "../lib/ApolloClient";
 

@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import { darken } from "polished";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { initializeApollo } from "../lib/ApolloClient";
-import mediaWrapper from "../styles/mediaWrapper";
+import { initializeApollo } from "../../lib/ApolloClient";
+import mediaWrapper from "../../styles/mediaWrapper";
 
 function Navbar() {
   const [cookies, setCookie, removeCookie] = useCookie(["firstName"]);

@@ -3,7 +3,7 @@ import cookie from "cookie";
 import { applyServerSidePropsCookie, NextCookieProvider } from "next-universal-cookie";
 import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import MainLayout from "../components/MainLayout";
+import MainLayout from "../components/layout/MainLayout";
 import { useApollo } from "../lib/ApolloClient";
 
 App.getInitialProps = async function(appContext) {
