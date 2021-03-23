@@ -31,7 +31,6 @@ interface User {
 export default {
   Query: {
     currentUser: async (parent, args, context, info) => {
-      console.log("🚀 ~ file: AuthResolver.ts ~ line 34 ~ currentUser: ~ currentUser");
       console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ cookies", context.req.cookies);
       const { token } = context.req.cookies;
       console.log("🚀 ~ file: AuthResolver.ts ~ line 36 ~ currentUser: ~ token", token);
@@ -97,10 +96,10 @@ export default {
         if (info) {
           console.error(info);
           switch (info.code) {
-            case 'ETIMEDOUT':
-              return (new Error('Failed to reach Google: Try Again'));
+            case "ETIMEDOUT":
+              return new Error("Failed to reach Google: Try Again");
             default:
-              return (new Error('something went wrong'));
+              return new Error("something went wrong");
           }
         }
 
