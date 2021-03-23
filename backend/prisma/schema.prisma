@@ -61,7 +61,6 @@ model User {
   googleRefreshToken String?
   image              String?
   lastName           String?
-  password           String?
   activities                Activity[]
   activityResponses        ActivityResponse[]
 

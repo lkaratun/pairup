@@ -72,6 +72,7 @@ export type Mutation = {
   deleteActivityResponse?: Maybe<ActivityResponse>;
   register?: Maybe<User>;
   logIn?: Maybe<User>;
+  googleLogIn?: Maybe<User>;
   logOut?: Maybe<Scalars['Boolean']>;
 };
 
@@ -135,6 +136,11 @@ export type MutationLogInArgs = {
   password: Scalars['String'];
 };
 
+
+export type MutationGoogleLogInArgs = {
+  accessToken: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['String'];
@@ -145,7 +151,6 @@ export type User = {
   googleRefreshToken?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
   activities?: Maybe<Array<Maybe<Activity>>>;
   activityResponses?: Maybe<Array<Maybe<ActivityResponse>>>;
 };
@@ -390,6 +395,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteActivityResponse?: Resolver<Maybe<ResolversTypes['ActivityResponse']>, ParentType, ContextType, RequireFields<MutationDeleteActivityResponseArgs, 'id'>>;
   register?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'data'>>;
   logIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationLogInArgs, 'email' | 'password'>>;
+  googleLogIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationGoogleLogInArgs, 'accessToken'>>;
   logOut?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 };
 
@@ -402,7 +408,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   googleRefreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   activities?: Resolver<Maybe<Array<Maybe<ResolversTypes['Activity']>>>, ParentType, ContextType>;
   activityResponses?: Resolver<Maybe<Array<Maybe<ResolversTypes['ActivityResponse']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
