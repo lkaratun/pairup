@@ -1,27 +1,24 @@
-import React, { Component } from "react";
 import Link from "next/link";
+import React from "react";
 import styled from "styled-components";
 import RegisterForm from "../components/RegisterForm";
-
 import mediaWrapper from "../styles/mediaWrapper";
 
-class Register extends Component {
-  render() {
-    return (
-      <RegisterWrapper>
-        <InputSection>
-          <Title>Register</Title>
-          <LinkWrapper>
-            <p>If you have an account:&nbsp; </p>
-            <Link href="/register">
-              <StyledLink>Log in!</StyledLink>
-            </Link>
-          </LinkWrapper>
-          <RegisterForm />
-        </InputSection>
-      </RegisterWrapper>
-    );
-  }
+function Register() {
+  return (
+    <RegisterWrapper>
+      <InputSection>
+        <Title>Register</Title>
+        <LinkWrapper>
+          <p>If you have an account:&nbsp; </p>
+          <Link href="/register">
+            <StyledLink>Log in!</StyledLink>
+          </Link>
+        </LinkWrapper>
+        <RegisterForm />
+      </InputSection>
+    </RegisterWrapper>
+  );
 }
 
 export default Register;
