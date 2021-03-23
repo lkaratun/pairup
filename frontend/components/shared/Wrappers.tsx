@@ -9,4 +9,4 @@ const AuthButtonWrapper = styled.div`
   }
 `;
 
-export { AuthButtonWrapper }; // eslint-disable-line import/prefer-default-export
+export { AuthButtonWrapper };

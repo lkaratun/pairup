@@ -1,9 +1,9 @@
-import React, { useState, useContext, useCallback } from "react";
+import { User, UserInput } from "generated-types";
+import React, { useState } from "react";
 import styled from "styled-components";
-
-import NameModal from "./NameModal";
 import BioModal from "./BioModal";
-import { UserInput, User } from "generated-types";
+import NameModal from "./NameModal";
+
 type updateUserHandler = (userInfo: { firstName?: string; lastName?: string }) => void;
 
 function Profile(props: { currentUser: User; updateUser: updateUserHandler }) {

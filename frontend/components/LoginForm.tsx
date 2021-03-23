@@ -1,14 +1,14 @@
-import React, { useState, useContext, useCallback } from "react";
-import { useRouter } from "next/router";
-import { gql, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/ApolloClient";
+import { gql } from "@apollo/client";
 import { useCookie } from "next-universal-cookie";
+import { useRouter } from "next/router";
+import React, { useCallback, useState } from "react";
+import GoogleLogin from "react-google-login";
 import styled from "styled-components";
+import config from "../config.json";
+import { initializeApollo } from "../lib/ApolloClient";
+import StyledErrorMsg from "../styles/StyledErrorMsg";
 import Input from "./Input";
 import LoginButton from "./LoginButton";
-import StyledErrorMsg from "../styles/StyledErrorMsg";
-import config from "../config.json";
-import GoogleLogin from "react-google-login";
 
 const backendUrl = config[process.env.NODE_ENV].BACKEND_URL;
 const googleClientId = config[process.env.NODE_ENV].GOOGLE_CLIENT_ID;

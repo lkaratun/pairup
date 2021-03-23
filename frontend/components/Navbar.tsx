@@ -1,12 +1,12 @@
-import React, { useContext, useCallback } from "react";
-import { gql, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/ApolloClient";
+import { gql } from "@apollo/client";
+import { useCookie } from "next-universal-cookie";
 import Link from "next/link";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 import { darken } from "polished";
+import React, { useCallback } from "react";
+import styled from "styled-components";
+import { initializeApollo } from "../lib/ApolloClient";
 import mediaWrapper from "../styles/mediaWrapper";
-import { useCookie } from "next-universal-cookie";
 
 function Navbar() {
   const [cookies, setCookie, removeCookie] = useCookie(["firstName"]);

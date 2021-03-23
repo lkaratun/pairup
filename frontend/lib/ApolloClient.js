@@ -1,7 +1,5 @@
 import { useMemo } from "react";
-// import { ApolloClient } from "apollo-client";
 import { InMemoryCache, ApolloClient, HttpLink } from "@apollo/client";
-// import { HttpLink } from "apollo-link-http";
 import fetch from "cross-fetch";
 
 let apolloClient;

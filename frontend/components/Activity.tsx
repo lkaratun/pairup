@@ -1,10 +1,9 @@
-import React, { useCallback, useContext } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { Activity, ActivityType } from "generated-types";
+import { useCookie } from "next-universal-cookie";
+import React from "react";
 import styled from "styled-components";
 import { WideButton } from "./shared/Buttons";
-import { useCookie } from "next-universal-cookie";
-import { Activity, ActivityType, NewActivityResponseInput } from "generated-types";
-import { gql, useMutation } from "@apollo/client";
-import { initializeApollo, useApollo } from "../lib/ApolloClient";
 
 function ActivityDisplay({
   activity,

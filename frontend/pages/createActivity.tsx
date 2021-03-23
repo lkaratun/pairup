@@ -91,14 +91,7 @@ export default function createActivityTypeForm() {
             .max(100, "Must be 100 characters or less")
             .required("Required")
         })}
-        onSubmit={(values: Values) => {
-          // const { activityTypeId, description, locationId } = values;
-          console.log("🚀 ~ file: createActivityType.tsx ~ line 96 ~ createActivityTypeForm ~ values", values);
-          mutate({ variables: { data: values } });
-          // setTimeout(() => {
-          //   alert(JSON.stringify(values, null, 2));
-          // }, 400);
-        }}
+        onSubmit={(values: Values) => mutate({ variables: { data: values } })}
       >
         <Form>
           <Select label="Category" name="activityTypeId" placeholder="Select activityType type">

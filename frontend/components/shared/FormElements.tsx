@@ -1,4 +1,4 @@
-import { Formik, Form, useField, useFormik } from "formik";
+import { useField } from "formik";
 
 interface InputProps {
   label?: string;
@@ -7,7 +7,7 @@ interface InputProps {
   placeholder?: string;
   id?: string;
   children?: JSX.Element | string | (JSX.Element | string)[];
-  validate?: (value: string) => string
+  validate?: (value: string) => string;
 }
 
 export const TextInput = ({ label, ...props }: InputProps) => {
@@ -61,7 +61,7 @@ export const Select = ({ label, ...props }: InputProps) => {
       {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
     </div>
   );
-}
+};
 
 export const DataList = ({ label, children, ...props }: InputProps) => {
   const [field, meta] = useField(props);
@@ -69,12 +69,8 @@ export const DataList = ({ label, children, ...props }: InputProps) => {
     <div>
       <label htmlFor={props.id || props.name}>{label}</label>
       <input {...field} {...props} list="data" id="datalist-input" name={props.name} />
-      <datalist id="data">
-        {children}
-      </datalist>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      <datalist id="data">{children}</datalist>
+      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
     </div>
   );
 };
