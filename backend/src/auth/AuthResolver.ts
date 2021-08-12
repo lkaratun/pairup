@@ -12,6 +12,7 @@ if (!SECRET) throw new Error("JWT_SECRET env.var missing!");
 
 const { FRONTEND_DOMAIN } = config[process.env.NODE_ENV];
 
+
 function setAuthCookies(context, { token, userId, firstName }) {
   context.res.cookie("token", token, {
     expires: addMonths(new Date(), 1),
@@ -103,7 +104,6 @@ export default {
           }
         }
 
-        // eslint-disable-next-line camelcase
         const { email, given_name, family_name, picture } = data.profile._json;
         const { accessToken } = data;
         console.log("🚀 ~ file: AuthResolver.ts ~ line 101 ~ googleLogIn: ~ email", email);

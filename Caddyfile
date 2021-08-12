@@ -1,0 +1,9 @@
+api.local.pair-up.net {
+  reverse_proxy 127.0.0.1:4000
+  tls internal
+}
+
+local.pair-up.net {
+  reverse_proxy 127.0.0.1:3100
+  tls internal
+}

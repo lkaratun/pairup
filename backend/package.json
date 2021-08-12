@@ -4,10 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "migrate": "node-pg-migrate",
     "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts --watch src --extensions 'ts, js'",
-    "check-types": "tsc",
-    "test": "mocha",
     "start": "NODE_ENV=production forever start -c babel-node src/server.js",
     "stop": "forever stop src/server.js",
     "restart": "NODE_ENV=production forever restart src/server.js",
